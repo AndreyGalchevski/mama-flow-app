@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "38532903-8a8a-48c6-8716-bf73e9769679"
+      }
+    },
+    "owner": "andreygalchevski"
   }
 }
