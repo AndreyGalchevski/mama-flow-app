@@ -1,10 +1,9 @@
-export type PumpSide = 'left' | 'right' | 'both';
-
 export interface PumpLog {
   id: string;
   timestamp: number;
-  side: PumpSide;
-  volumeML: number;
+  volumeLeftML: number;
+  volumeRightML: number;
+  volumeTotalML: number;
   durationMinutes: number;
   notes?: string;
 }

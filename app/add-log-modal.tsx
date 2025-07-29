@@ -1,93 +1,138 @@
+import { format } from 'date-fns';
+import * as Crypto from 'expo-crypto';
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Button, HelperText, RadioButton, Text, TextInput } from 'react-native-paper';
-import { v4 as uuidv4 } from 'uuid';
-
+import { Button, TextInput } from 'react-native-paper';
+import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { COLORS } from '../lib/colors';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
-import type { PumpLog, PumpSide } from '../lib/types';
 
 export default function AddLogModal() {
   const router = useRouter();
   const addLog = useLogsStore((s) => s.add);
 
-  const [side, setSide] = useState<PumpSide>('left');
-  const [volume, setVolume] = useState('');
+  const [volumeLeft, setVolumeLeft] = useState('');
+  const [volumeRight, setVolumeRight] = useState('');
   const [duration, setDuration] = useState('');
   const [notes, setNotes] = useState('');
+  const [date, setDate] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const handleDateConfirm = (params: { date: Date | undefined }) => {
+    if (!params.date) {
+      return;
+    }
+
+    setShowDatePicker(false);
+    setDate(new Date(params.date.setHours(date.getHours(), date.getMinutes())));
+  };
+
+  const handleTimeConfirm = ({ hours, minutes }: { hours: number; minutes: number }) => {
+    setShowTimePicker(false);
+    const newDate = new Date(date);
+    newDate.setHours(hours);
+    newDate.setMinutes(minutes);
+    setDate(newDate);
+  };
 
   const handleSave = () => {
-    if (!volume || !duration) return;
+    if (!volumeLeft || !volumeRight || !duration) {
+      return;
+    }
 
-    const log: PumpLog = {
-      id: uuidv4(),
-      timestamp: Date.now(),
-      side,
-      volumeML: Number.parseFloat(volume),
+    addLog({
+      id: Crypto.randomUUID(),
+      timestamp: date.getTime(),
+      volumeLeftML: Number.parseFloat(volumeLeft),
+      volumeRightML: Number.parseFloat(volumeRight),
+      volumeTotalML: Number.parseFloat(volumeLeft) + Number.parseFloat(volumeRight),
       durationMinutes: Number.parseFloat(duration),
       notes: notes.trim(),
-    };
+    });
 
-    addLog(log);
     router.back();
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
-      <Stack.Screen options={{ title: 'Add Pump Log', presentation: 'modal' }} />
+    <>
+      <SafeAreaView style={{ flex: 1, gap: 8, padding: 16, backgroundColor: COLORS.background }}>
+        <Stack.Screen options={{ title: 'Add Pump Log', presentation: 'modal' }} />
 
-      <Text variant="titleMedium" style={{ marginBottom: 8 }}>
-        Pumped Side
-      </Text>
-      <RadioButton.Group onValueChange={(value) => setSide(value as PumpSide)} value={side}>
-        <RadioButton.Item label="Left" value="left" />
-        <RadioButton.Item label="Right" value="right" />
-        <RadioButton.Item label="Both" value="both" />
-      </RadioButton.Group>
+        <TextInput
+          label="Volume Left (ml)"
+          value={volumeLeft}
+          keyboardType="numeric"
+          onChangeText={setVolumeLeft}
+          style={{ marginTop: 16 }}
+        />
 
-      <TextInput
-        label="Volume (ml)"
-        value={volume}
-        keyboardType="numeric"
-        onChangeText={setVolume}
-        style={{ marginTop: 16 }}
+        <TextInput
+          label="Volume Right (ml)"
+          value={volumeRight}
+          keyboardType="numeric"
+          onChangeText={setVolumeRight}
+          style={{ marginTop: 16 }}
+        />
+
+        <TextInput
+          label="Duration (minutes)"
+          value={duration}
+          keyboardType="numeric"
+          onChangeText={setDuration}
+          style={{ marginTop: 8 }}
+        />
+
+        <TextInput
+          label="Notes (optional)"
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+          style={{ marginTop: 8 }}
+        />
+
+        <Button onPress={() => setShowDatePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
+          {format(date, 'PP')}
+        </Button>
+
+        <Button onPress={() => setShowTimePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
+          {format(date, 'p')}
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={handleSave}
+          disabled={!volumeLeft || !volumeRight || !duration}
+          style={{ marginTop: 16 }}
+        >
+          Save
+        </Button>
+
+        <Button onPress={() => router.back()} style={{ marginTop: 8 }}>
+          Cancel
+        </Button>
+      </SafeAreaView>
+
+      <DatePickerModal
+        locale="en"
+        mode="single"
+        visible={showDatePicker}
+        onDismiss={() => setShowDatePicker(false)}
+        date={date}
+        onConfirm={handleDateConfirm}
       />
-      <HelperText type="error" visible={!volume}>
-        Volume is required
-      </HelperText>
 
-      <TextInput
-        label="Duration (minutes)"
-        value={duration}
-        keyboardType="numeric"
-        onChangeText={setDuration}
-        style={{ marginTop: 8 }}
+      <TimePickerModal
+        visible={showTimePicker}
+        onDismiss={() => setShowTimePicker(false)}
+        onConfirm={handleTimeConfirm}
+        hours={date.getHours()}
+        minutes={date.getMinutes()}
+        locale="en"
+        label="Select time"
       />
-      <HelperText type="error" visible={!duration}>
-        Duration is required
-      </HelperText>
-
-      <TextInput
-        label="Notes (optional)"
-        value={notes}
-        onChangeText={setNotes}
-        multiline
-        style={{ marginTop: 8 }}
-      />
-
-      <Button
-        mode="contained"
-        onPress={handleSave}
-        disabled={!volume || !duration}
-        style={{ marginTop: 16 }}
-      >
-        Save
-      </Button>
-
-      <Button onPress={() => router.back()} style={{ marginTop: 8 }}>
-        Cancel
-      </Button>
-    </SafeAreaView>
+    </>
   );
 }
