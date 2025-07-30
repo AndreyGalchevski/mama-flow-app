@@ -10,8 +10,9 @@ interface Props {
 }
 
 export default function PumpCard({ item }: Props) {
+  const logs = useLogsStore((s) => s.logs);
+
   const handleDeleteConfirm = () => {
-    const logs = useLogsStore.getState().logs;
     const newLogs = logs.filter((l) => l.id !== item.id);
     useLogsStore.setState({ logs: newLogs });
   };
