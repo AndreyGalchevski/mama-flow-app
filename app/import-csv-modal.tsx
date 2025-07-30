@@ -58,8 +58,6 @@ export default function ImportCSVModal() {
 
     const logs: PumpLog[] = rows
       .map((row) => {
-        console.log('timestamp', row[fieldMap.timestamp]);
-
         return {
           id: Crypto.randomUUID(),
           timestamp: parse(row[fieldMap.timestamp], 'dd/MM/yyyy HH:mm:ss', new Date()).getTime(),

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mama-flow-app",
+    "name": "MamaFlow",
     "slug": "mama-flow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mamaflowapp",
+    "scheme": "mamaflow",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
