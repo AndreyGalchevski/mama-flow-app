@@ -2,6 +2,7 @@ import { format, subDays } from 'date-fns';
 import * as DocumentPicker from 'expo-document-picker';
 import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
+import { LineChart } from 'react-native-gifted-charts';
 import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,7 +14,9 @@ import { useLogsStore } from '../lib/hooks/useLogsStore';
 export default function Home() {
   const router = useRouter();
   const logs = useLogsStore((s) => s.logs);
-  const recentLogs = logs.filter((l) => isInLast24Hours(l.timestamp));
+  const recentLogs = logs
+    .filter((l) => isInLast24Hours(l.timestamp))
+    .sort((a, b) => b.timestamp - a.timestamp);
 
   const days = [...Array(7)].map((_, i) => {
     const d = subDays(new Date(), 6 - i);
@@ -41,22 +44,19 @@ export default function Home() {
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
-      <Text variant="headlineMedium" style={{ marginBottom: 12 }}>
+      <Text variant="titleMedium" style={{ marginBottom: 12 }}>
         Volume Trend (Last 7 Days)
       </Text>
 
-      <Text variant="titleSmall" style={{ marginBottom: 8 }}>
-        🗓 Daily Totals
-      </Text>
-
-      {volumeByDay.map((d) => (
-        <Text key={d.date} style={{ marginBottom: 2 }}>
-          {format(new Date(d.date), 'EEE')}: {d.volumeTotalML} ml
-        </Text>
-      ))}
+      <LineChart
+        data={volumeByDay.map((it) => ({
+          value: it.volumeTotalML,
+          label: format(new Date(it.date), 'EEE'),
+        }))}
+      />
 
       <Text variant="titleMedium" style={{ marginTop: 16, marginBottom: 8 }}>
-        Last 24 Hours
+        Latest Logs (Last 24 Hours)
       </Text>
 
       <FlatList
@@ -73,9 +73,11 @@ export default function Home() {
         + Add Log
       </Button>
 
-      <Button onPress={handleImportCSVPress} style={{ marginTop: 8 }}>
-        Import CSV
-      </Button>
+      {logs.length === 0 && (
+        <Button onPress={handleImportCSVPress} style={{ marginTop: 8 }}>
+          Import CSV
+        </Button>
+      )}
 
       <Button onPress={() => router.push('/all-logs-modal')} style={{ marginTop: 8 }}>
         View All Logs
