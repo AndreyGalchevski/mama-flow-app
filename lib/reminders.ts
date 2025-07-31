@@ -2,6 +2,7 @@ import { addHours, isAfter } from 'date-fns';
 import * as Notifications from 'expo-notifications';
 
 import { useLogsStore } from './hooks/useLogsStore';
+import { useSettingsStore } from './hooks/useSettingsStore';
 
 const REMINDER_HOURS_DAY = 2.5;
 const REMINDER_HOURS_NIGHT = 4;
@@ -14,6 +15,11 @@ function isNightTime(date: Date): boolean {
 
 export async function scheduleNextPumpReminder() {
   try {
+    const remindersEnabled = useSettingsStore.getState().remindersEnabled;
+    if (!remindersEnabled) {
+      return;
+    }
+
     // Request notification permissions first
     const { status } = await Notifications.requestPermissionsAsync();
     if (status !== 'granted') {
@@ -40,7 +46,6 @@ export async function scheduleNextPumpReminder() {
     // Only schedule if the reminder time is in the future
     if (!isAfter(nextReminderTime, now)) {
       console.log('Next reminder time is in the past, not scheduling');
-
       return;
     }
 

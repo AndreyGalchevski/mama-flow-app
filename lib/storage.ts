@@ -1,22 +1,15 @@
 import { MMKV } from 'react-native-mmkv';
+import type { PersistStorage } from 'zustand/middleware';
 
-import type { PumpLog } from './types';
+const mmkv = new MMKV();
 
-const storage = new MMKV();
-
-const STORAGE_KEY = 'pumpLogs';
-
-export const getPumpLogs = (): PumpLog[] => {
-  const str = storage.getString(STORAGE_KEY);
-  return str ? JSON.parse(str) : [];
-};
-
-export const savePumpLog = (entry: PumpLog): void => {
-  const logs = getPumpLogs();
-  logs.push(entry);
-  storage.set(STORAGE_KEY, JSON.stringify(logs));
-};
-
-export const clearAllLogs = (): void => {
-  storage.delete(STORAGE_KEY);
-};
+export default function getStorage<T>(): PersistStorage<T> {
+  return {
+    getItem: (key) => {
+      const value = mmkv.getString(key);
+      return value ? JSON.parse(value) : null;
+    },
+    setItem: (key, value) => mmkv.set(key, JSON.stringify(value)),
+    removeItem: (key) => mmkv.delete(key),
+  };
+}

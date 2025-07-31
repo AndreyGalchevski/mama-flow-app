@@ -1,7 +1,7 @@
 import { format, subDays } from 'date-fns';
 import * as DocumentPicker from 'expo-document-picker';
 import { useRouter } from 'expo-router';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
       <Text variant="titleMedium" style={{ marginBottom: 12 }}>
-        Volume Trend (Last 7 Days)
+        Volume Trend
       </Text>
 
       <LineChart
@@ -56,7 +56,7 @@ export default function Home() {
       />
 
       <Text variant="titleMedium" style={{ marginTop: 16, marginBottom: 8 }}>
-        Latest Logs (Last 24 Hours)
+        Latest Logs
       </Text>
 
       <FlatList
@@ -65,23 +65,17 @@ export default function Home() {
         renderItem={({ item }) => <PumpCard item={item} />}
       />
 
-      <Button
-        mode="contained"
-        onPress={() => router.push('/add-log-modal')}
-        style={{ marginTop: 16 }}
-      >
-        + Add Log
-      </Button>
-
-      {logs.length === 0 && (
-        <Button onPress={handleImportCSVPress} style={{ marginTop: 8 }}>
-          Import CSV
+      <View style={{ gap: 8 }}>
+        <Button mode="contained" onPress={() => router.push('/add-log-modal')}>
+          + Add Log
         </Button>
-      )}
 
-      <Button onPress={() => router.push('/all-logs-modal')} style={{ marginTop: 8 }}>
-        View All Logs
-      </Button>
+        {logs.length === 0 && <Button onPress={handleImportCSVPress}>Import CSV</Button>}
+
+        <Button onPress={() => router.push('/all-logs-modal')}>View All Logs</Button>
+
+        <Button onPress={() => router.push('/settings-modal')}>Settings</Button>
+      </View>
     </SafeAreaView>
   );
 }
