@@ -45,18 +45,67 @@ export default function Home() {
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
       <Text variant="titleMedium" style={{ marginBottom: 12 }}>
-        Volume Trend
+        Volume trend (7 Days)
       </Text>
 
-      <LineChart
-        data={volumeByDay.map((it) => ({
-          value: it.volumeTotalML,
-          label: format(new Date(it.date), 'EEE'),
-        }))}
-      />
+      <View
+        style={{ marginBottom: 8, borderRadius: 12, backgroundColor: COLORS.surface, padding: 16 }}
+      >
+        <LineChart
+          data={volumeByDay.map((it) => ({
+            value: it.volumeTotalML,
+            label: format(new Date(it.date), 'EEE'),
+          }))}
+          width={300}
+          height={200}
+          spacing={40}
+          initialSpacing={20}
+          color={COLORS.primary}
+          thickness={3}
+          startFillColor={COLORS.primary}
+          endFillColor={COLORS.background}
+          startOpacity={0.3}
+          endOpacity={0.1}
+          areaChart
+          curved
+          isAnimated
+          animateOnDataChange
+          animationDuration={1000}
+          dataPointsHeight={8}
+          dataPointsWidth={8}
+          dataPointsColor={COLORS.primary}
+          dataPointsRadius={4}
+          textColor={COLORS.onSurface}
+          textFontSize={12}
+          hideRules
+          showVerticalLines
+          verticalLinesColor={COLORS.surfaceVariant}
+          verticalLinesThickness={1}
+          verticalLinesStrokeDashArray={[2, 6]}
+          xAxisThickness={2}
+          xAxisColor={COLORS.surfaceVariant}
+          yAxisThickness={0}
+          yAxisTextStyle={{ color: COLORS.onSurfaceVariant, fontSize: 11 }}
+          xAxisLabelTextStyle={{ color: COLORS.onSurfaceVariant, fontSize: 11 }}
+          rulesColor={COLORS.surfaceVariant}
+          backgroundColor={COLORS.surface}
+          noOfSections={4}
+          maxValue={Math.max(...volumeByDay.map((d) => d.volumeTotalML)) * 1.1 || 100}
+          focusEnabled
+          showDataPointOnFocus
+          showStripOnFocus
+          showTextOnFocus
+          stripHeight={200}
+          stripWidth={2}
+          stripColor={COLORS.primary}
+          stripOpacity={0.3}
+          focusedDataPointColor={COLORS.secondary}
+          focusedDataPointRadius={6}
+        />
+      </View>
 
       <Text variant="titleMedium" style={{ marginTop: 16, marginBottom: 8 }}>
-        Latest Logs
+        Latest pumps
       </Text>
 
       <FlatList
