@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import { Card, IconButton, Text } from 'react-native-paper';
 
 import { useLogsStore } from '../hooks/useLogsStore';
+import { scheduleNextPumpReminder } from '../reminders';
 import type { PumpLog } from '../types';
 
 interface Props {
@@ -12,9 +13,10 @@ interface Props {
 export default function PumpCard({ item }: Props) {
   const logs = useLogsStore((s) => s.logs);
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     const newLogs = logs.filter((l) => l.id !== item.id);
     useLogsStore.setState({ logs: newLogs });
+    scheduleNextPumpReminder().catch(console.error);
   };
 
   return (

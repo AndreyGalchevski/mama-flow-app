@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../lib/colors';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
+import { scheduleNextPumpReminder } from '../lib/reminders';
 
 export default function AddLogModal() {
   const router = useRouter();
@@ -52,6 +53,8 @@ export default function AddLogModal() {
       durationMinutes: Number.parseFloat(duration),
       notes: notes.trim(),
     });
+
+    scheduleNextPumpReminder().catch(console.error);
 
     router.back();
   };
