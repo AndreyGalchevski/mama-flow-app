@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import * as Crypto from 'expo-crypto';
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
+import { View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -61,61 +62,58 @@ export default function AddLogModal() {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1, gap: 8, padding: 16, backgroundColor: COLORS.background }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
         <Stack.Screen options={{ title: 'Add Pump Log', presentation: 'modal' }} />
 
-        <TextInput
-          label="Volume Left (ml)"
-          value={volumeLeft}
-          keyboardType="numeric"
-          onChangeText={setVolumeLeft}
-          style={{ marginTop: 16 }}
-        />
+        <View style={{ flex: 1, padding: 16, gap: 8 }}>
+          <TextInput
+            label="Volume Left (ml)"
+            value={volumeLeft}
+            keyboardType="numeric"
+            onChangeText={setVolumeLeft}
+            style={{ marginTop: 16 }}
+          />
 
-        <TextInput
-          label="Volume Right (ml)"
-          value={volumeRight}
-          keyboardType="numeric"
-          onChangeText={setVolumeRight}
-          style={{ marginTop: 16 }}
-        />
+          <TextInput
+            label="Volume Right (ml)"
+            value={volumeRight}
+            keyboardType="numeric"
+            onChangeText={setVolumeRight}
+            style={{ marginTop: 16 }}
+          />
 
-        <TextInput
-          label="Duration (minutes)"
-          value={duration}
-          keyboardType="numeric"
-          onChangeText={setDuration}
-          style={{ marginTop: 8 }}
-        />
+          <TextInput
+            label="Duration (minutes)"
+            value={duration}
+            keyboardType="numeric"
+            onChangeText={setDuration}
+            style={{ marginTop: 8 }}
+          />
 
-        <TextInput
-          label="Notes (optional)"
-          value={notes}
-          onChangeText={setNotes}
-          multiline
-          style={{ marginTop: 8 }}
-        />
+          <TextInput
+            label="Notes (optional)"
+            value={notes}
+            onChangeText={setNotes}
+            multiline
+            style={{ marginTop: 8 }}
+          />
 
-        <Button onPress={() => setShowDatePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
-          {format(date, 'PP')}
-        </Button>
+          <Button onPress={() => setShowDatePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
+            {format(date, 'PP')}
+          </Button>
 
-        <Button onPress={() => setShowTimePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
-          {format(date, 'p')}
-        </Button>
+          <Button onPress={() => setShowTimePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
+            {format(date, 'p')}
+          </Button>
+        </View>
 
-        <Button
-          mode="contained"
-          onPress={handleSave}
-          disabled={!volumeLeft || !volumeRight || !duration}
-          style={{ marginTop: 16 }}
-        >
-          Save
-        </Button>
+        <View style={{ padding: 16, gap: 8 }}>
+          <Button mode="contained" onPress={handleSave}>
+            Save
+          </Button>
 
-        <Button onPress={() => router.back()} style={{ marginTop: 8 }}>
-          Cancel
-        </Button>
+          <Button onPress={() => router.back()}>Cancel</Button>
+        </View>
       </SafeAreaView>
 
       <DatePickerModal
