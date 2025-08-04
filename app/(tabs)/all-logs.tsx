@@ -1,22 +1,33 @@
+import { format } from 'date-fns';
+import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import Papa from 'papaparse';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { format } from 'date-fns';
-import { COLORS } from '../lib/colors';
-import PumpCard from '../lib/components/PumpCard';
-import { useLogsStore } from '../lib/hooks/useLogsStore';
+import { COLORS } from '../../lib/colors';
+import PumpCard from '../../lib/components/PumpCard';
+import { useLogsStore } from '../../lib/hooks/useLogsStore';
 
-export default function AllLogsModal() {
+export default function AllLogs() {
   const router = useRouter();
 
   const logs = useLogsStore((s) => s.logs);
 
-  async function handleExportToCSVPress() {
+  const handleImportCSVPress = async () => {
+    const result = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: true });
+
+    if (result.canceled) {
+      return;
+    }
+
+    router.push({ pathname: '/import-csv-modal', params: { csvURI: result.assets[0].uri } });
+  };
+
+  const handleExportToCSVPress = async () => {
     const csv = Papa.unparse(
       logs.map((log) => ({
         id: log.id,
@@ -41,25 +52,25 @@ export default function AllLogsModal() {
       mimeType: 'text/csv',
       dialogTitle: 'Share Pump Logs CSV',
     });
-  }
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
-      <Stack.Screen options={{ title: 'All Logs', presentation: 'modal' }} />
+    <SafeAreaView style={{ flex: 1, padding: 16, gap: 16, backgroundColor: COLORS.background }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Button icon="upload" onPress={handleImportCSVPress} mode="outlined">
+          Import
+        </Button>
 
-      <Button onPress={handleExportToCSVPress} style={{ marginTop: 8 }}>
-        Export to CSV
-      </Button>
+        <Button icon="download" onPress={handleExportToCSVPress} mode="outlined">
+          Export
+        </Button>
+      </View>
 
       <FlatList
         data={[...logs].sort((a, b) => b.timestamp - a.timestamp)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PumpCard item={item} />}
       />
-
-      <Button onPress={() => router.back()} style={{ marginTop: 8 }}>
-        Close
-      </Button>
     </SafeAreaView>
   );
 }

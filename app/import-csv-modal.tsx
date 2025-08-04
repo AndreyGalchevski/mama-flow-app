@@ -1,6 +1,6 @@
 import { parse } from 'date-fns';
 import * as Crypto from 'expo-crypto';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -79,8 +79,6 @@ export default function ImportCSVModal() {
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
       <ScrollView>
-        <Stack.Screen options={{ title: 'Import Pump Logs', presentation: 'modal' }} />
-
         <Text variant="titleMedium" style={{ marginBottom: 12 }}>
           Map CSV Fields
         </Text>

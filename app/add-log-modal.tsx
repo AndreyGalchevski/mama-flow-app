@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import * as Crypto from 'expo-crypto';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
@@ -63,8 +63,6 @@ export default function AddLogModal() {
   return (
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
-        <Stack.Screen options={{ title: 'Add Pump Log', presentation: 'modal' }} />
-
         <View style={{ flex: 1, padding: 16, gap: 8 }}>
           <TextInput
             label="Volume Left (ml)"
