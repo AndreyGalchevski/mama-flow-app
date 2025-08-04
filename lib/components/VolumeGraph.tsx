@@ -21,9 +21,7 @@ export default function VolumeGraph() {
   });
 
   return (
-    <View
-      style={{ marginBottom: 8, borderRadius: 12, backgroundColor: COLORS.surface, padding: 16 }}
-    >
+    <View style={{ borderRadius: 12, backgroundColor: COLORS.surface, padding: 16 }}>
       <LineChart
         data={volumeByDay.map((it) => ({
           value: it.volumeTotalML,

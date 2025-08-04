@@ -4,6 +4,7 @@ import { Switch, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../lib/colors';
+import NextReminderText from '../lib/components/NextReminderText';
 import { useSettingsStore } from '../lib/hooks/useSettingsStore';
 
 export default function SettingsModal() {
@@ -23,6 +24,8 @@ export default function SettingsModal() {
 
         <Switch value={remindersEnabled} onValueChange={toggleReminders} />
       </View>
+
+      <NextReminderText />
     </SafeAreaView>
   );
 }

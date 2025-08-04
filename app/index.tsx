@@ -5,6 +5,7 @@ import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../lib/colors';
+import NextReminderBanner from '../lib/components/NextReminderBanner';
 import PumpCard from '../lib/components/PumpCard';
 import VolumeGraph from '../lib/components/VolumeGraph';
 import { isInLast24Hours } from '../lib/date';
@@ -31,15 +32,13 @@ export default function Home() {
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
-      <Text variant="titleMedium" style={{ marginBottom: 12 }}>
-        Volume trend (7 Days)
-      </Text>
+      <NextReminderBanner />
+
+      <Text variant="titleMedium">Volume trend (7 Days)</Text>
 
       <VolumeGraph />
 
-      <Text variant="titleMedium" style={{ marginTop: 16, marginBottom: 8 }}>
-        Latest pumps
-      </Text>
+      <Text variant="titleMedium">Latest pumps</Text>
 
       <FlatList
         data={recentLogs}

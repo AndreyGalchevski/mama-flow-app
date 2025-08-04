@@ -15,8 +15,9 @@ function isNightTime(date: Date): boolean {
 
 export async function scheduleNextPumpReminder() {
   try {
-    const remindersEnabled = useSettingsStore.getState().remindersEnabled;
+    const { remindersEnabled, setNextReminder } = useSettingsStore.getState();
     if (!remindersEnabled) {
+      setNextReminder(null);
       return;
     }
 
@@ -29,7 +30,8 @@ export async function scheduleNextPumpReminder() {
 
     await Notifications.cancelScheduledNotificationAsync(NOTIFICATION_IDENTIFIER);
 
-    const logs = useLogsStore.getState().logs;
+    const { logs } = useLogsStore.getState();
+
     const lastLog = logs[logs.length - 1];
 
     if (!lastLog) {
@@ -48,6 +50,8 @@ export async function scheduleNextPumpReminder() {
       console.log('Next reminder time is in the past, not scheduling');
       return;
     }
+
+    setNextReminder(nextReminderTime.getTime());
 
     await Notifications.scheduleNotificationAsync({
       identifier: NOTIFICATION_IDENTIFIER,
