@@ -9,6 +9,7 @@ import PumpCard from '../../lib/components/PumpCard';
 import VolumeGraph from '../../lib/components/VolumeGraph';
 import { isInLast24Hours } from '../../lib/date';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
+import DocumentAdd from '../../lib/icons/DocumentAdd';
 
 export default function Home() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function Home() {
       />
 
       <FAB
-        icon="plus"
+        icon={() => <DocumentAdd color={COLORS.onPrimary} />}
         style={{
           backgroundColor: COLORS.primary,
           position: 'absolute',

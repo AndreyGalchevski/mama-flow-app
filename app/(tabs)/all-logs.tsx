@@ -6,7 +6,7 @@ import * as Sharing from 'expo-sharing';
 import Papa from 'papaparse';
 import { FlatList, View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
 import PumpCard from '../../lib/components/PumpCard';
@@ -16,6 +16,7 @@ import Upload from '../../lib/icons/Upload';
 
 export default function AllLogs() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const logs = useLogsStore((s) => s.logs);
 
@@ -57,8 +58,16 @@ export default function AllLogs() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16, gap: 16, backgroundColor: COLORS.background }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        paddingLeft: insets.left + 16,
+        paddingRight: insets.right + 16,
+        backgroundColor: COLORS.background,
+      }}
+    >
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
         <Button onPress={handleImportCSVPress} mode="outlined" icon={() => <Download size={20} />}>
           Import
         </Button>
@@ -73,6 +82,6 @@ export default function AllLogs() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PumpCard item={item} />}
       />
-    </SafeAreaView>
+    </View>
   );
 }
