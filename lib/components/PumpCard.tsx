@@ -2,7 +2,9 @@ import { format } from 'date-fns';
 import { Alert } from 'react-native';
 import { Card, IconButton, Text } from 'react-native-paper';
 
+import { COLORS } from '../colors';
 import { useLogsStore } from '../hooks/useLogsStore';
+import Trash from '../icons/Trash';
 import { scheduleNextPumpReminder } from '../reminders';
 import type { PumpLog } from '../types';
 
@@ -26,7 +28,7 @@ export default function PumpCard({ item }: Props) {
         right={(props) => (
           <IconButton
             {...props}
-            icon="delete"
+            icon={() => <Trash size={24} color={COLORS.onBackground} />}
             onPress={() =>
               Alert.alert('Delete Entry?', 'This cannot be undone.', [
                 { text: 'Cancel', style: 'cancel' },

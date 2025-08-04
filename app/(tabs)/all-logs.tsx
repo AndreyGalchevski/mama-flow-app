@@ -11,6 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../../lib/colors';
 import PumpCard from '../../lib/components/PumpCard';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
+import Download from '../../lib/icons/Download';
+import Upload from '../../lib/icons/Upload';
 
 export default function AllLogs() {
   const router = useRouter();
@@ -57,21 +59,11 @@ export default function AllLogs() {
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, gap: 16, backgroundColor: COLORS.background }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Button
-          onPress={handleImportCSVPress}
-          mode="outlined"
-          icon="upload"
-          // icon={() => require('../../assets/images/upload.svg')}
-        >
+        <Button onPress={handleImportCSVPress} mode="outlined" icon={() => <Download size={20} />}>
           Import
         </Button>
 
-        <Button
-          onPress={handleExportToCSVPress}
-          mode="outlined"
-          icon="download"
-          // icon={() => require('../../assets/images/download.svg')}
-        >
+        <Button onPress={handleExportToCSVPress} mode="outlined" icon={() => <Upload size={20} />}>
           Export
         </Button>
       </View>

@@ -16,21 +16,21 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: '',
           tabBarIcon: () => require('../../assets/images/tabs/home.svg'),
         }}
       />
       <Tabs.Screen
         name="all-logs"
         options={{
-          title: 'All Logs',
+          title: '',
           tabBarIcon: () => require('../../assets/images/tabs/all-logs.svg'),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: '',
           tabBarIcon: () => require('../../assets/images/tabs/settings.svg'),
         }}
       />
