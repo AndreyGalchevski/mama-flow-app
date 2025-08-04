@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
 import NextReminderBanner from '../../lib/components/NextReminderBanner';
@@ -14,6 +14,8 @@ import DocumentAdd from '../../lib/icons/DocumentAdd';
 export default function Home() {
   const router = useRouter();
 
+  const insets = useSafeAreaInsets();
+
   const logs = useLogsStore((s) => s.logs);
 
   const recentLogs = logs
@@ -21,12 +23,13 @@ export default function Home() {
     .sort((a, b) => b.timestamp - a.timestamp);
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
-        padding: 16,
-        paddingBottom: 0,
         gap: 16,
+        paddingTop: insets.top,
+        paddingLeft: insets.left + 16,
+        paddingRight: insets.right + 16,
         backgroundColor: COLORS.background,
       }}
     >
@@ -55,6 +58,6 @@ export default function Home() {
         }}
         onPress={() => router.push('/add-log-modal')}
       />
-    </SafeAreaView>
+    </View>
   );
 }

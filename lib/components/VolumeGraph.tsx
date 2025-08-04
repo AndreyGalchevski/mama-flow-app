@@ -21,7 +21,15 @@ export default function VolumeGraph() {
   });
 
   return (
-    <View style={{ borderRadius: 12, backgroundColor: COLORS.surface, padding: 16 }}>
+    <View
+      style={{
+        borderRadius: 12,
+        borderWidth: 0.5,
+        borderColor: COLORS.outline,
+        backgroundColor: COLORS.background,
+        padding: 8,
+      }}
+    >
       <LineChart
         data={volumeByDay.map((it) => ({
           value: it.volumeTotalML,
@@ -60,7 +68,7 @@ export default function VolumeGraph() {
         yAxisTextStyle={{ color: COLORS.onSurfaceVariant, fontSize: 11 }}
         xAxisLabelTextStyle={{ color: COLORS.onSurfaceVariant, fontSize: 11 }}
         rulesColor={COLORS.surfaceVariant}
-        backgroundColor={COLORS.surface}
+        backgroundColor={COLORS.background}
         noOfSections={4}
         maxValue={Math.max(...volumeByDay.map((d) => d.volumeTotalML)) * 1.1 || 100}
         focusEnabled
