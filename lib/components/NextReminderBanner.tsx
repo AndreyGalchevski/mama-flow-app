@@ -9,7 +9,11 @@ export default function NextReminderBanner() {
   const nextReminderAt = useSettingsStore((s) => s.nextReminderAt);
 
   return (
-    <Banner visible={remindersEnabled && !!nextReminderAt} icon="clock-outline">
+    <Banner
+      visible={remindersEnabled && !!nextReminderAt}
+      icon="clock-outline"
+      // icon={() => require('../../assets/images/bell.svg')}
+    >
       <View style={{ padding: 8 }}>
         {nextReminderAt && (
           <Text>Next Reminder: {formatNextReminder(new Date(nextReminderAt))}</Text>

@@ -57,11 +57,21 @@ export default function AllLogs() {
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, gap: 16, backgroundColor: COLORS.background }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Button icon="upload" onPress={handleImportCSVPress} mode="outlined">
+        <Button
+          onPress={handleImportCSVPress}
+          mode="outlined"
+          icon="upload"
+          // icon={() => require('../../assets/images/upload.svg')}
+        >
           Import
         </Button>
 
-        <Button icon="download" onPress={handleExportToCSVPress} mode="outlined">
+        <Button
+          onPress={handleExportToCSVPress}
+          mode="outlined"
+          icon="download"
+          // icon={() => require('../../assets/images/download.svg')}
+        >
           Export
         </Button>
       </View>
