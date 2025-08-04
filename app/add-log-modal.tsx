@@ -17,7 +17,7 @@ export default function AddLogModal() {
 
   const [volumeLeft, setVolumeLeft] = useState('');
   const [volumeRight, setVolumeRight] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState('20');
   const [notes, setNotes] = useState('');
   const [date, setDate] = useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
