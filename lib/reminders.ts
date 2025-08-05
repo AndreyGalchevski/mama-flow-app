@@ -3,6 +3,7 @@ import * as Notifications from 'expo-notifications';
 
 import { useLogsStore } from './hooks/useLogsStore';
 import { useSettingsStore } from './hooks/useSettingsStore';
+import { captureException } from './sentry';
 
 const NOTIFICATION_IDENTIFIER = 'pump-reminder';
 
@@ -25,6 +26,10 @@ export async function scheduleNextPumpReminder() {
     const { status } = await Notifications.requestPermissionsAsync();
     if (status !== 'granted') {
       console.log('Notification permissions not granted');
+      captureException(new Error('Notification permissions not granted'), {
+        permissionStatus: status,
+        feature: 'reminders',
+      });
       return;
     }
 
@@ -69,5 +74,9 @@ export async function scheduleNextPumpReminder() {
     console.log(`Next pump reminder scheduled for: ${nextReminderTime.toISOString()}`);
   } catch (err) {
     console.error('Failed to schedule pump reminder:', err);
+    captureException(err instanceof Error ? err : new Error('Unknown reminder scheduling error'), {
+      feature: 'reminders',
+      action: 'schedule',
+    });
   }
 }

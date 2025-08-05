@@ -8,8 +8,23 @@
     "scheme": "mamaflow",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "description": "A comprehensive pumping log tracker for breastfeeding mothers. Track volume, duration, and schedule reminders to maintain your pumping routine.",
+    "keywords": [
+      "breastfeeding",
+      "pumping",
+      "baby",
+      "health",
+      "tracking",
+      "mother",
+      "lactation",
+      "nursing"
+    ],
+    "privacy": "public",
+    "primaryColor": "#4F8A8B",
+    "githubUrl": "https://github.com/AndreyGalchevski/mama-flow-app",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.soyrage.mamaflow"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,12 +32,12 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.soyrage.mamaflow"
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "package": "com.soyrage.mamaflow",
+      "permissions": [
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
     },
     "plugins": [
       "expo-router",
@@ -43,7 +58,16 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "mama-flow",
+          "organization": "soyrage"
+        }
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true
@@ -52,7 +76,8 @@
       "router": {},
       "eas": {
         "projectId": "38532903-8a8a-48c6-8716-bf73e9769679"
-      }
+      },
+      "privacyPolicyUrl": "https://www.privacypolicies.com/live/72f69876-661a-418e-be05-37d7df86dcf0"
     },
     "owner": "andreygalchevski"
   }

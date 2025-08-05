@@ -1,0 +1,87 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry"
+  },
+  "navigation": {
+    "home": "Home",
+    "allLogs": "All Logs",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "MamaFlow",
+    "volumeTrend": "Volume trend (7 Days)",
+    "latestPumps": "Latest pumps",
+    "noPumpsIn24h": "No pumps in the last 24 hours",
+    "recentSessionsHint": "Your recent pumping sessions will appear here",
+    "welcome": {
+      "title": "Welcome to MamaFlow!",
+      "description": "Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule.",
+      "addFirstLog": "Add Your First Log",
+      "importData": "Import Existing Data",
+      "setupReminders": "Set Up Reminders"
+    }
+  },
+  "logs": {
+    "newPumpLog": "New Pump Log",
+    "updatePumpLog": "Update Pump Log",
+    "volumeLeft": "Volume Left (ml)",
+    "volumeRight": "Volume Right (ml)",
+    "duration": "Duration (minutes)",
+    "notes": "Notes (optional)",
+    "volume": "Volume",
+    "deleteConfirm": {
+      "title": "Delete Entry?",
+      "message": "This cannot be undone."
+    },
+    "allLogs": {
+      "title": "All Logs",
+      "empty": {
+        "title": "No pump logs yet",
+        "description": "Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file. Don't forget to set up reminders to help maintain your schedule!",
+        "addFirstLog": "Add Your First Log",
+        "importFromCSV": "Import from CSV",
+        "configureReminders": "Configure Reminders"
+      },
+      "import": "Import",
+      "export": "Export"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "reminders": "Reminders",
+    "dayReminders": "Hours between daytime reminders",
+    "nightReminders": "Hours between nighttime reminders",
+    "nextReminder": "Next reminder",
+    "cancelChanges": "Cancel",
+    "saveChanges": "Save Changes"
+  },
+  "reminders": {
+    "title": "⏱ Time to pump?",
+    "body": "It's been {{hours}} hours since your last pump log.",
+    "nextReminder": "Next Reminder: {{time}}"
+  },
+  "csv": {
+    "importTitle": "Import CSV",
+    "mapFields": "Map CSV Fields",
+    "timestamp": "Timestamp (date + time)",
+    "volumeLeft": "Volume Left (ml)",
+    "volumeRight": "Volume Right (ml)",
+    "duration": "Duration (minutes)",
+    "notes": "Notes (optional)",
+    "preview": "Preview (first 3 rows)",
+    "importLogs": "Import Logs"
+  },
+  "time": {
+    "today": "today at {{time}}",
+    "tomorrow": "tomorrow at {{time}}"
+  }
+}

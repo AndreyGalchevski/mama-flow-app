@@ -1,11 +1,13 @@
 import { format, subDays } from 'date-fns';
+import { memo } from 'react';
 import { View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 
+import { AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
 import { useLogsStore } from '../hooks/useLogsStore';
 
-export default function VolumeGraph() {
+function VolumeGraph() {
   const logs = useLogsStore((s) => s.logs);
 
   const days = [...Array(7)].map((_, i) => {
@@ -29,6 +31,9 @@ export default function VolumeGraph() {
         backgroundColor: COLORS.background,
         padding: 8,
       }}
+      accessible={true}
+      accessibilityLabel={AccessibilityLabels.volumeChart}
+      accessibilityRole="image"
     >
       <LineChart
         data={volumeByDay.map((it) => ({
@@ -89,3 +94,5 @@ export default function VolumeGraph() {
     </View>
   );
 }
+
+export default memo(VolumeGraph);

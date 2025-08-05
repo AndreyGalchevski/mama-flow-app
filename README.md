@@ -1,50 +1,125 @@
-# Welcome to your Expo app 👋
+# MamaFlow 🍼
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A comprehensive pumping log tracker for breastfeeding mothers. Track volume, duration, and schedule reminders to maintain your pumping routine.
 
-## Get started
+## Features
 
-1. Install dependencies
+✨ **Core Features:**
+- 📊 Track pumping sessions with volume and duration
+- 📱 Visual trends with weekly volume charts
+- ⏰ Smart reminders with day/night scheduling
+- 📥 Import/Export data via CSV
+- 🌙 Automatic dark/light mode support
+- ♿ Full accessibility support
 
+## Screenshots
+
+*Add screenshots here when ready for store listing*
+
+## Privacy
+
+MamaFlow respects your privacy:
+- All data is stored locally on your device
+- No data is sent to external servers
+- No user tracking or analytics
+- View our [Privacy Policy](https://www.privacypolicies.com/live/72f69876-661a-418e-be05-37d7df86dcf0)
+
+## Development
+
+This is an [Expo](https://expo.dev) project built with React Native.
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+- Expo CLI
+- Android Studio (for Android development)
+- Xcode (for iOS development)
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/AndreyGalchevski/mama-flow-app.git
+   cd mama-flow-app
+   ```
+
+2. Install dependencies
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+### Building for Production
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+#### Android (Play Store)
 ```bash
-npm run reset-project
+npm run build:android:production
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+#### iOS (App Store)
+```bash
+npm run build:ios:production
+```
 
-## Learn more
+### Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+app/                    # App screens and navigation
+├── (tabs)/            # Tab navigation screens
+├── add-log-modal.tsx  # Add pump log modal
+├── edit-log/          # Edit pump log screens
+└── _layout.tsx        # Root layout
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+lib/                   # Shared utilities and components
+├── components/        # Reusable UI components
+├── hooks/            # Custom React hooks
+├── i18n/             # Internationalization
+├── icons/            # Custom SVG icons
+└── types.ts          # TypeScript type definitions
 
-## Join the community
+assets/               # Static assets (images, fonts)
+```
 
-Join our community of developers creating universal apps.
+### Technologies Used
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **React Native** - Mobile app framework
+- **Expo** - Development platform
+- **TypeScript** - Type safety
+- **React Native Paper** - UI components
+- **Zustand** - State management
+- **MMKV** - Fast local storage
+- **React Native Gifted Charts** - Data visualization
+- **expo-notifications** - Push notifications
+- **date-fns** - Date utilities
+
+### Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+### License
+
+This project is licensed under the MIT License.
+
+### Support
+
+For issues or questions:
+- Open an issue on GitHub
+- Email: support@mamaflow.app (replace with actual email)
+
+### Changelog
+
+#### v1.0.0
+- Initial release
+- Core pumping log functionality
+- Reminder system
+- CSV import/export
+- Accessibility support

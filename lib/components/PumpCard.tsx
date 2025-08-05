@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
 import { Card, IconButton, Text } from 'react-native-paper';
 
+import { AccessibilityHints, AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
 import { useLogsStore } from '../hooks/useLogsStore';
 import Trash from '../icons/Trash';
@@ -29,6 +30,10 @@ export default function PumpCard({ item }: Props) {
       style={{ marginBottom: 8 }}
       mode="contained"
       onPress={() => router.push(`/edit-log/${item.id}`)}
+      accessible={true}
+      accessibilityLabel={`Pump session from ${format(item.timestamp, 'PPp')}, ${item.volumeLeftML + item.volumeRightML} ml total`}
+      accessibilityHint={AccessibilityHints.editPumpLog}
+      accessibilityRole="button"
     >
       <Card.Title
         title={format(item.timestamp, 'PPp')}
@@ -46,13 +51,25 @@ export default function PumpCard({ item }: Props) {
                 },
               ])
             }
+            accessible={true}
+            accessibilityLabel={AccessibilityLabels.deletePumpLog}
+            accessibilityHint={AccessibilityHints.deletePumpLog}
+            accessibilityRole="button"
           />
         )}
       />
       <Card.Content>
-        <Text>Volume: {item.volumeLeftML + item.volumeRightML} ml</Text>
-        <Text>Duration: {item.durationMinutes} min</Text>
-        {item.notes ? <Text>Notes: {item.notes}</Text> : null}
+        <Text
+          accessibilityLabel={`Total volume: ${item.volumeLeftML + item.volumeRightML} milliliters`}
+        >
+          Volume: {item.volumeLeftML + item.volumeRightML} ml
+        </Text>
+        <Text accessibilityLabel={`Duration: ${item.durationMinutes} minutes`}>
+          Duration: {item.durationMinutes} min
+        </Text>
+        {item.notes ? (
+          <Text accessibilityLabel={`Notes: ${item.notes}`}>Notes: {item.notes}</Text>
+        ) : null}
       </Card.Content>
     </Card>
   );
