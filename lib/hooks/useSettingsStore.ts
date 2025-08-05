@@ -10,8 +10,7 @@ interface SettingsState {
   reminderHoursNight: number;
   toggleReminders: () => void;
   setNextReminder: (timestamp: number | null) => void;
-  setReminderHoursDay: (hours: number) => void;
-  setReminderHoursNight: (hours: number) => void;
+  updateReminderIntervals: (dayHours: number, nightHours: number) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -23,8 +22,12 @@ export const useSettingsStore = create<SettingsState>()(
       reminderHoursNight: 4,
       toggleReminders: () => set({ remindersEnabled: !get().remindersEnabled }),
       setNextReminder: (timestamp) => set({ nextReminderAt: timestamp }),
-      setReminderHoursDay: (hours) => set({ reminderHoursDay: hours }),
-      setReminderHoursNight: (hours) => set({ reminderHoursNight: hours }),
+      updateReminderIntervals: (dayHours, nightHours) => {
+        set({
+          reminderHoursDay: dayHours,
+          reminderHoursNight: nightHours,
+        });
+      },
     }),
     {
       name: 'settings',
