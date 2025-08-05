@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
 import { Card, IconButton, Text } from 'react-native-paper';
 
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export default function PumpCard({ item }: Props) {
+  const router = useRouter();
+
   const logs = useLogsStore((s) => s.logs);
 
   const handleDeleteConfirm = async () => {
@@ -22,9 +25,13 @@ export default function PumpCard({ item }: Props) {
   };
 
   return (
-    <Card style={{ marginBottom: 8 }}>
+    <Card
+      style={{ marginBottom: 8 }}
+      mode="contained"
+      onPress={() => router.push(`/edit-log/${item.id}`)}
+    >
       <Card.Title
-        title={format(item.timestamp, 'PPpp')}
+        title={format(item.timestamp, 'PPp')}
         right={(props) => (
           <IconButton
             {...props}

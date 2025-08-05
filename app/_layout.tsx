@@ -19,6 +19,10 @@ export default function RootLayout() {
           options={{ presentation: 'modal', title: 'New Pump Log' }}
         />
         <Stack.Screen
+          name="edit-log/[id]"
+          options={{ presentation: 'modal', title: 'Update Pump Log' }}
+        />
+        <Stack.Screen
           name="import-csv-modal"
           options={{ presentation: 'modal', title: 'Import CSV' }}
         />
