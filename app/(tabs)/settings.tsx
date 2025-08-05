@@ -37,7 +37,7 @@ export default function Settings() {
 
       <TextInput
         mode="outlined"
-        label="Reminder hours (day)"
+        label="Hours between daytime reminders"
         value={String(reminderHoursDay)}
         onChangeText={(text) => setReminderHoursDay(Number(text))}
         keyboardType="numeric"
@@ -45,7 +45,7 @@ export default function Settings() {
 
       <TextInput
         mode="outlined"
-        label="Reminder hours (night)"
+        label="Hours between nighttime reminders"
         value={String(reminderHoursNight)}
         onChangeText={(text) => setReminderHoursNight(Number(text))}
         keyboardType="numeric"
