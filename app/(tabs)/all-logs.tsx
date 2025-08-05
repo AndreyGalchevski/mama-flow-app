@@ -9,6 +9,7 @@ import { Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
+import EmptyState from '../../lib/components/EmptyState';
 import PumpCard from '../../lib/components/PumpCard';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
 import Download from '../../lib/icons/Download';
@@ -67,21 +68,47 @@ export default function AllLogs() {
         backgroundColor: COLORS.background,
       }}
     >
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-        <Button onPress={handleImportCSVPress} mode="outlined" icon={() => <Download size={20} />}>
-          Import
-        </Button>
+      {logs.length > 0 && (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+          <Button
+            onPress={handleImportCSVPress}
+            mode="outlined"
+            icon={() => <Download size={20} />}
+          >
+            Import
+          </Button>
 
-        <Button onPress={handleExportToCSVPress} mode="outlined" icon={() => <Upload size={20} />}>
-          Export
-        </Button>
-      </View>
+          <Button
+            onPress={handleExportToCSVPress}
+            mode="outlined"
+            icon={() => <Upload size={20} />}
+          >
+            Export
+          </Button>
+        </View>
+      )}
 
-      <FlatList
-        data={[...logs].sort((a, b) => b.timestamp - a.timestamp)}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <PumpCard item={item} />}
-      />
+      {logs.length === 0 ? (
+        <EmptyState
+          title="No pump logs yet"
+          description="Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file."
+          primaryAction={{
+            label: 'Add Your First Log',
+            onPress: () => router.push('/add-log-modal'),
+          }}
+          secondaryAction={{
+            label: 'Import from CSV',
+            onPress: handleImportCSVPress,
+          }}
+          icon={<Download size={64} color={COLORS.primary} />}
+        />
+      ) : (
+        <FlatList
+          data={[...logs].sort((a, b) => b.timestamp - a.timestamp)}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <PumpCard item={item} />}
+        />
+      )}
     </View>
   );
 }
