@@ -91,7 +91,7 @@ export default function AllLogs() {
       {logs.length === 0 ? (
         <EmptyState
           title="No pump logs yet"
-          description="Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file."
+          description="Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file. Don't forget to set up reminders to help maintain your schedule!"
           primaryAction={{
             label: 'Add Your First Log',
             onPress: () => router.push('/add-log-modal'),
@@ -99,6 +99,10 @@ export default function AllLogs() {
           secondaryAction={{
             label: 'Import from CSV',
             onPress: handleImportCSVPress,
+          }}
+          tertiaryAction={{
+            label: 'Configure Reminders',
+            onPress: () => router.push('/(tabs)/settings'),
           }}
           icon={<Download size={64} color={COLORS.primary} />}
         />

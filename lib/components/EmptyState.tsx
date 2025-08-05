@@ -15,6 +15,10 @@ interface EmptyStateProps {
     label: string;
     onPress: () => void;
   };
+  tertiaryAction?: {
+    label: string;
+    onPress: () => void;
+  };
   icon?: ReactNode;
 }
 
@@ -23,6 +27,7 @@ export default function EmptyState({
   description,
   primaryAction,
   secondaryAction,
+  tertiaryAction,
   icon,
 }: EmptyStateProps) {
   return (
@@ -71,6 +76,12 @@ export default function EmptyState({
         {secondaryAction && (
           <Button mode="outlined" onPress={secondaryAction.onPress}>
             {secondaryAction.label}
+          </Button>
+        )}
+
+        {tertiaryAction && (
+          <Button mode="text" onPress={tertiaryAction.onPress}>
+            {tertiaryAction.label}
           </Button>
         )}
       </View>

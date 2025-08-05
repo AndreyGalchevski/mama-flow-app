@@ -36,7 +36,7 @@ export default function Home() {
       >
         <EmptyState
           title="Welcome to MamaFlow!"
-          description="Start tracking your pumping sessions to see volume trends, get reminders, and keep a record of your journey."
+          description="Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule."
           primaryAction={{
             label: 'Add Your First Log',
             onPress: () => router.push('/add-log-modal'),
@@ -44,6 +44,10 @@ export default function Home() {
           secondaryAction={{
             label: 'Import Existing Data',
             onPress: () => router.push('/(tabs)/all-logs'),
+          }}
+          tertiaryAction={{
+            label: 'Set Up Reminders',
+            onPress: () => router.push('/(tabs)/settings'),
           }}
           icon={<DocumentAdd size={64} color={COLORS.primary} />}
         />
