@@ -65,6 +65,7 @@ export default function AddLogModal() {
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
         <View style={{ flex: 1, padding: 16, gap: 8 }}>
           <TextInput
+            mode="outlined"
             label="Volume Left (ml)"
             value={volumeLeft}
             keyboardType="numeric"
@@ -73,6 +74,7 @@ export default function AddLogModal() {
           />
 
           <TextInput
+            mode="outlined"
             label="Volume Right (ml)"
             value={volumeRight}
             keyboardType="numeric"
@@ -81,6 +83,7 @@ export default function AddLogModal() {
           />
 
           <TextInput
+            mode="outlined"
             label="Duration (minutes)"
             value={duration}
             keyboardType="numeric"
@@ -89,6 +92,7 @@ export default function AddLogModal() {
           />
 
           <TextInput
+            mode="outlined"
             label="Notes (optional)"
             value={notes}
             onChangeText={setNotes}

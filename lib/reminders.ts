@@ -4,8 +4,6 @@ import * as Notifications from 'expo-notifications';
 import { useLogsStore } from './hooks/useLogsStore';
 import { useSettingsStore } from './hooks/useSettingsStore';
 
-const REMINDER_HOURS_DAY = 2.5;
-const REMINDER_HOURS_NIGHT = 4;
 const NOTIFICATION_IDENTIFIER = 'pump-reminder';
 
 function isNightTime(date: Date): boolean {
@@ -15,7 +13,9 @@ function isNightTime(date: Date): boolean {
 
 export async function scheduleNextPumpReminder() {
   try {
-    const { remindersEnabled, setNextReminder } = useSettingsStore.getState();
+    const { remindersEnabled, setNextReminder, reminderHoursDay, reminderHoursNight } =
+      useSettingsStore.getState();
+
     if (!remindersEnabled) {
       setNextReminder(null);
       return;
@@ -42,7 +42,7 @@ export async function scheduleNextPumpReminder() {
     const lastTime = new Date(lastLog.timestamp);
     const now = new Date();
 
-    const interval = isNightTime(now) ? REMINDER_HOURS_NIGHT : REMINDER_HOURS_DAY;
+    const interval = isNightTime(now) ? reminderHoursNight : reminderHoursDay;
     const nextReminderTime = addHours(lastTime, interval);
 
     // Only schedule if the reminder time is in the future
