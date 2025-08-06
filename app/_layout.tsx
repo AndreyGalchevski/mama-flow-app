@@ -1,27 +1,43 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { PaperProvider } from 'react-native-paper';
-import { en, registerTranslation, ru } from 'react-native-paper-dates';
+import { I18nManager } from 'react-native';
+import { MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { en, he, registerTranslation, ru } from 'react-native-paper-dates';
 import 'react-native-reanimated';
 
 import { COLORS } from '../lib/colors';
 import ErrorBoundary from '../lib/components/ErrorBoundary';
 import WelcomeModal from '../lib/components/WelcomeModal';
-import i18n from '../lib/i18n';
+import i18n, { isRTL } from '../lib/i18n';
 import { initSentry } from '../lib/sentry';
 
 registerTranslation('en', en);
 registerTranslation('ru', ru);
+registerTranslation('he', he);
 
 export default function RootLayout() {
   useEffect(() => {
     initSentry();
+
+    const rtl = isRTL();
+
+    if (I18nManager.isRTL !== rtl) {
+      I18nManager.allowRTL(rtl);
+      I18nManager.forceRTL(rtl);
+    }
   }, []);
 
   return (
     <ErrorBoundary>
-      <PaperProvider theme={{ dark: false, roundness: 8, colors: COLORS }}>
+      <PaperProvider
+        theme={{
+          ...MD3LightTheme,
+          dark: false,
+          roundness: 8,
+          colors: COLORS,
+        }}
+      >
         <StatusBar style="dark" />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

@@ -27,15 +27,6 @@ interface Props {
 export default function PumpLogForm({ initialState, onSave }: Props) {
   const router = useRouter();
 
-  const getModalLocale = () => {
-    switch (i18n.locale) {
-      case 'ru':
-        return 'ru';
-      default:
-        return 'en';
-    }
-  };
-
   const [volumeLeft, setVolumeLeft] = useState('');
   const [volumeRight, setVolumeRight] = useState('');
   const [duration, setDuration] = useState('20');
@@ -145,7 +136,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
       </SafeAreaView>
 
       <DatePickerModal
-        locale={getModalLocale()}
+        locale={i18n.locale}
         mode="single"
         visible={showDatePicker}
         onDismiss={() => setShowDatePicker(false)}
@@ -159,7 +150,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
         onConfirm={handleTimeConfirm}
         hours={date.getHours()}
         minutes={date.getMinutes()}
-        locale={getModalLocale()}
+        locale={i18n.locale}
         label={i18n.t('form.selectTime')}
       />
     </>

@@ -1,5 +1,5 @@
 import { format, isAfter, isToday, isTomorrow, subHours } from 'date-fns';
-import { enUS, ru } from 'date-fns/locale';
+import { enUS, he, ru } from 'date-fns/locale';
 
 import i18n from './i18n';
 
@@ -7,6 +7,8 @@ export const getDateLocale = () => {
   switch (i18n.locale) {
     case 'ru':
       return ru;
+    case 'he':
+      return he;
     default:
       return enUS;
   }

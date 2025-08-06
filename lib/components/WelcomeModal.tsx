@@ -89,53 +89,66 @@ export default function WelcomeModal() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    justifyContent: 'center',
+    flex: 1,
+    padding: 24,
   },
   content: {
-    padding: 24,
+    paddingVertical: 24,
+  },
+  scrollContent: {
+    paddingBottom: 24,
   },
   header: {
     alignItems: 'center',
     marginBottom: 32,
   },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 16,
+  },
   title: {
-    marginTop: 16,
-    marginBottom: 4,
     textAlign: 'center',
-    fontWeight: 'bold',
+    marginBottom: 8,
   },
   subtitle: {
     textAlign: 'center',
     opacity: 0.7,
   },
-  privacySection: {
+  section: {
+    marginBottom: 32,
+  },
+  sectionTitle: {
     marginBottom: 16,
+    textAlign: 'center',
+  },
+  privacySection: {
+    marginBottom: 24,
   },
   featureRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 16,
   },
   featureText: {
     flex: 1,
-    marginLeft: 16,
+    marginStart: 16,
   },
   featureTitle: {
     marginBottom: 4,
-    fontWeight: '600',
   },
   featureDescription: {
-    opacity: 0.8,
-    lineHeight: 20,
+    opacity: 0.7,
   },
   footer: {
-    alignItems: 'center',
+    marginTop: 16,
   },
   disclaimer: {
     textAlign: 'center',
-    opacity: 0.7,
-    fontStyle: 'italic',
-    lineHeight: 18,
+    opacity: 0.6,
+  },
+  buttonContainer: {
+    marginTop: 'auto',
+    paddingTop: 24,
   },
 });

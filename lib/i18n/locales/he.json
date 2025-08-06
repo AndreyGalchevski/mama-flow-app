@@ -1,0 +1,153 @@
+{
+  "common": {
+    "save": "שמור",
+    "cancel": "ביטול",
+    "delete": "מחק",
+    "confirm": "אשר",
+    "yes": "כן",
+    "no": "לא",
+    "loading": "טוען...",
+    "error": "שגיאה",
+    "retry": "נסה שוב"
+  },
+  "navigation": {
+    "home": "בית",
+    "allLogs": "כל הרשומות",
+    "settings": "הגדרות"
+  },
+  "home": {
+    "title": "MamaFlow",
+    "volumeTrend": "מגמת נפח (7 ימים)",
+    "latestPumps": "שאיבות אחרונות",
+    "empty": {
+      "title": "ברוכים הבאים ל-MamaFlow!",
+      "description": "התחילי לעקוב אחר סשני השאיבה שלך כדי לראות מגמות נפח ולשמור תיעוד של המסע שלך. הגדירי תזכורות אישיות כדי לעזור לשמור על לוח הזמנים של השאיבה.",
+      "primaryAction": "הוסיפי את הרשומה הראשונה שלך",
+      "secondaryAction": "ייבוא נתונים קיימים",
+      "tertiaryAction": "הגדרת תזכורות"
+    },
+    "noRecentPumps": {
+      "title": "אין שאיבות ב-24 השעות האחרונות",
+      "description": "סשני השאיבה האחרונים שלך יופיעו כאן"
+    },
+    "welcome": {
+      "title": "ברוכים הבאים ל-MamaFlow!",
+      "description": "התחילי לעקוב אחר סשני השאיבה שלך כדי לראות מגמות נפח ולשמור תיעוד של המסע שלך. הגדירי תזכורות אישיות כדי לעזור לשמור על לוח הזמנים של השאיבה.",
+      "addFirstLog": "הוסיפי את הרשומה הראשונה שלך",
+      "importData": "ייבוא נתונים קיימים",
+      "setupReminders": "הגדרת תזכורות"
+    }
+  },
+  "importCSV": {
+    "title": "מיפוי שדות CSV",
+    "preview": "תצוגה מקדימה (3 שורות ראשונות)",
+    "importButton": "ייבוא רשומות",
+    "fields": {
+      "timestamp": "זמן (תאריך + שעה)",
+      "volumeLeft": "נפח שד שמאל (מ\"ל)",
+      "volumeRight": "נפח שד ימין (מ\"ל)",
+      "duration": "משך זמן (דקות)",
+      "notes": "הערות (אופציונלי)"
+    }
+  },
+  "logs": {
+    "newPumpLog": "רשומת שאיבה חדשה",
+    "updatePumpLog": "עדכון רשומת שאיבה",
+    "volumeLeft": "נפח שד שמאל (מ\"ל)",
+    "volumeRight": "נפח שד ימין (מ\"ל)",
+    "duration": "משך זמן (דקות)",
+    "notes": "הערות (אופציונלי)",
+    "volume": "נפח",
+    "volumeLabel": "נפח: {{volume}} מ\"ל",
+    "durationLabel": "משך זמן: {{duration}} דק'",
+    "notesLabel": "הערות: {{notes}}",
+    "deleteConfirm": {
+      "title": "למחוק רשומה?",
+      "message": "לא ניתן לבטל פעולה זו."
+    },
+    "allLogs": {
+      "title": "כל הרשומות",
+      "import": "ייבוא",
+      "export": "ייצוא",
+      "shareDialogTitle": "שיתוף קובץ CSV של רשומות שאיבה",
+      "empty": {
+        "title": "אין עדיין רשומות שאיבה",
+        "description": "רשומות השאיבה שלך יופיעו כאן. התחילי על ידי הוספת הרשומה הראשונה שלך או ייבוא נתונים קיימים מקובץ CSV. אל תשכחי להגדיר תזכורות כדי לעזור לשמור על הלוח זמנים!",
+        "primaryAction": "הוסיפי את הרשומה הראשונה שלך",
+        "secondaryAction": "ייבוא מ-CSV",
+        "tertiaryAction": "הגדרת תזכורות"
+      }
+    }
+  },
+  "settings": {
+    "title": "הגדרות",
+    "reminders": "תזכורות",
+    "useReminders": "שימוש בתזכורות",
+    "dayReminders": "שעות בין תזכורות יום",
+    "nightReminders": "שעות בין תזכורות לילה",
+    "nextReminder": "התזכורת הבאה",
+    "cancelChanges": "ביטול",
+    "saveChanges": "שמור שינויים",
+    "privacy": {
+      "title": "פרטיות ונתונים",
+      "localStorage": "כל הנתונים נשמרים מקומית במכשיר שלך",
+      "localStorageDesc": "ללא סנכרון ענן, חשבונות או שיתוף נתונים",
+      "dataOwnership": "רשומות השאיבה שלך לעולם לא עוזבות את הטלפון שלך",
+      "dataOwnershipDesc": "פרטיות מלאה ובעלות על הנתונים",
+      "showWelcomeAgain": "[פיתוח] הצג ברכה שוב"
+    }
+  },
+  "reminders": {
+    "title": "⏱ זמן לשאוב?",
+    "body": "עברו {{hours}} שעות מאז רשומת השאיבה האחרונה שלך.",
+    "nextReminder": "התזכורת הבאה: {{time}}",
+    "nextReminderShort": "התזכורת הבאה: {{time}}"
+  },
+  "csv": {
+    "importTitle": "ייבוא CSV",
+    "mapFields": "מיפוי שדות CSV",
+    "timestamp": "זמן (תאריך + שעה)",
+    "volumeLeft": "נפח שד שמאל (מ\"ל)",
+    "volumeRight": "נפח שד ימין (מ\"ל)",
+    "duration": "משך זמן (דקות)",
+    "notes": "הערות (אופציונלי)",
+    "preview": "תצוגה מקדימה (3 שורות ראשונות)",
+    "importLogs": "ייבוא רשומות"
+  },
+  "time": {
+    "today": "היום ב-{{time}}",
+    "tomorrow": "מחר ב-{{time}}"
+  },
+  "welcome": {
+    "title": "ברוכים הבאים ל-MamaFlow",
+    "subtitle": "מעקב שאיבה עם פרטיות תחילה",
+    "features": {
+      "dataOwnership": {
+        "title": "הנתונים שלך, המכשיר שלך",
+        "description": "כל רשומות השאיבה נשמרות מקומית בטלפון שלך"
+      },
+      "noAccount": {
+        "title": "לא נדרש חשבון",
+        "description": "התחילי לעקוב מיד, באופן אנונימי לחלוטין"
+      },
+      "noCloud": {
+        "title": "ללא סנכרון ענן",
+        "description": "עובד במצב לא מקוון, הנתונים לעולם לא עוזבים את המכשיר שלך"
+      }
+    },
+    "disclaimer": "כי מסע השאיבה שלך צריך להיות פרטי, מאובטח ולחלוטין תחת השליטה שלך.",
+    "startButton": "התחילי מעקב פרטי"
+  },
+  "form": {
+    "selectDate": "בחרי תאריך",
+    "selectTime": "בחרי שעה"
+  },
+  "units": {
+    "ml": "מ״ל",
+    "volumeWithUnit": "{{volume}} מ״ל"
+  },
+  "privacy": {
+    "bannerTitle": "הנתונים שלך, המכשיר שלך",
+    "bannerDescription": "MamaFlow שומר את כל רשומות השאיבה שלך מקומית בטלפון שלך. ללא סנכרון ענן, חשבונות או שיתוף נתונים."
+  }
+}

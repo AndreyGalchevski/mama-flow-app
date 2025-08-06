@@ -40,7 +40,7 @@ function VolumeGraph() {
         data={volumeByDay.map((it) => ({
           value: it.volumeTotalML,
           label: format(new Date(it.date), 'EEE', { locale: getDateLocale() }),
-          dataPointText: `${it.volumeTotalML}ml`,
+          dataPointText: it.volumeTotalML.toString(),
         }))}
         width={300}
         height={200}
