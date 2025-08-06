@@ -20,14 +20,35 @@
     "title": "MamaFlow",
     "volumeTrend": "Volume trend (7 Days)",
     "latestPumps": "Latest pumps",
-    "noPumpsIn24h": "No pumps in the last 24 hours",
-    "recentSessionsHint": "Your recent pumping sessions will appear here",
+    "empty": {
+      "title": "Welcome to MamaFlow!",
+      "description": "Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule.",
+      "primaryAction": "Add Your First Log",
+      "secondaryAction": "Import Existing Data",
+      "tertiaryAction": "Set Up Reminders"
+    },
+    "noRecentPumps": {
+      "title": "No pumps in the last 24 hours",
+      "description": "Your recent pumping sessions will appear here"
+    },
     "welcome": {
       "title": "Welcome to MamaFlow!",
       "description": "Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule.",
       "addFirstLog": "Add Your First Log",
       "importData": "Import Existing Data",
       "setupReminders": "Set Up Reminders"
+    }
+  },
+  "importCSV": {
+    "title": "Map CSV Fields",
+    "preview": "Preview (first 3 rows)",
+    "importButton": "Import Logs",
+    "fields": {
+      "timestamp": "Timestamp (date + time)",
+      "volumeLeft": "Volume Left (ml)",
+      "volumeRight": "Volume Right (ml)",
+      "duration": "Duration (minutes)",
+      "notes": "Notes (optional)"
     }
   },
   "logs": {
@@ -44,15 +65,16 @@
     },
     "allLogs": {
       "title": "All Logs",
+      "import": "Import",
+      "export": "Export",
+      "shareDialogTitle": "Share Pump Logs CSV",
       "empty": {
         "title": "No pump logs yet",
         "description": "Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file. Don't forget to set up reminders to help maintain your schedule!",
-        "addFirstLog": "Add Your First Log",
-        "importFromCSV": "Import from CSV",
-        "configureReminders": "Configure Reminders"
-      },
-      "import": "Import",
-      "export": "Export"
+        "primaryAction": "Add Your First Log",
+        "secondaryAction": "Import from CSV",
+        "tertiaryAction": "Configure Reminders"
+      }
     }
   },
   "settings": {
@@ -62,7 +84,15 @@
     "nightReminders": "Hours between nighttime reminders",
     "nextReminder": "Next reminder",
     "cancelChanges": "Cancel",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "privacy": {
+      "title": "Privacy & Data",
+      "localStorage": "All data stored locally on your device",
+      "localStorageDesc": "No cloud sync, no accounts, no data sharing",
+      "dataOwnership": "Your pumping logs never leave your phone",
+      "dataOwnershipDesc": "Complete privacy and data ownership",
+      "showWelcomeAgain": "[Dev] Show Welcome Again"
+    }
   },
   "reminders": {
     "title": "⏱ Time to pump?",
@@ -83,5 +113,33 @@
   "time": {
     "today": "today at {{time}}",
     "tomorrow": "tomorrow at {{time}}"
+  },
+  "welcome": {
+    "title": "Welcome to MamaFlow",
+    "subtitle": "Privacy-First Pumping Tracker",
+    "features": {
+      "dataOwnership": {
+        "title": "Your Data, Your Device",
+        "description": "All pumping logs stored locally on your phone"
+      },
+      "noAccount": {
+        "title": "No Account Required",
+        "description": "Start tracking immediately, completely anonymous"
+      },
+      "noCloud": {
+        "title": "No Cloud Sync",
+        "description": "Works offline, data never leaves your device"
+      }
+    },
+    "disclaimer": "Because your pumping journey should be private, secure, and completely under your control.",
+    "startButton": "Start Tracking Privately"
+  },
+  "form": {
+    "selectDate": "Select date",
+    "selectTime": "Select time"
+  },
+  "privacy": {
+    "bannerTitle": "Your Data, Your Device",
+    "bannerDescription": "MamaFlow keeps all your pumping logs locally on your phone. No cloud sync, no accounts, no data sharing."
   }
 }

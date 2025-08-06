@@ -7,6 +7,7 @@ import { COLORS } from '../../lib/colors';
 import NextReminderText from '../../lib/components/NextReminderText';
 import { useResetFirstTime } from '../../lib/hooks/useFirstTimeUser';
 import { useSettingsStore } from '../../lib/hooks/useSettingsStore';
+import i18n from '../../lib/i18n';
 import { scheduleNextPumpReminder } from '../../lib/reminders';
 
 const isValidInput = (dayHoursStr: string, nightHoursStr: string) => {
@@ -62,7 +63,7 @@ export default function Settings() {
       }}
     >
       <View>
-        <Text variant="titleMedium">Reminders</Text>
+        <Text variant="titleMedium">{i18n.t('settings.reminders')}</Text>
 
         <View
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
@@ -78,7 +79,7 @@ export default function Settings() {
           <TextInput
             ref={localDayHoursInputRef}
             mode="outlined"
-            label="Hours between daytime reminders"
+            label={i18n.t('settings.dayReminders')}
             value={localDayHours}
             onChangeText={setLocalDayHours}
             keyboardType="numeric"
@@ -91,7 +92,7 @@ export default function Settings() {
           <TextInput
             ref={localNightHoursInputRef}
             mode="outlined"
-            label="Hours between nighttime reminders"
+            label={i18n.t('settings.nightReminders')}
             value={localNightHours}
             onChangeText={setLocalNightHours}
             keyboardType="numeric"
@@ -104,7 +105,7 @@ export default function Settings() {
           {hasChanges && (
             <View style={{ flexDirection: 'row', gap: 12 }}>
               <Button mode="outlined" onPress={handleResetIntervals} style={{ flex: 1 }}>
-                Cancel
+                {i18n.t('settings.cancelChanges')}
               </Button>
               <Button
                 mode="contained"
@@ -112,7 +113,7 @@ export default function Settings() {
                 disabled={!isValidInput(localDayHours, localNightHours)}
                 style={{ flex: 1 }}
               >
-                Save Changes
+                {i18n.t('settings.saveChanges')}
               </Button>
             </View>
           )}
@@ -122,14 +123,14 @@ export default function Settings() {
       <Divider style={{ marginVertical: 8 }} />
 
       <View style={{ gap: 12 }}>
-        <Text variant="titleMedium">Privacy & Data</Text>
+        <Text variant="titleMedium">{i18n.t('settings.privacy.title')}</Text>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <Icon source="shield-check" size={20} />
           <View style={{ flex: 1 }}>
-            <Text variant="bodyMedium">All data stored locally on your device</Text>
+            <Text variant="bodyMedium">{i18n.t('settings.privacy.localStorage')}</Text>
             <Text variant="bodySmall" style={{ opacity: 0.7 }}>
-              No cloud sync, no accounts, no data sharing
+              {i18n.t('settings.privacy.localStorageDesc')}
             </Text>
           </View>
         </View>
@@ -137,16 +138,16 @@ export default function Settings() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <Icon source="cellphone-lock" size={20} />
           <View style={{ flex: 1 }}>
-            <Text variant="bodyMedium">Your pumping logs never leave your phone</Text>
+            <Text variant="bodyMedium">{i18n.t('settings.privacy.dataOwnership')}</Text>
             <Text variant="bodySmall" style={{ opacity: 0.7 }}>
-              Complete privacy and data ownership
+              {i18n.t('settings.privacy.dataOwnershipDesc')}
             </Text>
           </View>
         </View>
 
         {__DEV__ && (
           <Button mode="outlined" onPress={resetFirstTime} style={{ marginTop: 8 }}>
-            [Dev] Show Welcome Again
+            {i18n.t('settings.privacy.showWelcomeAgain')}
           </Button>
         )}
       </View>

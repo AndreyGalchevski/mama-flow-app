@@ -10,6 +10,7 @@ import PumpCard from '../../lib/components/PumpCard';
 import VolumeGraph from '../../lib/components/VolumeGraph';
 import { isInLast24Hours } from '../../lib/date';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
+import i18n from '../../lib/i18n';
 import DocumentAdd from '../../lib/icons/DocumentAdd';
 
 export default function Home() {
@@ -34,18 +35,18 @@ export default function Home() {
         }}
       >
         <EmptyState
-          title="Welcome to MamaFlow!"
-          description="Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule."
+          title={i18n.t('home.empty.title')}
+          description={i18n.t('home.empty.description')}
           primaryAction={{
-            label: 'Add Your First Log',
+            label: i18n.t('home.empty.primaryAction'),
             onPress: () => router.push('/add-log-modal'),
           }}
           secondaryAction={{
-            label: 'Import Existing Data',
+            label: i18n.t('home.empty.secondaryAction'),
             onPress: () => router.push('/(tabs)/all-logs'),
           }}
           tertiaryAction={{
-            label: 'Set Up Reminders',
+            label: i18n.t('home.empty.tertiaryAction'),
             onPress: () => router.push('/(tabs)/settings'),
           }}
           icon={<DocumentAdd size={64} color={COLORS.primary} />}
@@ -67,11 +68,11 @@ export default function Home() {
     >
       <NextReminderBanner />
 
-      <Text variant="titleMedium">Volume trend (7 Days)</Text>
+      <Text variant="titleMedium">{i18n.t('home.volumeTrend')}</Text>
 
       <VolumeGraph />
 
-      <Text variant="titleMedium">Latest pumps</Text>
+      <Text variant="titleMedium">{i18n.t('home.latestPumps')}</Text>
 
       {recentLogs.length === 0 ? (
         <View
@@ -90,7 +91,7 @@ export default function Home() {
               marginBottom: 16,
             }}
           >
-            No pumps in the last 24 hours
+            {i18n.t('home.noRecentPumps.title')}
           </Text>
           <Text
             variant="bodyMedium"
@@ -99,7 +100,7 @@ export default function Home() {
               color: COLORS.onSurfaceVariant,
             }}
           >
-            Your recent pumping sessions will appear here
+            {i18n.t('home.noRecentPumps.description')}
           </Text>
         </View>
       ) : (

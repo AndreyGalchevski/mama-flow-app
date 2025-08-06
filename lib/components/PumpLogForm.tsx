@@ -7,6 +7,7 @@ import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
+import i18n from '../i18n';
 import type { PumpLog } from '../types';
 
 export interface PumpLogFormData {
@@ -84,7 +85,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
         <View style={{ flex: 1, padding: 16, gap: 8 }}>
           <TextInput
             mode="outlined"
-            label="Volume Left (ml)"
+            label={i18n.t('logs.volumeLeft')}
             value={volumeLeft}
             keyboardType="numeric"
             onChangeText={setVolumeLeft}
@@ -93,29 +94,26 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
           <TextInput
             mode="outlined"
-            label="Volume Right (ml)"
+            label={i18n.t('logs.volumeRight')}
             value={volumeRight}
             keyboardType="numeric"
             onChangeText={setVolumeRight}
-            style={{ marginTop: 16 }}
           />
 
           <TextInput
             mode="outlined"
-            label="Duration (minutes)"
+            label={i18n.t('logs.duration')}
             value={duration}
             keyboardType="numeric"
             onChangeText={setDuration}
-            style={{ marginTop: 8 }}
           />
 
           <TextInput
             mode="outlined"
-            label="Notes (optional)"
+            label={i18n.t('logs.notes')}
             value={notes}
             onChangeText={setNotes}
             multiline
-            style={{ marginTop: 8 }}
           />
 
           <Button onPress={() => setShowDatePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
@@ -129,10 +127,10 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
         <View style={{ padding: 16, gap: 8 }}>
           <Button mode="contained" onPress={handleSave}>
-            Save
+            {i18n.t('common.save')}
           </Button>
 
-          <Button onPress={() => router.back()}>Cancel</Button>
+          <Button onPress={() => router.back()}>{i18n.t('common.cancel')}</Button>
         </View>
       </SafeAreaView>
 
@@ -152,7 +150,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
         hours={date.getHours()}
         minutes={date.getMinutes()}
         locale="en"
-        label="Select time"
+        label={i18n.t('form.selectTime')}
       />
     </>
   );

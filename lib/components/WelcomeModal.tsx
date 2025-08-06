@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Card, Icon, Modal, Portal, Text } from 'react-native-paper';
 
 import { useMarkWelcomeSeen, useShowWelcome } from '../hooks/useFirstTimeUser';
+import i18n from '../i18n';
 import ShieldCheck from '../icons/ShieldCheck';
 
 const FeatureRow = ({
@@ -40,45 +41,44 @@ export default function WelcomeModal() {
               <ShieldCheck size={48} />
 
               <Text variant="headlineSmall" style={styles.title}>
-                Welcome to MamaFlow
+                {i18n.t('welcome.title')}
               </Text>
 
               <Text variant="titleMedium" style={styles.subtitle}>
-                Privacy-First Pumping Tracker
+                {i18n.t('welcome.subtitle')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
               <FeatureRow
                 icon="cellphone-lock"
-                title="Your Data, Your Device"
-                description="All pumping logs stored locally on your phone"
+                title={i18n.t('welcome.features.dataOwnership.title')}
+                description={i18n.t('welcome.features.dataOwnership.description')}
               />
 
               <FeatureRow
                 icon="account-off"
-                title="No Account Required"
-                description="Start tracking immediately, completely anonymous"
+                title={i18n.t('welcome.features.noAccount.title')}
+                description={i18n.t('welcome.features.noAccount.description')}
               />
 
               <FeatureRow
                 icon="cloud-off-outline"
-                title="No Cloud Sync"
-                description="Works offline, data never leaves your device"
+                title={i18n.t('welcome.features.noCloud.title')}
+                description={i18n.t('welcome.features.noCloud.description')}
               />
             </View>
 
             <View style={styles.footer}>
               <Text variant="bodySmall" style={styles.disclaimer}>
-                Because your pumping journey should be private, secure, and completely under your
-                control.
+                {i18n.t('welcome.disclaimer')}
               </Text>
             </View>
           </Card.Content>
 
           <Card.Actions style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Button mode="contained" onPress={markWelcomeSeen}>
-              Start Tracking Privately
+              {i18n.t('welcome.startButton')}
             </Button>
           </Card.Actions>
         </Card>

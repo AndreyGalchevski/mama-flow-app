@@ -10,14 +10,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../lib/colors';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
+import i18n from '../lib/i18n';
 import type { PumpLog } from '../lib/types';
 
 const pumpLogFields: { key: keyof PumpLog; label: string }[] = [
-  { key: 'timestamp', label: 'Timestamp (date + time)' },
-  { key: 'volumeLeftML', label: 'Volume Left (ml)' },
-  { key: 'volumeRightML', label: 'Volume Right (ml)' },
-  { key: 'durationMinutes', label: 'Duration (minutes)' },
-  { key: 'notes', label: 'Notes (optional)' },
+  { key: 'timestamp', label: i18n.t('importCSV.fields.timestamp') },
+  { key: 'volumeLeftML', label: i18n.t('importCSV.fields.volumeLeft') },
+  { key: 'volumeRightML', label: i18n.t('importCSV.fields.volumeRight') },
+  { key: 'durationMinutes', label: i18n.t('importCSV.fields.duration') },
+  { key: 'notes', label: i18n.t('importCSV.fields.notes') },
 ];
 
 export default function ImportCSVModal() {
@@ -80,7 +81,7 @@ export default function ImportCSVModal() {
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
       <ScrollView>
         <Text variant="titleMedium" style={{ marginBottom: 12 }}>
-          Map CSV Fields
+          {i18n.t('importCSV.title')}
         </Text>
 
         {pumpLogFields.map((field) => (
@@ -97,7 +98,7 @@ export default function ImportCSVModal() {
 
         <Divider style={{ marginVertical: 16 }} />
 
-        <Text variant="titleSmall">Preview (first 3 rows)</Text>
+        <Text variant="titleSmall">{i18n.t('importCSV.preview')}</Text>
 
         {rows.slice(0, 3).map((row, i) => (
           <Text key={i} style={{ fontSize: 12, marginBottom: 4 }}>
@@ -116,11 +117,11 @@ export default function ImportCSVModal() {
             !fieldMap.durationMinutes
           }
         >
-          Import Logs
+          {i18n.t('importCSV.importButton')}
         </Button>
 
         <Button onPress={() => router.back()} style={{ marginTop: 8 }}>
-          Cancel
+          {i18n.t('common.cancel')}
         </Button>
       </ScrollView>
     </SafeAreaView>

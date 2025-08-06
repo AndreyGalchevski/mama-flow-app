@@ -12,6 +12,7 @@ import { COLORS } from '../../lib/colors';
 import EmptyState from '../../lib/components/EmptyState';
 import PumpCard from '../../lib/components/PumpCard';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
+import i18n from '../../lib/i18n';
 import Download from '../../lib/icons/Download';
 import Upload from '../../lib/icons/Upload';
 
@@ -54,7 +55,7 @@ export default function AllLogs() {
 
     await Sharing.shareAsync(fileUri, {
       mimeType: 'text/csv',
-      dialogTitle: 'Share Pump Logs CSV',
+      dialogTitle: i18n.t('logs.allLogs.shareDialogTitle'),
     });
   };
 
@@ -75,7 +76,7 @@ export default function AllLogs() {
             mode="outlined"
             icon={() => <Download size={20} />}
           >
-            Import
+            {i18n.t('logs.allLogs.import')}
           </Button>
 
           <Button
@@ -83,25 +84,25 @@ export default function AllLogs() {
             mode="outlined"
             icon={() => <Upload size={20} />}
           >
-            Export
+            {i18n.t('logs.allLogs.export')}
           </Button>
         </View>
       )}
 
       {logs.length === 0 ? (
         <EmptyState
-          title="No pump logs yet"
-          description="Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file. Don't forget to set up reminders to help maintain your schedule!"
+          title={i18n.t('logs.allLogs.empty.title')}
+          description={i18n.t('logs.allLogs.empty.description')}
           primaryAction={{
-            label: 'Add Your First Log',
+            label: i18n.t('logs.allLogs.empty.primaryAction'),
             onPress: () => router.push('/add-log-modal'),
           }}
           secondaryAction={{
-            label: 'Import from CSV',
+            label: i18n.t('logs.allLogs.empty.secondaryAction'),
             onPress: handleImportCSVPress,
           }}
           tertiaryAction={{
-            label: 'Configure Reminders',
+            label: i18n.t('logs.allLogs.empty.tertiaryAction'),
             onPress: () => router.push('/(tabs)/settings'),
           }}
           icon={<Download size={64} color={COLORS.primary} />}
