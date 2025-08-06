@@ -68,7 +68,7 @@ export default function Settings() {
         <View
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
         >
-          <Text>Use reminders</Text>
+          <Text>{i18n.t('settings.useReminders')}</Text>
 
           <Switch value={remindersEnabled} onValueChange={toggleReminders} />
         </View>

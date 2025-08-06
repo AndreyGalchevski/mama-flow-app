@@ -7,6 +7,7 @@ import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
+import { getDateLocale } from '../date';
 import i18n from '../i18n';
 import type { PumpLog } from '../types';
 
@@ -25,6 +26,15 @@ interface Props {
 
 export default function PumpLogForm({ initialState, onSave }: Props) {
   const router = useRouter();
+
+  const getModalLocale = () => {
+    switch (i18n.locale) {
+      case 'ru':
+        return 'ru';
+      default:
+        return 'en';
+    }
+  };
 
   const [volumeLeft, setVolumeLeft] = useState('');
   const [volumeRight, setVolumeRight] = useState('');
@@ -117,11 +127,11 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
           />
 
           <Button onPress={() => setShowDatePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
-            {format(date, 'PP')}
+            {format(date, 'PP', { locale: getDateLocale() })}
           </Button>
 
           <Button onPress={() => setShowTimePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
-            {format(date, 'p')}
+            {format(date, 'p', { locale: getDateLocale() })}
           </Button>
         </View>
 
@@ -135,7 +145,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
       </SafeAreaView>
 
       <DatePickerModal
-        locale="en"
+        locale={getModalLocale()}
         mode="single"
         visible={showDatePicker}
         onDismiss={() => setShowDatePicker(false)}
@@ -149,7 +159,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
         onConfirm={handleTimeConfirm}
         hours={date.getHours()}
         minutes={date.getMinutes()}
-        locale="en"
+        locale={getModalLocale()}
         label={i18n.t('form.selectTime')}
       />
     </>

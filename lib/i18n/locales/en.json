@@ -59,6 +59,9 @@
     "duration": "Duration (minutes)",
     "notes": "Notes (optional)",
     "volume": "Volume",
+    "volumeLabel": "Volume: {{volume}} ml",
+    "durationLabel": "Duration: {{duration}} min",
+    "notesLabel": "Notes: {{notes}}",
     "deleteConfirm": {
       "title": "Delete Entry?",
       "message": "This cannot be undone."
@@ -80,6 +83,7 @@
   "settings": {
     "title": "Settings",
     "reminders": "Reminders",
+    "useReminders": "Use reminders",
     "dayReminders": "Hours between daytime reminders",
     "nightReminders": "Hours between nighttime reminders",
     "nextReminder": "Next reminder",
@@ -97,7 +101,8 @@
   "reminders": {
     "title": "⏱ Time to pump?",
     "body": "It's been {{hours}} hours since your last pump log.",
-    "nextReminder": "Next Reminder: {{time}}"
+    "nextReminder": "Next Reminder: {{time}}",
+    "nextReminderShort": "Next reminder: {{time}}"
   },
   "csv": {
     "importTitle": "Import CSV",

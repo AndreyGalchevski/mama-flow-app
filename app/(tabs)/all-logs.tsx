@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../../lib/colors';
 import EmptyState from '../../lib/components/EmptyState';
 import PumpCard from '../../lib/components/PumpCard';
+import { getDateLocale } from '../../lib/date';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
 import i18n from '../../lib/i18n';
 import Download from '../../lib/icons/Download';
@@ -36,7 +37,9 @@ export default function AllLogs() {
     const csv = Papa.unparse(
       logs.map((log) => ({
         id: log.id,
-        timestamp: format(new Date(log.timestamp), 'dd/MM/yyyy HH:mm:ss'),
+        timestamp: format(new Date(log.timestamp), 'dd/MM/yyyy HH:mm:ss', {
+          locale: getDateLocale(),
+        }),
         volumeLeftML: log.volumeLeftML,
         volumeRightML: log.volumeRightML,
         volumeTotalML: log.volumeTotalML,

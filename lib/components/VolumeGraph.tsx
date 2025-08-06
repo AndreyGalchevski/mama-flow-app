@@ -5,6 +5,7 @@ import { LineChart } from 'react-native-gifted-charts';
 
 import { AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
+import { getDateLocale } from '../date';
 import { useLogsStore } from '../hooks/useLogsStore';
 
 function VolumeGraph() {
@@ -38,7 +39,7 @@ function VolumeGraph() {
       <LineChart
         data={volumeByDay.map((it) => ({
           value: it.volumeTotalML,
-          label: format(new Date(it.date), 'EEE'),
+          label: format(new Date(it.date), 'EEE', { locale: getDateLocale() }),
           dataPointText: `${it.volumeTotalML}ml`,
         }))}
         width={300}

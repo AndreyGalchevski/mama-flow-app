@@ -3,6 +3,7 @@ import { Banner, Text } from 'react-native-paper';
 
 import { formatNextReminder } from '../date';
 import { useSettingsStore } from '../hooks/useSettingsStore';
+import i18n from '../i18n';
 import Bell from '../icons/Bell';
 
 export default function NextReminderBanner() {
@@ -15,7 +16,11 @@ export default function NextReminderBanner() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Bell size={24} />
 
-          <Text>Next Reminder: {formatNextReminder(new Date(nextReminderAt))}</Text>
+          <Text>
+            {i18n.t('reminders.nextReminder', {
+              time: formatNextReminder(new Date(nextReminderAt)),
+            })}
+          </Text>
         </View>
       )}
     </Banner>
