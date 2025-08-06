@@ -14,7 +14,6 @@ import DocumentAdd from '../../lib/icons/DocumentAdd';
 
 export default function Home() {
   const router = useRouter();
-
   const insets = useSafeAreaInsets();
 
   const logs = useLogsStore((s) => s.logs);

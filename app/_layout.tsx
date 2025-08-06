@@ -7,12 +7,12 @@ import 'react-native-reanimated';
 
 import { COLORS } from '../lib/colors';
 import ErrorBoundary from '../lib/components/ErrorBoundary';
+import WelcomeModal from '../lib/components/WelcomeModal';
 import { initSentry } from '../lib/sentry';
 
 registerTranslation('en', en);
 
 export default function RootLayout() {
-  // Initialize Sentry for error tracking
   useEffect(() => {
     initSentry();
   }, []);
@@ -36,6 +36,8 @@ export default function RootLayout() {
             options={{ presentation: 'modal', title: 'Import CSV' }}
           />
         </Stack>
+
+        <WelcomeModal />
       </PaperProvider>
     </ErrorBoundary>
   );
