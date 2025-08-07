@@ -76,7 +76,7 @@ export default function WelcomeModal() {
             </View>
           </Card.Content>
 
-          <Card.Actions style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Card.Actions style={styles.cardActions}>
             <Button mode="contained" onPress={markWelcomeSeen}>
               {i18n.t('welcome.startButton')}
             </Button>
@@ -150,5 +150,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 'auto',
     paddingTop: 24,
+  },
+  cardActions: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

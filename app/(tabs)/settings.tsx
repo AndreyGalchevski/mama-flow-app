@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { type TextInput as TextInputRN, View } from 'react-native';
+import { StyleSheet, type TextInput as TextInputRN, View } from 'react-native';
 import { Button, Divider, Icon, Switch, Text, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -54,26 +54,17 @@ export default function Settings() {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        padding: 16,
-        gap: 16,
-        backgroundColor: COLORS.background,
-      }}
-    >
+    <SafeAreaView style={styles.container}>
       <View>
         <Text variant="titleMedium">{i18n.t('settings.reminders')}</Text>
 
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-        >
+        <View style={styles.switchRow}>
           <Text>{i18n.t('settings.useReminders')}</Text>
 
           <Switch value={remindersEnabled} onValueChange={toggleReminders} />
         </View>
 
-        <View style={{ gap: 16 }}>
+        <View style={styles.remindersSection}>
           <NextReminderText />
 
           <TextInput
@@ -103,15 +94,15 @@ export default function Settings() {
           />
 
           {hasChanges && (
-            <View style={{ flexDirection: 'row', gap: 12 }}>
-              <Button mode="outlined" onPress={handleResetIntervals} style={{ flex: 1 }}>
+            <View style={styles.buttonRow}>
+              <Button mode="outlined" onPress={handleResetIntervals} style={styles.button}>
                 {i18n.t('settings.cancelChanges')}
               </Button>
               <Button
                 mode="contained"
                 onPress={handleSaveIntervals}
                 disabled={!isValidInput(localDayHours, localNightHours)}
-                style={{ flex: 1 }}
+                style={styles.button}
               >
                 {i18n.t('settings.saveChanges')}
               </Button>
@@ -120,33 +111,33 @@ export default function Settings() {
         </View>
       </View>
 
-      <Divider style={{ marginVertical: 8 }} />
+      <Divider style={styles.divider} />
 
-      <View style={{ gap: 12 }}>
+      <View style={styles.privacySection}>
         <Text variant="titleMedium">{i18n.t('settings.privacy.title')}</Text>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={styles.privacyRow}>
           <Icon source="shield-check" size={20} />
-          <View style={{ flex: 1 }}>
+          <View style={styles.privacyTextContainer}>
             <Text variant="bodyMedium">{i18n.t('settings.privacy.localStorage')}</Text>
-            <Text variant="bodySmall" style={{ opacity: 0.7 }}>
+            <Text variant="bodySmall" style={styles.privacyDescription}>
               {i18n.t('settings.privacy.localStorageDesc')}
             </Text>
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={styles.privacyRow}>
           <Icon source="cellphone-lock" size={20} />
-          <View style={{ flex: 1 }}>
+          <View style={styles.privacyTextContainer}>
             <Text variant="bodyMedium">{i18n.t('settings.privacy.dataOwnership')}</Text>
-            <Text variant="bodySmall" style={{ opacity: 0.7 }}>
+            <Text variant="bodySmall" style={styles.privacyDescription}>
               {i18n.t('settings.privacy.dataOwnershipDesc')}
             </Text>
           </View>
         </View>
 
         {__DEV__ && (
-          <Button mode="outlined" onPress={resetFirstTime} style={{ marginTop: 8 }}>
+          <Button mode="outlined" onPress={resetFirstTime} style={styles.welcomeButton}>
             {i18n.t('settings.privacy.showWelcomeAgain')}
           </Button>
         )}
@@ -154,3 +145,47 @@ export default function Settings() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    gap: 16,
+    backgroundColor: COLORS.background,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  remindersSection: {
+    gap: 16,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  button: {
+    flex: 1,
+  },
+  divider: {
+    marginVertical: 8,
+  },
+  privacySection: {
+    gap: 12,
+  },
+  privacyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  privacyTextContainer: {
+    flex: 1,
+  },
+  privacyDescription: {
+    opacity: 0.7,
+  },
+  welcomeButton: {
+    marginTop: 8,
+  },
+});

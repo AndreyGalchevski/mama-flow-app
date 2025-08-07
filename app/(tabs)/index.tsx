@@ -1,7 +1,7 @@
 import { format, subDays } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -50,13 +50,14 @@ export default function Home() {
   if (logs.length === 0) {
     return (
       <View
-        style={{
-          flex: 1,
-          paddingTop: insets.top,
-          paddingLeft: insets.left + 16,
-          paddingRight: insets.right + 16,
-          backgroundColor: COLORS.background,
-        }}
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            paddingLeft: insets.left + 16,
+            paddingRight: insets.right + 16,
+          },
+        ]}
       >
         <EmptyState
           title={i18n.t('home.empty.title')}
@@ -81,14 +82,14 @@ export default function Home() {
 
   return (
     <View
-      style={{
-        flex: 1,
-        gap: 16,
-        paddingTop: insets.top,
-        paddingLeft: insets.left + 16,
-        paddingRight: insets.right + 16,
-        backgroundColor: COLORS.background,
-      }}
+      style={[
+        styles.container,
+        {
+          paddingTop: insets.top,
+          paddingLeft: insets.left + 16,
+          paddingRight: insets.right + 16,
+        },
+      ]}
     >
       <NextReminderBanner />
 
@@ -99,31 +100,11 @@ export default function Home() {
       <Text variant="titleMedium">{i18n.t('home.latestPumps')}</Text>
 
       {recentLogs.length === 0 ? (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 32,
-          }}
-        >
-          <Text
-            variant="bodyLarge"
-            style={{
-              textAlign: 'center',
-              color: COLORS.onSurfaceVariant,
-              marginBottom: 16,
-            }}
-          >
+        <View style={styles.noRecentContainer}>
+          <Text variant="bodyLarge" style={styles.noRecentTitle}>
             {i18n.t('home.noRecentPumps.title')}
           </Text>
-          <Text
-            variant="bodyMedium"
-            style={{
-              textAlign: 'center',
-              color: COLORS.onSurfaceVariant,
-            }}
-          >
+          <Text variant="bodyMedium" style={styles.noRecentDescription}>
             {i18n.t('home.noRecentPumps.description')}
           </Text>
         </View>
@@ -137,15 +118,39 @@ export default function Home() {
 
       <FAB
         icon={() => <DocumentAdd color={COLORS.onPrimary} />}
-        style={{
-          backgroundColor: COLORS.primary,
-          position: 'absolute',
-          margin: 16,
-          right: 0,
-          bottom: 0,
-        }}
+        style={styles.fab}
         onPress={() => router.push('/add-log-modal')}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 16,
+    backgroundColor: COLORS.background,
+  },
+  noRecentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 32,
+  },
+  noRecentTitle: {
+    textAlign: 'center',
+    color: COLORS.onSurfaceVariant,
+    marginBottom: 16,
+  },
+  noRecentDescription: {
+    textAlign: 'center',
+    color: COLORS.onSurfaceVariant,
+  },
+  fab: {
+    backgroundColor: COLORS.primary,
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+});

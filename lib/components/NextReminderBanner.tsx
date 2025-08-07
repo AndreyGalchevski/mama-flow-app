@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Banner, Text } from 'react-native-paper';
 
 import { formatNextReminder } from '../date';
@@ -11,9 +11,9 @@ export default function NextReminderBanner() {
   const nextReminderAt = useSettingsStore((s) => s.nextReminderAt);
 
   return (
-    <Banner visible={remindersEnabled && !!nextReminderAt} contentStyle={{ padding: 2 }}>
+    <Banner visible={remindersEnabled && !!nextReminderAt} contentStyle={styles.bannerContent}>
       {remindersEnabled && !!nextReminderAt && (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <View style={styles.container}>
           <Bell size={24} />
 
           <Text>
@@ -26,3 +26,14 @@ export default function NextReminderBanner() {
     </Banner>
   );
 }
+
+const styles = StyleSheet.create({
+  bannerContent: {
+    padding: 2,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+});

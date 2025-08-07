@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 import { COLORS } from '../colors';
@@ -31,45 +31,19 @@ export default function EmptyState({
   icon,
 }: EmptyStateProps) {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 32,
-        paddingVertical: 48,
-      }}
-    >
-      {icon && <View style={{ marginBottom: 24, opacity: 0.6 }}>{icon}</View>}
+    <View style={styles.container}>
+      {icon && <View style={styles.iconContainer}>{icon}</View>}
 
-      <Text
-        variant="headlineSmall"
-        style={{
-          textAlign: 'center',
-          marginBottom: 8,
-          color: COLORS.onSurface,
-        }}
-      >
+      <Text variant="headlineSmall" style={styles.title}>
         {title}
       </Text>
 
-      <Text
-        variant="bodyLarge"
-        style={{
-          textAlign: 'center',
-          marginBottom: 32,
-          color: COLORS.onSurfaceVariant,
-        }}
-      >
+      <Text variant="bodyLarge" style={styles.description}>
         {description}
       </Text>
 
-      <View style={{ gap: 12, width: '100%', maxWidth: 300 }}>
-        <Button
-          mode="contained"
-          onPress={primaryAction.onPress}
-          style={{ backgroundColor: COLORS.primary }}
-        >
+      <View style={styles.buttonContainer}>
+        <Button mode="contained" onPress={primaryAction.onPress} style={styles.primaryButton}>
           {primaryAction.label}
         </Button>
 
@@ -88,3 +62,35 @@ export default function EmptyState({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    paddingVertical: 48,
+  },
+  iconContainer: {
+    marginBottom: 24,
+    opacity: 0.6,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 8,
+    color: COLORS.onSurface,
+  },
+  description: {
+    textAlign: 'center',
+    marginBottom: 32,
+    color: COLORS.onSurfaceVariant,
+  },
+  buttonContainer: {
+    gap: 12,
+    width: '100%',
+    maxWidth: 300,
+  },
+  primaryButton: {
+    backgroundColor: COLORS.primary,
+  },
+});

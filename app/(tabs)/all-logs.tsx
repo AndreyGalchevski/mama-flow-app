@@ -4,7 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import Papa from 'papaparse';
-import { FlatList, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -64,16 +64,13 @@ export default function AllLogs() {
 
   return (
     <View
-      style={{
-        flex: 1,
-        paddingTop: insets.top,
-        paddingLeft: insets.left + 16,
-        paddingRight: insets.right + 16,
-        backgroundColor: COLORS.background,
-      }}
+      style={[
+        styles.container,
+        { paddingTop: insets.top, paddingLeft: insets.left + 16, paddingRight: insets.right + 16 },
+      ]}
     >
       {logs.length > 0 && (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+        <View style={styles.buttonRow}>
           <Button
             onPress={handleImportCSVPress}
             mode="outlined"
@@ -120,3 +117,15 @@ export default function AllLogs() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+});

@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -82,15 +82,15 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
-        <View style={{ flex: 1, padding: 16, gap: 8 }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.formContainer}>
           <TextInput
             mode="outlined"
             label={i18n.t('logs.volumeLeft')}
             value={volumeLeft}
             keyboardType="numeric"
             onChangeText={setVolumeLeft}
-            style={{ marginTop: 16 }}
+            style={styles.firstInput}
           />
 
           <TextInput
@@ -117,16 +117,24 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
             multiline
           />
 
-          <Button onPress={() => setShowDatePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
+          <Button
+            onPress={() => setShowDatePicker(true)}
+            mode="outlined"
+            style={styles.dateTimeButton}
+          >
             {format(date, 'PP', { locale: getDateLocale() })}
           </Button>
 
-          <Button onPress={() => setShowTimePicker(true)} mode="outlined" style={{ marginTop: 8 }}>
+          <Button
+            onPress={() => setShowTimePicker(true)}
+            mode="outlined"
+            style={styles.dateTimeButton}
+          >
             {format(date, 'p', { locale: getDateLocale() })}
           </Button>
         </View>
 
-        <View style={{ padding: 16, gap: 8 }}>
+        <View style={styles.buttonContainer}>
           <Button mode="contained" onPress={handleSave}>
             {i18n.t('common.save')}
           </Button>
@@ -156,3 +164,25 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  formContainer: {
+    flex: 1,
+    padding: 16,
+    gap: 8,
+  },
+  firstInput: {
+    marginTop: 16,
+  },
+  dateTimeButton: {
+    marginTop: 8,
+  },
+  buttonContainer: {
+    padding: 16,
+    gap: 8,
+  },
+});

@@ -1,13 +1,13 @@
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { COLORS } from '../../lib/colors';
 import Tabs from '../../lib/components/Tabs';
 
 export default function TabLayout() {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <Tabs
         labeled={false}
-        tabBarStyle={{ backgroundColor: COLORS.surface }}
+        tabBarStyle={styles.tabBar}
         tabBarActiveTintColor={COLORS.onPrimary}
         activeIndicatorColor={COLORS.primary}
       >
@@ -36,3 +36,12 @@ export default function TabLayout() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  tabBar: {
+    backgroundColor: COLORS.surface,
+  },
+});

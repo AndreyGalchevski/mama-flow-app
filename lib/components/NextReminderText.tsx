@@ -1,3 +1,4 @@
+import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import { formatNextReminder } from '../date';
@@ -11,7 +12,7 @@ export default function NextReminderText() {
   return (
     remindersEnabled &&
     nextReminderAt && (
-      <Text style={{ marginTop: 8, color: '#999' }}>
+      <Text style={styles.text}>
         {i18n.t('reminders.nextReminderShort', {
           time: formatNextReminder(new Date(nextReminderAt)),
         })}
@@ -19,3 +20,10 @@ export default function NextReminderText() {
     )
   );
 }
+
+const styles = StyleSheet.create({
+  text: {
+    marginTop: 8,
+    color: '#999',
+  },
+});

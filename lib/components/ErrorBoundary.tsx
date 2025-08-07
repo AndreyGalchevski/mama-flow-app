@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 import { COLORS } from '../colors';
@@ -41,56 +41,25 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     }
 
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 32,
-          backgroundColor: COLORS.background,
-        }}
-      >
-        <Text
-          variant="headlineSmall"
-          style={{
-            textAlign: 'center',
-            marginBottom: 16,
-            color: COLORS.error,
-          }}
-        >
+      <View style={styles.container}>
+        <Text variant="headlineSmall" style={styles.title}>
           Something went wrong
         </Text>
 
-        <Text
-          variant="bodyLarge"
-          style={{
-            textAlign: 'center',
-            marginBottom: 32,
-            color: COLORS.onSurfaceVariant,
-          }}
-        >
+        <Text variant="bodyLarge" style={styles.description}>
           The app encountered an unexpected error. Please try restarting the app.
         </Text>
 
         <Button
           mode="contained"
           onPress={() => this.setState({ hasError: false, error: undefined })}
-          style={{ backgroundColor: COLORS.primary }}
+          style={styles.button}
         >
           Try Again
         </Button>
 
         {__DEV__ && this.state.error && (
-          <Text
-            variant="bodySmall"
-            style={{
-              marginTop: 16,
-              padding: 16,
-              backgroundColor: COLORS.surfaceVariant,
-              fontFamily: 'monospace',
-              fontSize: 10,
-            }}
-          >
+          <Text variant="bodySmall" style={styles.errorText}>
             {this.state.error.toString()}
           </Text>
         )}
@@ -98,3 +67,33 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+    backgroundColor: COLORS.background,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 16,
+    color: COLORS.error,
+  },
+  description: {
+    textAlign: 'center',
+    marginBottom: 32,
+    color: COLORS.onSurfaceVariant,
+  },
+  button: {
+    backgroundColor: COLORS.primary,
+  },
+  errorText: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: COLORS.surfaceVariant,
+    fontFamily: 'monospace',
+    fontSize: 10,
+  },
+});

@@ -2,12 +2,14 @@ import { max, min } from 'd3-array';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { line } from 'd3-shape';
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
 import Svg, { Circle, Line, Path, Text as TextSVG } from 'react-native-svg';
 
 import { AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
 import i18n, { isRTL } from '../i18n';
+import { getRTLTextAlign } from '../rtl';
 import type { DataPoint } from '../types';
 
 const GRAPH_WIDTH = 340;
@@ -110,19 +112,13 @@ export default function VolumeGraph({ data }: Props) {
 
   return (
     <View
-      style={{
-        borderRadius: 12,
-        borderWidth: 0.5,
-        borderColor: COLORS.outline,
-        backgroundColor: COLORS.background,
-        padding: 16,
-      }}
+      style={styles.graph}
       accessible={true}
       accessibilityLabel={AccessibilityLabels.volumeChart}
       accessibilityRole="image"
     >
       <Pressable onPress={handleSvgPress}>
-        <Svg width={GRAPH_WIDTH} height={GRAPH_HEIGHT} style={{ backgroundColor: 'transparent' }}>
+        <Svg width={GRAPH_WIDTH} height={GRAPH_HEIGHT} style={styles.svg}>
           <Line
             x1={30}
             y1={30}
@@ -203,27 +199,13 @@ export default function VolumeGraph({ data }: Props) {
             },
           ]}
         >
-          <Text
-            style={{
-              color: COLORS.onSurface,
-              fontSize: 14,
-              fontWeight: 'bold',
-              textAlign: isRTL() ? 'right' : 'left',
-            }}
-          >
+          <Text variant="labelLarge" style={{ textAlign: getRTLTextAlign() }}>
             {i18n.t('units.volumeWithUnit', {
               volume: Math.round(selectedPoint.value),
             })}
           </Text>
 
-          <Text
-            style={{
-              color: COLORS.onSurface,
-              fontSize: 12,
-              fontWeight: '600',
-              textAlign: isRTL() ? 'right' : 'left',
-            }}
-          >
+          <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
             {selectedPoint.tooltip}
           </Text>
         </View>
@@ -233,6 +215,16 @@ export default function VolumeGraph({ data }: Props) {
 }
 
 const styles = StyleSheet.create({
+  graph: {
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: COLORS.outline,
+    backgroundColor: COLORS.background,
+    padding: 16,
+  },
+  svg: {
+    backgroundColor: 'transparent',
+  },
   tooltip: {
     position: 'absolute',
     backgroundColor: COLORS.surface,

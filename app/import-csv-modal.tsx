@@ -3,7 +3,7 @@ import * as Crypto from 'expo-crypto';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Divider, Text } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -78,14 +78,14 @@ export default function ImportCSVModal() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: COLORS.background }}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text variant="titleMedium" style={{ marginBottom: 12 }}>
+        <Text variant="titleMedium" style={styles.title}>
           {i18n.t('importCSV.title')}
         </Text>
 
         {pumpLogFields.map((field) => (
-          <View key={field.key} style={{ marginBottom: 16 }}>
+          <View key={field.key} style={styles.fieldContainer}>
             <Dropdown
               label={field.label}
               mode="outlined"
@@ -96,12 +96,12 @@ export default function ImportCSVModal() {
           </View>
         ))}
 
-        <Divider style={{ marginVertical: 16 }} />
+        <Divider style={styles.divider} />
 
         <Text variant="titleSmall">{i18n.t('importCSV.preview')}</Text>
 
         {rows.slice(0, 3).map((row, i) => (
-          <Text key={i} style={{ fontSize: 12, marginBottom: 4 }}>
+          <Text key={i} style={styles.previewRow}>
             {JSON.stringify(row)}
           </Text>
         ))}
@@ -109,7 +109,7 @@ export default function ImportCSVModal() {
         <Button
           mode="contained"
           onPress={handleImport}
-          style={{ marginTop: 24 }}
+          style={styles.importButton}
           disabled={
             !fieldMap.timestamp ||
             !fieldMap.volumeLeftML ||
@@ -120,10 +120,37 @@ export default function ImportCSVModal() {
           {i18n.t('importCSV.importButton')}
         </Button>
 
-        <Button onPress={() => router.back()} style={{ marginTop: 8 }}>
+        <Button onPress={() => router.back()} style={styles.cancelButton}>
           {i18n.t('common.cancel')}
         </Button>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: COLORS.background,
+  },
+  title: {
+    marginBottom: 12,
+  },
+  fieldContainer: {
+    marginBottom: 16,
+  },
+  divider: {
+    marginVertical: 16,
+  },
+  previewRow: {
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  importButton: {
+    marginTop: 24,
+  },
+  cancelButton: {
+    marginTop: 8,
+  },
+});

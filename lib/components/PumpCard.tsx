@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
-import { Alert } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { Card, IconButton, Text } from 'react-native-paper';
 
 import { AccessibilityHints, AccessibilityLabels } from '../accessibility';
@@ -29,7 +29,7 @@ export default function PumpCard({ item }: Props) {
 
   return (
     <Card
-      style={{ marginBottom: 8 }}
+      style={styles.card}
       mode="contained"
       onPress={() => router.push(`/edit-log/${item.id}`)}
       accessible={true}
@@ -82,3 +82,9 @@ export default function PumpCard({ item }: Props) {
     </Card>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    marginBottom: 8,
+  },
+});
