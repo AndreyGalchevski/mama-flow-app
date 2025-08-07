@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { max, min } from 'd3-array';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { line } from 'd3-shape';
@@ -74,6 +75,15 @@ export default function VolumeGraph({ data }: Props) {
     label: string;
     tooltip: string;
   } | null>(null);
+
+  // Reset selected point when screen loses focus
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setSelectedPoint(null);
+      };
+    }, []),
+  );
 
   const { pathData, points, scales } = useMemo(() => createGraph(data), [data]);
 
