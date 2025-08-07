@@ -150,5 +150,12 @@
   "privacy": {
     "bannerTitle": "Your Data, Your Device",
     "bannerDescription": "MamaFlow keeps all your pumping logs locally on your phone. No cloud sync, no accounts, no data sharing."
+  },
+  "rating": {
+    "title": "Enjoying MamaFlow?",
+    "message": "If you're finding MamaFlow helpful for tracking your pumping journey, we'd love a rating in the app store!",
+    "rateNow": "Rate App",
+    "notNow": "Not Now",
+    "settingsButton": "Rate MamaFlow"
   }
 }

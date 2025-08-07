@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../../lib/colors';
 import NextReminderText from '../../lib/components/NextReminderText';
 import { useResetFirstTime } from '../../lib/hooks/useFirstTimeUser';
+import { useRatingPrompt } from '../../lib/hooks/useRatingPrompt';
 import { useSettingsStore } from '../../lib/hooks/useSettingsStore';
 import i18n from '../../lib/i18n';
 import { scheduleNextPumpReminder } from '../../lib/reminders';
@@ -20,6 +21,7 @@ export default function Settings() {
   const localDayHoursInputRef = useRef<TextInputRN>(null);
   const localNightHoursInputRef = useRef<TextInputRN>(null);
   const resetFirstTime = useResetFirstTime();
+  const { showRatingPrompt } = useRatingPrompt();
 
   const remindersEnabled = useSettingsStore((s) => s.remindersEnabled);
   const toggleReminders = useSettingsStore((s) => s.toggleReminders);
@@ -136,6 +138,10 @@ export default function Settings() {
           </View>
         </View>
 
+        <Button mode="outlined" onPress={showRatingPrompt} style={styles.ratingButton}>
+          {i18n.t('rating.settingsButton')}
+        </Button>
+
         {__DEV__ && (
           <Button mode="outlined" onPress={resetFirstTime} style={styles.welcomeButton}>
             {i18n.t('settings.privacy.showWelcomeAgain')}
@@ -184,6 +190,9 @@ const styles = StyleSheet.create({
   },
   privacyDescription: {
     opacity: 0.7,
+  },
+  ratingButton: {
+    marginTop: 8,
   },
   welcomeButton: {
     marginTop: 8,

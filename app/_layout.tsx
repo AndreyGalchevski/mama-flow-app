@@ -10,6 +10,7 @@ import 'react-native-reanimated';
 import { COLORS } from '../lib/colors';
 import ErrorBoundary from '../lib/components/ErrorBoundary';
 import WelcomeModal from '../lib/components/WelcomeModal';
+import { useSettingsStore } from '../lib/hooks/useSettingsStore';
 import i18n, { isRTL } from '../lib/i18n';
 import { initSentry } from '../lib/sentry';
 
@@ -18,8 +19,13 @@ registerTranslation('ru', ru);
 registerTranslation('he', he);
 
 export default function RootLayout() {
+  const incrementAppLaunchCount = useSettingsStore((state) => state.incrementAppLaunchCount);
+
   useEffect(() => {
     initSentry();
+
+    // Increment app launch count
+    incrementAppLaunchCount();
 
     const rtl = isRTL();
 
@@ -27,7 +33,7 @@ export default function RootLayout() {
       I18nManager.allowRTL(rtl);
       I18nManager.forceRTL(rtl);
     }
-  }, []);
+  }, [incrementAppLaunchCount]);
 
   return (
     <GestureHandlerRootView>

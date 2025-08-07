@@ -1,6 +1,7 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { format, subDays } from 'date-fns';
 import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,9 +10,11 @@ import { COLORS } from '../../lib/colors';
 import EmptyState from '../../lib/components/EmptyState';
 import NextReminderBanner from '../../lib/components/NextReminderBanner';
 import PumpCard from '../../lib/components/PumpCard';
+import RatingPromptDialog from '../../lib/components/RatingPromptDialog';
 import VolumeGraph from '../../lib/components/VolumeGraph';
 import { getDateLocale, isInLast24Hours } from '../../lib/date';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
+import { useRatingPrompt } from '../../lib/hooks/useRatingPrompt';
 import i18n from '../../lib/i18n';
 import DocumentAdd from '../../lib/icons/DocumentAdd';
 import type { DataPoint } from '../../lib/types';
@@ -19,8 +22,25 @@ import type { DataPoint } from '../../lib/types';
 export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
 
   const logs = useLogsStore((s) => s.logs);
+  const { checkAndShowRatingPrompt, shouldShowPrompt } = useRatingPrompt();
+
+  // Check for rating prompt when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      // Only check for automatic rating prompt if it should be shown
+      if (shouldShowPrompt) {
+        // Delay slightly to avoid showing immediately on app launch
+        const timer = setTimeout(() => {
+          setShowRatingDialog(true);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+      }
+    }, [shouldShowPrompt]),
+  );
 
   const recentLogs = logs
     .filter((l) => isInLast24Hours(l.timestamp))
@@ -121,6 +141,8 @@ export default function Home() {
         style={styles.fab}
         onPress={() => router.push('/add-log-modal')}
       />
+
+      <RatingPromptDialog visible={showRatingDialog} onDismiss={() => setShowRatingDialog(false)} />
     </View>
   );
 }

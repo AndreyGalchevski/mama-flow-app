@@ -8,9 +8,15 @@ interface SettingsState {
   nextReminderAt: number | null;
   reminderHoursDay: number;
   reminderHoursNight: number;
+  appLaunchCount: number;
+  lastRatingPromptDate: number | null;
+  hasUserRated: boolean;
   toggleReminders: () => void;
   setNextReminder: (timestamp: number | null) => void;
   updateReminderIntervals: (dayHours: number, nightHours: number) => void;
+  incrementAppLaunchCount: () => void;
+  markRatingPromptShown: () => void;
+  markUserRated: () => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -20,6 +26,9 @@ export const useSettingsStore = create<SettingsState>()(
       nextReminderAt: null,
       reminderHoursDay: 2.5,
       reminderHoursNight: 4,
+      appLaunchCount: 0,
+      lastRatingPromptDate: null,
+      hasUserRated: false,
       toggleReminders: () => set({ remindersEnabled: !get().remindersEnabled }),
       setNextReminder: (timestamp) => set({ nextReminderAt: timestamp }),
       updateReminderIntervals: (dayHours, nightHours) => {
@@ -28,6 +37,9 @@ export const useSettingsStore = create<SettingsState>()(
           reminderHoursNight: nightHours,
         });
       },
+      incrementAppLaunchCount: () => set({ appLaunchCount: get().appLaunchCount + 1 }),
+      markRatingPromptShown: () => set({ lastRatingPromptDate: Date.now() }),
+      markUserRated: () => set({ hasUserRated: true }),
     }),
     {
       name: 'settings',

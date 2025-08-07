@@ -3,13 +3,15 @@ import { useRouter } from 'expo-router';
 
 import PumpLogForm, { type PumpLogFormData } from '../lib/components/PumpLogForm';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
+import { useRatingPrompt } from '../lib/hooks/useRatingPrompt';
 import { scheduleNextPumpReminder } from '../lib/reminders';
 
 export default function AddLogModal() {
   const router = useRouter();
   const addLog = useLogsStore((s) => s.add);
+  const { checkAndShowRatingPrompt } = useRatingPrompt();
 
-  const handleSave = ({
+  const handleSave = async ({
     volumeLeftML,
     volumeRightML,
     durationMinutes,
@@ -27,6 +29,9 @@ export default function AddLogModal() {
     });
 
     scheduleNextPumpReminder().catch(console.error);
+
+    // Check if we should show rating prompt after adding a log
+    await checkAndShowRatingPrompt();
 
     router.back();
   };
