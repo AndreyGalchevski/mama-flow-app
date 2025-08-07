@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { I18nManager } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { en, he, registerTranslation, ru } from 'react-native-paper-dates';
 import 'react-native-reanimated';
@@ -29,34 +30,36 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <PaperProvider
-        theme={{
-          ...MD3LightTheme,
-          dark: false,
-          roundness: 8,
-          colors: COLORS,
-        }}
-      >
-        <StatusBar style="dark" />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="add-log-modal"
-            options={{ presentation: 'modal', title: i18n.t('logs.newPumpLog') }}
-          />
-          <Stack.Screen
-            name="edit-log/[id]"
-            options={{ presentation: 'modal', title: i18n.t('logs.updatePumpLog') }}
-          />
-          <Stack.Screen
-            name="import-csv-modal"
-            options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
-          />
-        </Stack>
+    <GestureHandlerRootView>
+      <ErrorBoundary>
+        <PaperProvider
+          theme={{
+            ...MD3LightTheme,
+            dark: false,
+            roundness: 8,
+            colors: COLORS,
+          }}
+        >
+          <StatusBar style="dark" />
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="add-log-modal"
+              options={{ presentation: 'modal', title: i18n.t('logs.newPumpLog') }}
+            />
+            <Stack.Screen
+              name="edit-log/[id]"
+              options={{ presentation: 'modal', title: i18n.t('logs.updatePumpLog') }}
+            />
+            <Stack.Screen
+              name="import-csv-modal"
+              options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
+            />
+          </Stack>
 
-        <WelcomeModal />
-      </PaperProvider>
-    </ErrorBoundary>
+          <WelcomeModal />
+        </PaperProvider>
+      </ErrorBoundary>
+    </GestureHandlerRootView>
   );
 }

@@ -9,17 +9,6 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "description": "A comprehensive pumping log tracker for breastfeeding mothers. Track volume, duration, and schedule reminders to maintain your pumping routine.",
-    "keywords": [
-      "breastfeeding",
-      "pumping",
-      "baby",
-      "health",
-      "tracking",
-      "mother",
-      "lactation",
-      "nursing"
-    ],
-    "privacy": "public",
     "primaryColor": "#4F8A8B",
     "githubUrl": "https://github.com/AndreyGalchevski/mama-flow-app",
     "ios": {

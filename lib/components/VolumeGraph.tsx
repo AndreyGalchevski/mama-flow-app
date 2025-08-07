@@ -1,27 +1,112 @@
-import { format, subDays } from 'date-fns';
-import { memo } from 'react';
-import { View } from 'react-native';
-import { LineChart } from 'react-native-gifted-charts';
+import { max, min } from 'd3-array';
+import { scaleLinear, scaleTime } from 'd3-scale';
+import { line } from 'd3-shape';
+import { useCallback, useMemo, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Svg, { Circle, Line, Path, Text as TextSVG } from 'react-native-svg';
 
 import { AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
-import { getDateLocale } from '../date';
-import { useLogsStore } from '../hooks/useLogsStore';
+import i18n, { isRTL } from '../i18n';
+import type { DataPoint } from '../types';
 
-function VolumeGraph() {
-  const logs = useLogsStore((s) => s.logs);
+const GRAPH_WIDTH = 340;
+const GRAPH_HEIGHT = 240;
 
-  const days = [...Array(7)].map((_, i) => {
-    const d = subDays(new Date(), 6 - i);
-    return format(d, 'yyyy-MM-dd');
-  });
+const createGraph = (chartData: DataPoint[]) => {
+  if (chartData.length === 0) return { pathData: '', points: [], scales: null };
 
-  const volumeByDay = days.map((day) => {
-    const total = logs
-      .filter((log) => format(log.timestamp, 'yyyy-MM-dd') === day)
-      .reduce((sum, log) => sum + log.volumeTotalML, 0);
-    return { date: day, volumeTotalML: total };
-  });
+  const maxValue = max(chartData, (d) => d.value) || 0;
+  const minValue = min(chartData, (d) => d.value) || 0;
+
+  let adjustedMax: number;
+  let adjustedMin: number;
+
+  if (maxValue === 0 && minValue === 0) {
+    adjustedMax = 10;
+    adjustedMin = 0;
+  } else if (maxValue === minValue) {
+    const padding = Math.max(maxValue * 0.2, 10);
+    adjustedMax = maxValue + padding;
+    adjustedMin = Math.max(0, maxValue - padding);
+  } else {
+    const yPadding = (maxValue - minValue) * 0.1;
+    adjustedMax = maxValue + yPadding;
+    adjustedMin = Math.max(0, minValue - yPadding);
+  }
+
+  const yScale = scaleLinear()
+    .domain([adjustedMin, adjustedMax])
+    .range([GRAPH_HEIGHT - 30, 30]);
+
+  const xScale = scaleTime()
+    .domain([chartData[0].timestamp, chartData[chartData.length - 1].timestamp])
+    .range([30, GRAPH_WIDTH - 30]);
+
+  const lineGenerator = line<DataPoint>()
+    .x((d) => xScale(d.timestamp))
+    .y((d) => yScale(d.value));
+
+  const pathData = lineGenerator(chartData) || '';
+
+  const points = chartData.map((point) => ({
+    x: xScale(point.timestamp),
+    y: yScale(point.value),
+    value: point.value,
+    label: point.label,
+    tooltip: point.tooltip,
+  }));
+
+  return { pathData, points, scales: { xScale, yScale } };
+};
+
+interface Props {
+  data: DataPoint[];
+}
+
+export default function VolumeGraph({ data }: Props) {
+  const [selectedPoint, setSelectedPoint] = useState<{
+    x: number;
+    y: number;
+    value: number;
+    label: string;
+    tooltip: string;
+  } | null>(null);
+
+  const { pathData, points, scales } = useMemo(() => createGraph(data), [data]);
+
+  const handleSvgPress = useCallback(
+    (event: { nativeEvent: { locationX: number; locationY: number } }) => {
+      if (!scales) {
+        return;
+      }
+
+      const { locationX, locationY } = event.nativeEvent;
+
+      let closestPoint = points[0];
+      let minDistance = Number.POSITIVE_INFINITY;
+
+      for (const point of points) {
+        const distance = Math.sqrt((locationX - point.x) ** 2 + (locationY - point.y) ** 2);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestPoint = point;
+        }
+      }
+
+      if (minDistance < 60) {
+        setSelectedPoint(closestPoint);
+      } else {
+        setSelectedPoint(null);
+      }
+    },
+    [points, scales],
+  );
+
+  const tooltipOffset = selectedPoint
+    ? Math.min(GRAPH_WIDTH - 100, Math.max(10, selectedPoint.x))
+    : 0;
 
   return (
     <View
@@ -30,70 +115,144 @@ function VolumeGraph() {
         borderWidth: 0.5,
         borderColor: COLORS.outline,
         backgroundColor: COLORS.background,
-        padding: 8,
+        padding: 16,
       }}
       accessible={true}
       accessibilityLabel={AccessibilityLabels.volumeChart}
       accessibilityRole="image"
     >
-      <LineChart
-        data={volumeByDay.map((it) => ({
-          value: it.volumeTotalML,
-          label: format(new Date(it.date), 'EEE', { locale: getDateLocale() }),
-          dataPointText: it.volumeTotalML.toString(),
-        }))}
-        width={300}
-        height={200}
-        spacing={40}
-        initialSpacing={20}
-        color={COLORS.primary}
-        thickness={3}
-        startFillColor={COLORS.primary}
-        endFillColor={COLORS.background}
-        startOpacity={0.3}
-        endOpacity={0.1}
-        areaChart
-        curved
-        isAnimated
-        animateOnDataChange
-        animationDuration={1000}
-        dataPointsHeight={8}
-        dataPointsWidth={8}
-        dataPointsColor={COLORS.primary}
-        dataPointsRadius={4}
-        textColor={COLORS.onSurface}
-        textFontSize={12}
-        hideRules
-        showVerticalLines
-        verticalLinesColor={COLORS.surfaceVariant}
-        verticalLinesThickness={1}
-        verticalLinesStrokeDashArray={[2, 6]}
-        xAxisThickness={2}
-        xAxisColor={COLORS.surfaceVariant}
-        yAxisThickness={0}
-        yAxisTextStyle={{ color: COLORS.onSurfaceVariant, fontSize: 11 }}
-        xAxisLabelTextStyle={{ color: COLORS.onSurfaceVariant, fontSize: 11 }}
-        rulesColor={COLORS.surfaceVariant}
-        backgroundColor={COLORS.background}
-        noOfSections={4}
-        maxValue={Math.max(...volumeByDay.map((d) => d.volumeTotalML)) * 1.1 || 100}
-        focusEnabled
-        showDataPointOnFocus
-        showStripOnFocus
-        showTextOnFocus
-        textShiftY={-8}
-        textShiftX={-10}
-        textColor1={COLORS.primary}
-        textFontSize1={14}
-        stripHeight={200}
-        stripWidth={0.5}
-        stripColor={COLORS.primary}
-        stripOpacity={0.3}
-        focusedDataPointColor={COLORS.secondary}
-        focusedDataPointRadius={6}
-      />
+      <Pressable onPress={handleSvgPress}>
+        <Svg width={GRAPH_WIDTH} height={GRAPH_HEIGHT} style={{ backgroundColor: 'transparent' }}>
+          <Line
+            x1={30}
+            y1={30}
+            x2={30}
+            y2={GRAPH_HEIGHT - 30}
+            stroke={COLORS.outline}
+            strokeWidth={1}
+            opacity={0.2}
+          />
+
+          <Line
+            x1={30}
+            y1={GRAPH_HEIGHT - 30}
+            x2={GRAPH_WIDTH - 30}
+            y2={GRAPH_HEIGHT - 30}
+            stroke={COLORS.outline}
+            strokeWidth={1}
+            opacity={0.2}
+          />
+
+          {pathData && (
+            <Path
+              d={pathData}
+              stroke={COLORS.primary}
+              strokeWidth={3}
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          )}
+
+          {points.map((point, index) => (
+            <Circle
+              key={`point-${index}`}
+              cx={point.x}
+              cy={point.y}
+              r={5}
+              fill={COLORS.primary}
+              stroke={COLORS.background}
+              strokeWidth={3}
+            />
+          ))}
+
+          {points.map((point, index) => (
+            <TextSVG
+              key={`label-${index}`}
+              x={point.x}
+              y={GRAPH_HEIGHT - 10}
+              textAnchor="middle"
+              fontSize="10"
+              fill={COLORS.onSurface}
+            >
+              {point.label}
+            </TextSVG>
+          ))}
+
+          {selectedPoint && (
+            <Circle
+              cx={selectedPoint.x}
+              cy={selectedPoint.y}
+              r={8}
+              fill={COLORS.secondary}
+              stroke={COLORS.background}
+              strokeWidth={4}
+              opacity={0.8}
+            />
+          )}
+        </Svg>
+      </Pressable>
+
+      {selectedPoint && (
+        <View
+          style={[
+            styles.tooltip,
+            {
+              top: Math.max(10, selectedPoint.y - 40),
+              ...(isRTL() ? { right: tooltipOffset } : { left: tooltipOffset }),
+            },
+          ]}
+        >
+          <Text
+            style={{
+              color: COLORS.onSurface,
+              fontSize: 14,
+              fontWeight: 'bold',
+              textAlign: isRTL() ? 'right' : 'left',
+            }}
+          >
+            {i18n.t('units.volumeWithUnit', {
+              volume: Math.round(selectedPoint.value),
+            })}
+          </Text>
+
+          <Text
+            style={{
+              color: COLORS.onSurface,
+              fontSize: 12,
+              fontWeight: '600',
+              textAlign: isRTL() ? 'right' : 'left',
+            }}
+          >
+            {selectedPoint.tooltip}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
 
-export default memo(VolumeGraph);
+const styles = StyleSheet.create({
+  tooltip: {
+    position: 'absolute',
+    backgroundColor: COLORS.surface,
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.outline,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 6,
+    minWidth: 80,
+    alignItems: 'baseline',
+    zIndex: 1000,
+    flexDirection: isRTL() ? 'row-reverse' : 'row',
+    gap: 4,
+    justifyContent: 'space-between',
+  },
+});
