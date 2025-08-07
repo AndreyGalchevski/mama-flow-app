@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Divider, Text } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../lib/colors';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
@@ -78,7 +77,7 @@ export default function ImportCSVModal() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         <Text variant="titleMedium" style={styles.title}>
           {i18n.t('importCSV.title')}
@@ -124,7 +123,7 @@ export default function ImportCSVModal() {
           {i18n.t('common.cancel')}
         </Button>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

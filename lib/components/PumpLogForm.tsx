@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
 import { getDateLocale } from '../date';
@@ -82,7 +81,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.formContainer}>
           <TextInput
             mode="outlined"
@@ -141,7 +140,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
           <Button onPress={() => router.back()}>{i18n.t('common.cancel')}</Button>
         </View>
-      </SafeAreaView>
+      </View>
 
       <DatePickerModal
         locale={i18n.locale}
