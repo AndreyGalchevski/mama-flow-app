@@ -1,4 +1,7 @@
-import { requestReview, shouldShowRatingPrompt } from '../rating';
+import { Alert } from 'react-native';
+
+import i18n from '../i18n';
+import { openAppStore, requestReview, shouldShowRatingPrompt } from '../rating';
 import { useLogsStore } from './useLogsStore';
 import { useSettingsStore } from './useSettingsStore';
 
@@ -12,10 +15,34 @@ export function useRatingPrompt() {
 
   const showRatingPrompt = async () => {
     try {
-      await requestReview();
-      markUserRated();
+      const result = await requestReview();
+
+      console.log('Rating prompt result:', result);
+
+      if (result.success) {
+        markUserRated();
+
+        // If we used the fallback (opened store directly), show confirmation
+        if (!result.usedNativePrompt) {
+          Alert.alert(i18n.t('rating.storeOpened.title'), i18n.t('rating.storeOpened.message'), [
+            { text: i18n.t('common.ok') },
+          ]);
+        }
+      } else {
+        Alert.alert(i18n.t('rating.error.title'), i18n.t('rating.error.message'), [
+          { text: i18n.t('common.cancel'), style: 'cancel' },
+          {
+            text: i18n.t('rating.error.openStore'),
+            onPress: async () => {
+              const storeResult = await openAppStore();
+              if (storeResult.success) {
+                markUserRated();
+              }
+            },
+          },
+        ]);
+      }
     } catch (error) {
-      // Silently fail - rating prompts should not interrupt user experience
       console.warn('Failed to show rating prompt:', error);
     }
   };

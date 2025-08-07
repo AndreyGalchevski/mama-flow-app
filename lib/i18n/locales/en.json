@@ -156,6 +156,15 @@
     "message": "If you're finding MamaFlow helpful for tracking your pumping journey, we'd love a rating in the app store!",
     "rateNow": "Rate App",
     "notNow": "Not Now",
-    "settingsButton": "Rate MamaFlow"
+    "settingsButton": "Rate MamaFlow",
+    "storeOpened": {
+      "title": "App Store Opened",
+      "message": "We've opened the app store for you. Thank you for taking the time to rate MamaFlow!"
+    },
+    "error": {
+      "title": "Couldn't Open Rating",
+      "message": "We couldn't open the rating prompt right now. Would you like to open the app store directly?",
+      "openStore": "Open Store"
+    }
   }
 }
