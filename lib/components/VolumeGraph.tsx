@@ -185,6 +185,44 @@ export default function VolumeGraph({ data }: Props) {
             </TextSVG>
           ))}
 
+          {scales &&
+            (() => {
+              const yTicks = 4;
+              const yValues = [];
+              const yDomain = scales.yScale.domain();
+              for (let i = 0; i <= yTicks; i++) {
+                const value = yDomain[0] + (yDomain[1] - yDomain[0]) * (i / yTicks);
+                yValues.push(value);
+              }
+
+              return yValues.map((value, index) => {
+                const yPos = scales.yScale(value);
+                return (
+                  <TextSVG
+                    key={`y-label-${index}`}
+                    x={25}
+                    y={yPos + 4}
+                    textAnchor="end"
+                    fontSize="10"
+                    fill={COLORS.onSurface}
+                  >
+                    {Math.round(value)}
+                  </TextSVG>
+                );
+              });
+            })()}
+
+          <TextSVG
+            x={15}
+            y={20}
+            textAnchor="middle"
+            fontSize="12"
+            fill={COLORS.onSurface}
+            fontWeight="500"
+          >
+            {i18n.t('units.ml')}
+          </TextSVG>
+
           {selectedPoint && (
             <Circle
               cx={selectedPoint.x}
