@@ -22,7 +22,7 @@
     "latestPumps": "Latest pumps",
     "empty": {
       "title": "Welcome to MamaFlow!",
-      "description": "Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule.",
+      "description": "Track your pumping sessions and view volume trends over time. Set reminders to help you stay on schedule.",
       "primaryAction": "Add Your First Log",
       "secondaryAction": "Import Existing Data",
       "tertiaryAction": "Set Up Reminders"
@@ -33,7 +33,7 @@
     },
     "welcome": {
       "title": "Welcome to MamaFlow!",
-      "description": "Start tracking your pumping sessions to see volume trends and keep a record of your journey. Set up personalized reminders to help maintain your pumping schedule.",
+      "description": "Track your pumping sessions and view volume trends over time. Set reminders to help you stay on schedule.",
       "addFirstLog": "Add Your First Log",
       "importData": "Import Existing Data",
       "setupReminders": "Set Up Reminders"
@@ -73,7 +73,7 @@
       "shareDialogTitle": "Share Pump Logs CSV",
       "empty": {
         "title": "No pump logs yet",
-        "description": "Your pump logs will appear here. Start by adding your first log or importing existing data from a CSV file. Don't forget to set up reminders to help maintain your schedule!",
+        "description": "Your pump logs will appear here. Add your first log or import data from a CSV file.",
         "primaryAction": "Add Your First Log",
         "secondaryAction": "Import from CSV",
         "tertiaryAction": "Configure Reminders"
@@ -136,8 +136,8 @@
         "description": "Works offline, data never leaves your device"
       }
     },
-    "disclaimer": "Because your pumping journey should be private, secure, and completely under your control.",
-    "startButton": "Start Tracking Privately"
+    "disclaimer": "Your pumping data stays private, secure, and under your control.",
+    "startButton": "Get Started"
   },
   "form": {
     "selectDate": "Select date",
@@ -153,17 +153,17 @@
   },
   "rating": {
     "title": "Enjoying MamaFlow?",
-    "message": "If you're finding MamaFlow helpful for tracking your pumping journey, we'd love a rating in the app store!",
+    "message": "If MamaFlow is helping you track your pumping sessions, we'd appreciate a rating in the app store!",
     "rateNow": "Rate App",
     "notNow": "Not Now",
     "settingsButton": "Rate MamaFlow",
     "storeOpened": {
       "title": "App Store Opened",
-      "message": "We've opened the app store for you. Thank you for taking the time to rate MamaFlow!"
+      "message": "The app store has been opened. Thanks for rating MamaFlow!"
     },
     "error": {
       "title": "Couldn't Open Rating",
-      "message": "We couldn't open the rating prompt right now. Would you like to open the app store directly?",
+      "message": "Unable to open the rating prompt. Would you like to open the app store directly?",
       "openStore": "Open Store"
     }
   }

@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
@@ -12,6 +11,7 @@ import { COLORS } from '../../lib/colors';
 import EmptyState from '../../lib/components/EmptyState';
 import PumpCard from '../../lib/components/PumpCard';
 import { getDateLocale } from '../../lib/date';
+import useImportCSV from '../../lib/hooks/useImportCSV';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
 import i18n from '../../lib/i18n';
 import Download from '../../lib/icons/Download';
@@ -23,15 +23,7 @@ export default function AllLogs() {
 
   const logs = useLogsStore((s) => s.logs);
 
-  const handleImportCSVPress = async () => {
-    const result = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: true });
-
-    if (result.canceled) {
-      return;
-    }
-
-    router.push({ pathname: '/import-csv-modal', params: { csvURI: result.assets[0].uri } });
-  };
+  const { handleImportCSVPress } = useImportCSV();
 
   const handleExportToCSVPress = async () => {
     const csv = Papa.unparse(

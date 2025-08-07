@@ -17,8 +17,6 @@ export function useRatingPrompt() {
     try {
       const result = await requestReview();
 
-      console.log('Rating prompt result:', result);
-
       if (result.success) {
         markUserRated();
 

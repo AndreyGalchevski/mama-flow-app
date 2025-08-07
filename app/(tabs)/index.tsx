@@ -13,6 +13,7 @@ import PumpCard from '../../lib/components/PumpCard';
 import RatingPromptDialog from '../../lib/components/RatingPromptDialog';
 import VolumeGraph from '../../lib/components/VolumeGraph';
 import { getDateLocale, isInLast24Hours } from '../../lib/date';
+import useImportCSV from '../../lib/hooks/useImportCSV';
 import { useLogsStore } from '../../lib/hooks/useLogsStore';
 import { useRatingPrompt } from '../../lib/hooks/useRatingPrompt';
 import i18n from '../../lib/i18n';
@@ -25,9 +26,10 @@ export default function Home() {
   const [showRatingDialog, setShowRatingDialog] = useState(false);
 
   const logs = useLogsStore((s) => s.logs);
-  const { checkAndShowRatingPrompt, shouldShowPrompt } = useRatingPrompt();
+  const { shouldShowPrompt } = useRatingPrompt();
 
-  // Check for rating prompt when screen comes into focus
+  const { handleImportCSVPress } = useImportCSV();
+
   useFocusEffect(
     useCallback(() => {
       // Only check for automatic rating prompt if it should be shown
@@ -88,7 +90,7 @@ export default function Home() {
           }}
           secondaryAction={{
             label: i18n.t('home.empty.secondaryAction'),
-            onPress: () => router.push('/(tabs)/all-logs'),
+            onPress: () => handleImportCSVPress(),
           }}
           tertiaryAction={{
             label: i18n.t('home.empty.tertiaryAction'),
