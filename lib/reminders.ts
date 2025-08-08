@@ -51,18 +51,6 @@ export async function scheduleNextPumpReminder() {
       return;
     }
 
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Notification permissions not granted');
-      captureException(new Error('Notification permissions not granted'), {
-        permissionStatus: status,
-        feature: 'reminders',
-      });
-      return;
-    }
-
-    await Notifications.cancelScheduledNotificationAsync(NOTIFICATION_IDENTIFIER);
-
     const { logs } = useLogsStore.getState();
 
     const lastLog = logs[logs.length - 1];
@@ -83,23 +71,19 @@ export async function scheduleNextPumpReminder() {
       return;
     }
 
-    setNextReminder(nextReminderTime.getTime());
-
-    await ensurePumpReminderCategory();
-
-    await Notifications.scheduleNotificationAsync({
-      identifier: NOTIFICATION_IDENTIFIER,
-      content: {
-        title: i18n.t('reminders.title'),
-        body: i18n.t('reminders.body', { hours: interval }),
-        sound: true,
-        categoryIdentifier: CATEGORY_IDENTIFIER,
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DATE,
-        date: nextReminderTime,
+    const ok = await scheduleReminderAt(nextReminderTime, interval, {
+      onPermissionDenied: (status) => {
+        console.log('Notification permissions not granted');
+        captureException(new Error('Notification permissions not granted'), {
+          permissionStatus: status,
+          feature: 'reminders',
+        });
       },
     });
+
+    if (ok) {
+      setNextReminder(nextReminderTime.getTime());
+    }
 
     console.log(`Next pump reminder scheduled for: ${nextReminderTime.toISOString()}`);
   } catch (err) {
@@ -139,29 +123,12 @@ export async function snoozeNextPumpReminder(minutes = 10) {
     const effectiveBase = isBefore(base, now) ? now : base;
     const newTime = addMinutes(effectiveBase, minutes);
 
+    // Update state immediately even if permissions are denied, preserving prior behavior
     setNextReminder(newTime.getTime());
 
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Notification permissions not granted; stored snoozed time only');
-      return;
-    }
-
-    await Notifications.cancelScheduledNotificationAsync(NOTIFICATION_IDENTIFIER);
-
-    await ensurePumpReminderCategory();
-
-    await Notifications.scheduleNotificationAsync({
-      identifier: NOTIFICATION_IDENTIFIER,
-      content: {
-        title: i18n.t('reminders.title'),
-        body: i18n.t('reminders.body', { hours: getHoursSinceLastLog(newTime) }),
-        sound: true,
-        categoryIdentifier: CATEGORY_IDENTIFIER,
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DATE,
-        date: newTime,
+    await scheduleReminderAt(newTime, getHoursSinceLastLog(newTime), {
+      onPermissionDenied: () => {
+        console.log('Notification permissions not granted; stored snoozed time only');
       },
     });
 
@@ -173,4 +140,40 @@ export async function snoozeNextPumpReminder(minutes = 10) {
       action: 'snooze',
     });
   }
+}
+
+/**
+ * Shared scheduler: handles permission, cancellation, category, and scheduling.
+ * Returns true when permissions are granted and scheduling attempted; false otherwise.
+ */
+async function scheduleReminderAt(
+  date: Date,
+  hoursForBody: number,
+  { onPermissionDenied }: { onPermissionDenied?: (status: Notifications.PermissionStatus) => void },
+): Promise<boolean> {
+  const { status } = await Notifications.requestPermissionsAsync();
+  if (status !== 'granted') {
+    onPermissionDenied?.(status);
+    return false;
+  }
+
+  await Notifications.cancelScheduledNotificationAsync(NOTIFICATION_IDENTIFIER);
+
+  await ensurePumpReminderCategory();
+
+  await Notifications.scheduleNotificationAsync({
+    identifier: NOTIFICATION_IDENTIFIER,
+    content: {
+      title: i18n.t('reminders.title'),
+      body: i18n.t('reminders.body', { hours: hoursForBody }),
+      sound: true,
+      categoryIdentifier: CATEGORY_IDENTIFIER,
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      date,
+    },
+  });
+
+  return true;
 }
