@@ -1,4 +1,4 @@
-import { addHours, isAfter } from 'date-fns';
+import { addHours, addMinutes, isAfter, isBefore } from 'date-fns';
 import * as Notifications from 'expo-notifications';
 
 import { useLogsStore } from './hooks/useLogsStore';
@@ -107,6 +107,70 @@ export async function scheduleNextPumpReminder() {
     captureException(err instanceof Error ? err : new Error('Unknown reminder scheduling error'), {
       feature: 'reminders',
       action: 'schedule',
+    });
+  }
+}
+
+const getHoursSinceLastLog = (newTime: Date) => {
+  try {
+    const { logs } = useLogsStore.getState();
+    const lastLog = logs[logs.length - 1];
+    if (!lastLog) {
+      return 0;
+    }
+    const diffMs = newTime.getTime() - lastLog.timestamp;
+    const hoursApprox = Math.max(1, Math.round(diffMs / (60 * 60 * 1000)));
+    return hoursApprox;
+  } catch {
+    return 0;
+  }
+};
+
+export async function snoozeNextPumpReminder(minutes = 10) {
+  try {
+    const { remindersEnabled, nextReminderAt, setNextReminder } = useSettingsStore.getState();
+
+    if (!remindersEnabled || !nextReminderAt) {
+      return;
+    }
+
+    const base = new Date(nextReminderAt);
+    const now = new Date();
+    const effectiveBase = isBefore(base, now) ? now : base;
+    const newTime = addMinutes(effectiveBase, minutes);
+
+    setNextReminder(newTime.getTime());
+
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Notification permissions not granted; stored snoozed time only');
+      return;
+    }
+
+    await Notifications.cancelScheduledNotificationAsync(NOTIFICATION_IDENTIFIER);
+
+    await ensurePumpReminderCategory();
+
+    await Notifications.scheduleNotificationAsync({
+      identifier: NOTIFICATION_IDENTIFIER,
+      content: {
+        title: i18n.t('reminders.title'),
+        body: i18n.t('reminders.body', { hours: getHoursSinceLastLog(newTime) }),
+        sound: true,
+        categoryIdentifier: CATEGORY_IDENTIFIER,
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: newTime,
+      },
+    });
+
+    console.log(`Next pump reminder snoozed to: ${newTime.toISOString()}`);
+  } catch (err) {
+    console.error('Failed to snooze pump reminder:', err);
+    captureException(err instanceof Error ? err : new Error('Unknown reminder snooze error'), {
+      feature: 'reminders',
+      action: 'snooze',
     });
   }
 }

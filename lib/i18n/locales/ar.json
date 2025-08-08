@@ -110,6 +110,7 @@
     "title": "⏱ حان وقت الضخ؟",
     "body": "مضت {{hours}} ساعات منذ آخر سجل.",
     "startPumpAction": "بدء الضخ",
+    "snooze10m": "غفوة 10 د",
     "nextReminder": "التذكير التالي: {{time}}",
     "nextReminderShort": "التذكير التالي: {{time}}"
   },

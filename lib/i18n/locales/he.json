@@ -109,6 +109,7 @@
     "title": "⏱ זמן לשאוב?",
     "body": "עברו {{hours}} שעות מאז הרשומה האחרונה.",
     "startPumpAction": "התחלת שאיבה",
+    "snooze10m": "נודניק 10 דק'",
     "nextReminder": "התזכורת הבאה: {{time}}",
     "nextReminderShort": "התזכורת הבאה: {{time}}"
   },

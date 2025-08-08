@@ -110,6 +110,7 @@
     "title": "⏱ Time to pump?",
     "body": "It’s been {{hours}} hours since your last log.",
     "startPumpAction": "Start pump",
+    "snooze10m": "Snooze 10m",
     "nextReminder": "Next Reminder: {{time}}",
     "nextReminderShort": "Next reminder: {{time}}"
   },
