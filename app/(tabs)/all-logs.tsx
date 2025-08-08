@@ -1,9 +1,10 @@
-import { format } from 'date-fns';
+import { format, isToday, isYesterday, startOfDay } from 'date-fns';
 import * as FileSystem from 'expo-file-system';
 import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import Papa from 'papaparse';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -54,6 +55,31 @@ export default function AllLogs() {
     });
   };
 
+  const sections = React.useMemo(() => {
+    if (!logs?.length) return [] as { title: string; data: typeof logs }[];
+
+    const locale = getDateLocale();
+    const byDay = new Map<number, typeof logs>();
+
+    for (const log of [...logs].sort((a, b) => b.timestamp - a.timestamp)) {
+      const day = startOfDay(new Date(log.timestamp)).getTime();
+      const arr = byDay.get(day) ?? [];
+      arr.push(log);
+      byDay.set(day, arr);
+    }
+
+    const makeTitle = (dayTs: number) => {
+      const d = new Date(dayTs);
+      if (isToday(d)) return i18n.t('date.today');
+      if (isYesterday(d)) return i18n.t('date.yesterday');
+      return format(d, 'PPP', { locale });
+    };
+
+    return Array.from(byDay.entries())
+      .sort((a, b) => b[0] - a[0])
+      .map(([day, data]) => ({ title: makeTitle(day), data }));
+  }, [logs]);
+
   return (
     <View
       style={[
@@ -100,10 +126,19 @@ export default function AllLogs() {
           icon={<Download size={64} color={COLORS.primary} />}
         />
       ) : (
-        <FlatList
-          data={[...logs].sort((a, b) => b.timestamp - a.timestamp)}
+        <SectionList
+          sections={sections}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <PumpCard item={item} />}
+          renderSectionHeader={({ section }) => (
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                {section.title} ({section.data.length})
+              </Text>
+            </View>
+          )}
+          stickySectionHeadersEnabled
+          contentContainerStyle={{ paddingBottom: 16 }}
         />
       )}
     </View>
@@ -119,5 +154,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
+  },
+  sectionHeader: {
+    backgroundColor: COLORS.background,
+    paddingVertical: 8,
+  },
+  sectionHeaderText: {
+    color: COLORS.onBackground,
+    fontWeight: '600',
+    fontSize: 16,
+    marginTop: 8,
+    marginBottom: 4,
   },
 });

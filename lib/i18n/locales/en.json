@@ -129,6 +129,10 @@
     "today": "today at {{time}}",
     "tomorrow": "tomorrow at {{time}}"
   },
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday"
+  },
   "welcome": {
     "title": "Welcome to MamaFlow",
     "subtitle": "Privacy-First Pumping Tracker",

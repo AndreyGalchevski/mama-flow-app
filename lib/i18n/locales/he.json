@@ -128,6 +128,10 @@
     "today": "היום ב-{{time}}",
     "tomorrow": "מחר ב-{{time}}"
   },
+  "date": {
+    "today": "היום",
+    "yesterday": "אתמול"
+  },
   "welcome": {
     "title": "ברוכים הבאים ל-MamaFlow",
     "subtitle": "מעקב שאיבה עם פרטיות תחילה",
