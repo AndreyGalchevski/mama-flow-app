@@ -1,10 +1,11 @@
-import { format, isToday, isYesterday, startOfDay } from 'date-fns';
+import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
+import { type Locale, format, isToday, isYesterday, startOfDay } from 'date-fns';
 import * as FileSystem from 'expo-file-system';
 import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import Papa from 'papaparse';
-import React from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import { useMemo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -17,6 +18,22 @@ import { useLogsStore } from '../../lib/hooks/useLogsStore';
 import i18n from '../../lib/i18n';
 import Download from '../../lib/icons/Download';
 import Upload from '../../lib/icons/Upload';
+import type { PumpLog } from '../../lib/types';
+
+const makeTitle = (dayTs: number, locale: Locale) => {
+  const d = new Date(dayTs);
+  if (isToday(d)) {
+    return i18n.t('date.today');
+  }
+  if (isYesterday(d)) {
+    return i18n.t('date.yesterday');
+  }
+  return format(d, 'PPP', { locale });
+};
+
+type Row =
+  | { type: 'header'; id: string; title: string; count: number }
+  | { type: 'item'; id: string; item: PumpLog[][number] };
 
 export default function AllLogs() {
   const router = useRouter();
@@ -55,11 +72,13 @@ export default function AllLogs() {
     });
   };
 
-  const sections = React.useMemo(() => {
-    if (!logs?.length) return [] as { title: string; data: typeof logs }[];
+  const rows = useMemo<Row[]>(() => {
+    if (!logs?.length) {
+      return [];
+    }
 
     const locale = getDateLocale();
-    const byDay = new Map<number, typeof logs>();
+    const byDay = new Map<number, Array<PumpLog[][number]>>();
 
     for (const log of [...logs].sort((a, b) => b.timestamp - a.timestamp)) {
       const day = startOfDay(new Date(log.timestamp)).getTime();
@@ -68,16 +87,17 @@ export default function AllLogs() {
       byDay.set(day, arr);
     }
 
-    const makeTitle = (dayTs: number) => {
-      const d = new Date(dayTs);
-      if (isToday(d)) return i18n.t('date.today');
-      if (isYesterday(d)) return i18n.t('date.yesterday');
-      return format(d, 'PPP', { locale });
-    };
+    const out: Row[] = [];
+    for (const [day, data] of Array.from(byDay.entries()).sort((a, b) => b[0] - a[0])) {
+      const title = makeTitle(day, locale);
 
-    return Array.from(byDay.entries())
-      .sort((a, b) => b[0] - a[0])
-      .map(([day, data]) => ({ title: makeTitle(day), data }));
+      out.push({ type: 'header', id: `h-${day}`, title, count: data.length });
+
+      for (const it of data) {
+        out.push({ type: 'item', id: it.id, item: it });
+      }
+    }
+    return out;
   }, [logs]);
 
   return (
@@ -126,19 +146,26 @@ export default function AllLogs() {
           icon={<Download size={64} color={COLORS.primary} />}
         />
       ) : (
-        <SectionList
-          sections={sections}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <PumpCard item={item} />}
-          renderSectionHeader={({ section }) => (
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>
-                {section.title} ({section.data.length})
-              </Text>
-            </View>
-          )}
-          stickySectionHeadersEnabled
+        <FlashList
+          data={rows}
+          keyExtractor={(row) => row.id}
+          renderItem={({ item }: ListRenderItemInfo<Row>) => {
+            if (item.type === 'header') {
+              return (
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionHeaderText}>
+                    {item.title} ({item.count})
+                  </Text>
+                </View>
+              );
+            }
+            return <PumpCard item={item.item} />;
+          }}
+          getItemType={(row) => row.type}
           contentContainerStyle={{ paddingBottom: 16 }}
+          stickyHeaderIndices={rows
+            .map((r, idx) => (r.type === 'header' ? idx : -1))
+            .filter((i) => i !== -1)}
         />
       )}
     </View>

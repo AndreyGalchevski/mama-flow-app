@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
+import { memo } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { Card, IconButton, Text } from 'react-native-paper';
 
@@ -16,13 +17,12 @@ interface Props {
   item: PumpLog;
 }
 
-export default function PumpCard({ item }: Props) {
+function PumpCard({ item }: Props) {
   const router = useRouter();
 
-  const logs = useLogsStore((s) => s.logs);
-
   const handleDeleteConfirm = async () => {
-    const newLogs = logs.filter((l) => l.id !== item.id);
+    const current = useLogsStore.getState().logs;
+    const newLogs = current.filter((l) => l.id !== item.id);
     useLogsStore.setState({ logs: newLogs });
     scheduleNextPumpReminder().catch(console.error);
   };
@@ -88,3 +88,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
+
+export default memo(PumpCard);
