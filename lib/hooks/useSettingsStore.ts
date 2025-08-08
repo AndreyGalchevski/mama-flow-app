@@ -24,8 +24,8 @@ export const useSettingsStore = create<SettingsState>()(
     (set, get) => ({
       remindersEnabled: true,
       nextReminderAt: null,
-      reminderHoursDay: 2.5,
-      reminderHoursNight: 4,
+      reminderHoursDay: 3,
+      reminderHoursNight: 3,
       appLaunchCount: 0,
       lastRatingPromptDate: null,
       hasUserRated: false,
