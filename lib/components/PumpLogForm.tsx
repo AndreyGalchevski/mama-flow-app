@@ -9,6 +9,7 @@ import { COLORS } from '../../lib/colors';
 import { getDateLocale } from '../date';
 import i18n from '../i18n';
 import type { PumpLog } from '../types';
+import ActionsBar from './ActionBar';
 
 export interface PumpLogFormData {
   volumeLeftML: number;
@@ -133,13 +134,13 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
           </Button>
         </View>
 
-        <View style={styles.buttonContainer}>
+        <ActionsBar>
+          <Button onPress={() => router.back()}>{i18n.t('common.cancel')}</Button>
+
           <Button mode="contained" onPress={handleSave}>
             {i18n.t('common.save')}
           </Button>
-
-          <Button onPress={() => router.back()}>{i18n.t('common.cancel')}</Button>
-        </View>
+        </ActionsBar>
       </View>
 
       <DatePickerModal
@@ -179,9 +180,5 @@ const styles = StyleSheet.create({
   },
   dateTimeButton: {
     marginTop: 8,
-  },
-  buttonContainer: {
-    padding: 16,
-    gap: 8,
   },
 });

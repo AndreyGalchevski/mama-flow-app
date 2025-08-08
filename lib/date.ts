@@ -30,3 +30,11 @@ export const formatNextReminder = (date: Date): string => {
 
   return format(date, 'PPpp', { locale });
 };
+
+export const formatTimeHM = (hours: number, minutes: number): string => {
+  const d = new Date();
+  d.setHours(hours);
+  d.setMinutes(minutes);
+  const locale = getDateLocale();
+  return format(d, 'p', { locale });
+};

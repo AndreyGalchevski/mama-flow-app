@@ -8,6 +8,7 @@ import { Button, Divider, Text } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
 
 import { COLORS } from '../lib/colors';
+import ActionsBar from '../lib/components/ActionBar';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
 import i18n from '../lib/i18n';
 import type { PumpLog } from '../lib/types';
@@ -104,11 +105,14 @@ export default function ImportCSVModal() {
             {JSON.stringify(row)}
           </Text>
         ))}
+      </ScrollView>
+
+      <ActionsBar>
+        <Button onPress={() => router.back()}>{i18n.t('common.cancel')}</Button>
 
         <Button
           mode="contained"
           onPress={handleImport}
-          style={styles.importButton}
           disabled={
             !fieldMap.timestamp ||
             !fieldMap.volumeLeftML ||
@@ -118,11 +122,7 @@ export default function ImportCSVModal() {
         >
           {i18n.t('importCSV.importButton')}
         </Button>
-
-        <Button onPress={() => router.back()} style={styles.cancelButton}>
-          {i18n.t('common.cancel')}
-        </Button>
-      </ScrollView>
+      </ActionsBar>
     </View>
   );
 }
@@ -145,11 +145,5 @@ const styles = StyleSheet.create({
   previewRow: {
     fontSize: 12,
     marginBottom: 4,
-  },
-  importButton: {
-    marginTop: 24,
-  },
-  cancelButton: {
-    marginTop: 8,
   },
 });

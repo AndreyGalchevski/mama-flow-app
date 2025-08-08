@@ -30,8 +30,15 @@ export async function ensurePumpReminderCategory() {
 }
 
 function isNightTime(date: Date): boolean {
-  const hour = date.getHours();
-  return hour >= 0 && hour < 6;
+  const { nightStartMinutes, nightEndMinutes } = useSettingsStore.getState();
+
+  const minutes = date.getHours() * 60 + date.getMinutes();
+  // Support intervals that may wrap past midnight (e.g., 22:00 -> 06:00)
+  if (nightStartMinutes <= nightEndMinutes) {
+    return minutes >= nightStartMinutes && minutes < nightEndMinutes;
+  }
+  // Wrapping case
+  return minutes >= nightStartMinutes || minutes < nightEndMinutes;
 }
 
 export async function scheduleNextPumpReminder() {

@@ -30,7 +30,6 @@ export default function AddLogModal() {
 
     scheduleNextPumpReminder().catch(console.error);
 
-    // Check if we should show rating prompt after adding a log
     await checkAndShowRatingPrompt();
 
     router.back();

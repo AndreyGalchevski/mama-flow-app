@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { StyleSheet, type TextInput as TextInputRN, View } from 'react-native';
 import { Button, Divider, Icon, Switch, Text, TextInput } from 'react-native-paper';
@@ -5,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { COLORS } from '../../lib/colors';
 import NextReminderText from '../../lib/components/NextReminderText';
+import { formatTimeHM } from '../../lib/date';
 import { useResetFirstTime } from '../../lib/hooks/useFirstTimeUser';
 import { useRatingPrompt } from '../../lib/hooks/useRatingPrompt';
 import { useSettingsStore } from '../../lib/hooks/useSettingsStore';
@@ -18,6 +20,8 @@ const isValidInput = (dayHoursStr: string, nightHoursStr: string) => {
 };
 
 export default function Settings() {
+  const router = useRouter();
+
   const localDayHoursInputRef = useRef<TextInputRN>(null);
   const localNightHoursInputRef = useRef<TextInputRN>(null);
   const resetFirstTime = useResetFirstTime();
@@ -28,6 +32,8 @@ export default function Settings() {
   const reminderHoursDay = useSettingsStore((s) => s.reminderHoursDay);
   const reminderHoursNight = useSettingsStore((s) => s.reminderHoursNight);
   const updateReminderIntervals = useSettingsStore((s) => s.updateReminderIntervals);
+  const nightStartMinutes = useSettingsStore((s) => s.nightStartMinutes);
+  const nightEndMinutes = useSettingsStore((s) => s.nightEndMinutes);
 
   const [localDayHours, setLocalDayHours] = useState(String(reminderHoursDay));
   const [localNightHours, setLocalNightHours] = useState(String(reminderHoursNight));
@@ -68,6 +74,19 @@ export default function Settings() {
 
         <View style={styles.remindersSection}>
           <NextReminderText />
+
+          <View style={styles.nightRow}>
+            <Text>
+              {i18n.t('settings.nightIntervalSummary', {
+                start: formatTimeHM(Math.floor(nightStartMinutes / 60), nightStartMinutes % 60),
+                end: formatTimeHM(Math.floor(nightEndMinutes / 60), nightEndMinutes % 60),
+              })}
+            </Text>
+
+            <Button compact onPress={() => router.push('/night-time-modal')}>
+              {i18n.t('settings.changeNightInterval')}
+            </Button>
+          </View>
 
           <TextInput
             ref={localDayHoursInputRef}
@@ -166,6 +185,11 @@ const styles = StyleSheet.create({
   },
   remindersSection: {
     gap: 16,
+  },
+  nightRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   buttonRow: {
     flexDirection: 'row',

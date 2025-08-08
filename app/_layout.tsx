@@ -115,6 +115,10 @@ export default function RootLayout() {
               name="import-csv-modal"
               options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
             />
+            <Stack.Screen
+              name="night-time-modal"
+              options={{ presentation: 'modal', title: i18n.t('settings.nightIntervalTitle') }}
+            />
           </Stack>
 
           <WelcomeModal />
