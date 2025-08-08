@@ -100,7 +100,8 @@
   },
   "reminders": {
     "title": "⏱ حان وقت الضخ؟",
-    "body": "لقد مضت {{hours}} ساعات منذ آخر سجل ضخ.",
+    "body": "مضت {{hours}} ساعات منذ آخر سجل.",
+    "startPumpAction": "بدء الضخ",
     "nextReminder": "التذكير التالي: {{time}}",
     "nextReminderShort": "التذكير التالي: {{time}}"
   },

@@ -3,9 +3,31 @@ import * as Notifications from 'expo-notifications';
 
 import { useLogsStore } from './hooks/useLogsStore';
 import { useSettingsStore } from './hooks/useSettingsStore';
+import i18n from './i18n';
 import { captureException } from './sentry';
 
-const NOTIFICATION_IDENTIFIER = 'pump-reminder';
+export const NOTIFICATION_IDENTIFIER = 'pump-reminder';
+export const CATEGORY_IDENTIFIER = 'pump-reminder-category';
+export const ACTION_START_PUMP = 'START_PUMP';
+
+export async function ensurePumpReminderCategory() {
+  try {
+    await Notifications.setNotificationCategoryAsync(CATEGORY_IDENTIFIER, [
+      {
+        identifier: ACTION_START_PUMP,
+        buttonTitle: i18n.t('reminders.startPumpAction'),
+        options: {
+          opensAppToForeground: true,
+        },
+      },
+    ]);
+  } catch (e) {
+    captureException(e instanceof Error ? e : new Error('Failed to set notification category'), {
+      feature: 'reminders',
+      action: 'setNotificationCategory',
+    });
+  }
+}
 
 function isNightTime(date: Date): boolean {
   const hour = date.getHours();
@@ -22,7 +44,6 @@ export async function scheduleNextPumpReminder() {
       return;
     }
 
-    // Request notification permissions first
     const { status } = await Notifications.requestPermissionsAsync();
     if (status !== 'granted') {
       console.log('Notification permissions not granted');
@@ -50,7 +71,6 @@ export async function scheduleNextPumpReminder() {
     const interval = isNightTime(now) ? reminderHoursNight : reminderHoursDay;
     const nextReminderTime = addHours(lastTime, interval);
 
-    // Only schedule if the reminder time is in the future
     if (!isAfter(nextReminderTime, now)) {
       console.log('Next reminder time is in the past, not scheduling');
       return;
@@ -58,12 +78,15 @@ export async function scheduleNextPumpReminder() {
 
     setNextReminder(nextReminderTime.getTime());
 
+    await ensurePumpReminderCategory();
+
     await Notifications.scheduleNotificationAsync({
       identifier: NOTIFICATION_IDENTIFIER,
       content: {
-        title: '⏱ Time to pump?',
-        body: `It's been ${interval} hours since your last pump log.`,
+        title: i18n.t('reminders.title'),
+        body: i18n.t('reminders.body', { hours: interval }),
         sound: true,
+        categoryIdentifier: CATEGORY_IDENTIFIER,
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,

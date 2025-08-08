@@ -100,7 +100,8 @@
   },
   "reminders": {
     "title": "⏱ Time to pump?",
-    "body": "It's been {{hours}} hours since your last pump log.",
+    "body": "It’s been {{hours}} hours since your last log.",
+    "startPumpAction": "Start pump",
     "nextReminder": "Next Reminder: {{time}}",
     "nextReminderShort": "Next reminder: {{time}}"
   },

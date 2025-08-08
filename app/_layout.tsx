@@ -1,4 +1,5 @@
-import { Stack } from 'expo-router';
+import * as Notifications from 'expo-notifications';
+import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { I18nManager } from 'react-native';
@@ -12,6 +13,11 @@ import ErrorBoundary from '../lib/components/ErrorBoundary';
 import WelcomeModal from '../lib/components/WelcomeModal';
 import { useSettingsStore } from '../lib/hooks/useSettingsStore';
 import i18n, { isRTL } from '../lib/i18n';
+import {
+  ACTION_START_PUMP,
+  CATEGORY_IDENTIFIER,
+  ensurePumpReminderCategory,
+} from '../lib/reminders';
 import { initSentry } from '../lib/sentry';
 
 registerTranslation('en', en);
@@ -24,7 +30,6 @@ export default function RootLayout() {
   useEffect(() => {
     initSentry();
 
-    // Increment app launch count
     incrementAppLaunchCount();
 
     const rtl = isRTL();
@@ -34,6 +39,55 @@ export default function RootLayout() {
       I18nManager.forceRTL(rtl);
     }
   }, [incrementAppLaunchCount]);
+
+  useEffect(() => {
+    ensurePumpReminderCategory();
+
+    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+      try {
+        const actionID = response.actionIdentifier;
+        const categoryID = response.notification.request.content.categoryIdentifier;
+        const notificationID = response.notification.request.identifier;
+
+        if (categoryID !== CATEGORY_IDENTIFIER) {
+          return;
+        }
+
+        if (
+          actionID === ACTION_START_PUMP ||
+          actionID === Notifications.DEFAULT_ACTION_IDENTIFIER
+        ) {
+          void Notifications.dismissNotificationAsync(notificationID);
+          router.push('/add-log-modal');
+        }
+      } catch (e) {
+        router.push('/');
+      }
+    });
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      try {
+        if (!response) return;
+        const actionID = response.actionIdentifier;
+        const categoryID = response.notification.request.content.categoryIdentifier;
+        const notificationID = response.notification.request.identifier;
+        if (categoryID !== CATEGORY_IDENTIFIER) return;
+        if (
+          actionID === ACTION_START_PUMP ||
+          actionID === Notifications.DEFAULT_ACTION_IDENTIFIER
+        ) {
+          void Notifications.dismissNotificationAsync(notificationID);
+          router.push('/add-log-modal');
+        }
+      } catch {
+        router.push('/');
+      }
+    });
+
+    return () => {
+      sub.remove();
+    };
+  }, []);
 
   return (
     <GestureHandlerRootView>

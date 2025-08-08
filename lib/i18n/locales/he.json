@@ -99,7 +99,8 @@
   },
   "reminders": {
     "title": "⏱ זמן לשאוב?",
-    "body": "עברו {{hours}} שעות מאז רשומת השאיבה האחרונה שלך.",
+    "body": "עברו {{hours}} שעות מאז הרשומה האחרונה.",
+    "startPumpAction": "התחלת שאיבה",
     "nextReminder": "התזכורת הבאה: {{time}}",
     "nextReminderShort": "התזכורת הבאה: {{time}}"
   },
