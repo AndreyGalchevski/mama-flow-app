@@ -152,6 +152,15 @@
     "selectDate": "Выберите дату",
     "selectTime": "Выберите время"
   },
+  "validation": {
+    "positive": "Введите значение больше 0",
+    "integer": "Введите целое количество минут",
+    "minMinutes": "Введите не менее {{min}} минуты",
+    "maxMinutes": "Введите 600 минут или меньше",
+    "maxLength": "Пожалуйста, не более {{max}} символов",
+    "invalidTimestamp": "Пожалуйста, выберите корректные дату и время",
+    "csvRow": "Строка {{row}}: {{field}} — {{message}}"
+  },
   "units": {
     "ml": "мл",
     "volumeWithUnit": "{{volume}} мл"

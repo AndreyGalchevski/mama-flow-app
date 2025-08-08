@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Divider, Text } from 'react-native-paper';
+import { Button, Divider, HelperText, Text } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
 
 import { COLORS } from '../lib/colors';
@@ -12,6 +12,7 @@ import ActionsBar from '../lib/components/ActionBar';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
 import i18n from '../lib/i18n';
 import type { PumpLog } from '../lib/types';
+import { pumpLogCSVRowSchema } from '../lib/validation/pumpLog';
 
 const pumpLogFields: { key: keyof PumpLog; label: string }[] = [
   { key: 'timestamp', label: i18n.t('importCSV.fields.timestamp') },
@@ -27,6 +28,7 @@ export default function ImportCSVModal() {
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<Record<string, string>[]>([]);
   const [fieldMap, setFieldMap] = useState<Record<string, string>>({});
+  const [importErrors, setImportErrors] = useState<string[]>([]);
 
   const addLog = useLogsStore((s) => s.add);
 
@@ -57,21 +59,66 @@ export default function ImportCSVModal() {
       return;
     }
 
-    const logs: PumpLog[] = rows
-      .map((row) => {
-        return {
-          id: Crypto.randomUUID(),
-          timestamp: parse(row[fieldMap.timestamp], 'dd/MM/yyyy HH:mm:ss', new Date()).getTime(),
-          volumeLeftML: Number.parseFloat(row[fieldMap.volumeLeftML]),
-          volumeRightML: Number.parseFloat(row[fieldMap.volumeRightML]),
-          volumeTotalML:
-            Number.parseFloat(row[fieldMap.volumeLeftML]) +
-            Number.parseFloat(row[fieldMap.volumeRightML]),
-          durationMinutes: Number.parseFloat(row[fieldMap.durationMinutes]),
-          notes: row[fieldMap.notes] || '',
-        };
-      })
-      .filter(Boolean) as PumpLog[];
+    const errors: string[] = [];
+    const logs: PumpLog[] = [];
+
+    // Helper to present human labels instead of raw field keys
+    const fieldLabel = (k: string) => {
+      switch (k) {
+        case 'timestamp':
+          return i18n.t('importCSV.fields.timestamp');
+        case 'volumeLeftML':
+          return i18n.t('importCSV.fields.volumeLeft');
+        case 'volumeRightML':
+          return i18n.t('importCSV.fields.volumeRight');
+        case 'durationMinutes':
+          return i18n.t('importCSV.fields.duration');
+        case 'notes':
+          return i18n.t('importCSV.fields.notes');
+        default:
+          return k;
+      }
+    };
+
+    rows.forEach((row, index) => {
+      const parsedTimestamp = parse(
+        row[fieldMap.timestamp],
+        'dd/MM/yyyy HH:mm:ss',
+        new Date(),
+      ).getTime();
+      const candidate = {
+        timestamp: parsedTimestamp,
+        volumeLeftML: Number.parseFloat(row[fieldMap.volumeLeftML]),
+        volumeRightML: Number.parseFloat(row[fieldMap.volumeRightML]),
+        durationMinutes: Number.parseFloat(row[fieldMap.durationMinutes]),
+        notes: row[fieldMap.notes] || '',
+      };
+
+      const result = pumpLogCSVRowSchema.safeParse(candidate);
+      if (!result.success) {
+        const firstIssue = result.error.issues[0];
+        const field = fieldLabel(String(firstIssue.path[0] ?? 'field'));
+        errors.push(
+          i18n.t('validation.csvRow', {
+            row: index + 1,
+            field,
+            message: firstIssue.message,
+          }),
+        );
+        return;
+      }
+
+      logs.push({
+        id: Crypto.randomUUID(),
+        ...result.data,
+        volumeTotalML: result.data.volumeLeftML + result.data.volumeRightML,
+      });
+    });
+
+    if (errors.length) {
+      setImportErrors(errors.slice(0, 10));
+      return;
+    }
 
     logs.forEach(addLog);
     router.back();
@@ -99,6 +146,12 @@ export default function ImportCSVModal() {
         <Divider style={styles.divider} />
 
         <Text variant="titleSmall">{i18n.t('importCSV.preview')}</Text>
+
+        {importErrors.length > 0 ? (
+          <HelperText type="error" visible style={{ marginTop: 8 }}>
+            {importErrors.join('\n')}
+          </HelperText>
+        ) : null}
 
         {rows.slice(0, 3).map((row, i) => (
           <Text key={i} style={styles.previewRow}>

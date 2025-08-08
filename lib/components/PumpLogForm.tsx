@@ -2,13 +2,14 @@ import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, HelperText, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 
 import { COLORS } from '../../lib/colors';
 import { getDateLocale } from '../date';
 import i18n from '../i18n';
 import type { PumpLog } from '../types';
+import { pumpLogFormSchema } from '../validation/pumpLog';
 import ActionsBar from './ActionBar';
 
 export interface PumpLogFormData {
@@ -34,6 +35,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
   const [date, setDate] = useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 
   useEffect(() => {
     if (initialState) {
@@ -67,17 +69,26 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
     const volumeRightML = Number.parseFloat(volumeRight);
     const durationMinutes = Number.parseFloat(duration);
 
-    if (!volumeLeftML || !volumeRightML || !durationMinutes) {
-      return;
-    }
-
-    onSave({
+    const parsed = pumpLogFormSchema.safeParse({
       volumeLeftML,
       volumeRightML,
       durationMinutes,
       notes: notes.trim(),
       timestamp: date.getTime(),
     });
+
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string | undefined> = {};
+      for (const issue of parsed.error.issues) {
+        const path = issue.path[0] as string;
+        if (!fieldErrors[path]) fieldErrors[path] = issue.message;
+      }
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setErrors({});
+    onSave(parsed.data);
   };
 
   return (
@@ -91,7 +102,14 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
             keyboardType="numeric"
             onChangeText={setVolumeLeft}
             style={styles.firstInput}
+            error={!!errors.volumeLeftML}
           />
+
+          {errors.volumeLeftML ? (
+            <HelperText type="error" visible>
+              {errors.volumeLeftML}
+            </HelperText>
+          ) : null}
 
           <TextInput
             mode="outlined"
@@ -99,7 +117,14 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
             value={volumeRight}
             keyboardType="numeric"
             onChangeText={setVolumeRight}
+            error={!!errors.volumeRightML}
           />
+
+          {errors.volumeRightML ? (
+            <HelperText type="error" visible>
+              {errors.volumeRightML}
+            </HelperText>
+          ) : null}
 
           <TextInput
             mode="outlined"
@@ -107,7 +132,14 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
             value={duration}
             keyboardType="numeric"
             onChangeText={setDuration}
+            error={!!errors.durationMinutes}
           />
+
+          {errors.durationMinutes ? (
+            <HelperText type="error" visible>
+              {errors.durationMinutes}
+            </HelperText>
+          ) : null}
 
           <TextInput
             mode="outlined"
@@ -116,6 +148,12 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
             onChangeText={setNotes}
             multiline
           />
+
+          {errors.notes ? (
+            <HelperText type="error" visible>
+              {errors.notes}
+            </HelperText>
+          ) : null}
 
           <Button
             onPress={() => setShowDatePicker(true)}

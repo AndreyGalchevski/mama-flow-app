@@ -21,7 +21,7 @@ export default function ActionsBar({ children, style }: Props) {
 const styles = StyleSheet.create({
   container: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#ccc',
+    borderTopColor: COLORS.outline,
     backgroundColor: COLORS.background,
     paddingHorizontal: 16,
     paddingTop: 12,

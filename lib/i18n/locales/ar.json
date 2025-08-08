@@ -152,6 +152,15 @@
     "selectDate": "اختاري التاريخ",
     "selectTime": "اختاري الوقت"
   },
+  "validation": {
+    "positive": "أدخلي قيمة أكبر من 0",
+    "integer": "أدخلي عدداً صحيحاً للدقائق",
+    "minMinutes": "أدخلي على الأقل {{min}} دقيقة",
+    "maxMinutes": "أدخلي 600 دقيقة أو أقل",
+    "maxLength": "يرجى عدم تجاوز {{max}} حرفاً",
+    "invalidTimestamp": "يرجى اختيار تاريخ ووقت صالحين",
+    "csvRow": "الصف {{row}}: {{field}} — {{message}}"
+  },
   "units": {
     "ml": "مل",
     "volumeWithUnit": "{{volume}}مل"

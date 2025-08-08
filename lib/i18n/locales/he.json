@@ -151,6 +151,15 @@
     "selectDate": "בחרי תאריך",
     "selectTime": "בחרי שעה"
   },
+  "validation": {
+    "positive": "הכניסי ערך גדול מ-0",
+    "integer": "הכניסי מספר שלם של דקות",
+    "minMinutes": "הכניסי לפחות {{min}} דקה",
+    "maxMinutes": "הכניסי 600 דקות או פחות",
+    "maxLength": "נא להגביל עד {{max}} תווים",
+    "invalidTimestamp": "נא לבחור תאריך ושעה תקינים",
+    "csvRow": "שורה {{row}}: {{field}} — {{message}}"
+  },
   "units": {
     "ml": "מ״ל",
     "volumeWithUnit": "{{volume}} מ״ל"
