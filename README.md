@@ -1,125 +1,101 @@
-# MamaFlow 🍼
+# MamaFlow
 
-A comprehensive pumping log tracker for breastfeeding mothers. Track volume, duration, and schedule reminders to maintain your pumping routine.
+MamaFlow is a simple, focused pumping log for breastfeeding parents. Log volume and duration, see weekly trends, and set gentle reminders that fit your routine.
 
 ## Features
 
-✨ **Core Features:**
-- 📊 Track pumping sessions with volume and duration
-- 📱 Visual trends with weekly volume charts
-- ⏰ Smart reminders with day/night scheduling
-- 📥 Import/Export data via CSV
-- 🌙 Automatic dark/light mode support
-- ♿ Full accessibility support
+- Log pumping sessions with volume and duration
+- Weekly volume chart to spot trends
+- Day/night reminders you control (local notifications)
+- CSV import and export
+ - Localization: English, Hebrew, Russian, Arabic; RTL and accessibility support
 
-## Screenshots
+## Data and privacy
 
-*Add screenshots here when ready for store listing*
+- Your pumping logs are stored on-device using fast local storage (MMKV).
+- The app does not include ads or behavioral analytics.
+- Production builds use Sentry for crash reporting only. Personal data is not sent; events are scrubbed in code. You can review the setup in `lib/sentry.ts`.
+- Privacy policy: https://www.privacypolicies.com/live/72f69876-661a-418e-be05-37d7df86dcf0
 
-## Privacy
-
-MamaFlow respects your privacy:
-- All data is stored locally on your device
-- No data is sent to external servers
-- No user tracking or analytics
-- View our [Privacy Policy](https://www.privacypolicies.com/live/72f69876-661a-418e-be05-37d7df86dcf0)
-
-## Development
-
-This is an [Expo](https://expo.dev) project built with React Native.
+## Getting started
 
 ### Prerequisites
 
-- Node.js (v18+)
-- npm or yarn
-- Expo CLI
-- Android Studio (for Android development)
-- Xcode (for iOS development)
+- Node.js 18+
+- npm
+- Xcode (iOS) and/or Android Studio (Android)
 
-### Installation
+### Install and run
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/AndreyGalchevski/mama-flow-app.git
-   cd mama-flow-app
-   ```
+Common scripts:
 
-2. Install dependencies
-   ```bash
-   npm install
-   ```
+- `npm start` — start Expo
+- `npm run ios` — run on iOS simulator/device
+- `npm run android` — run on Android emulator/device
 
-3. Start the development server
-   ```bash
-   npx expo start
-   ```
+## Build and release
 
-### Building for Production
+Builds are managed with EAS. You’ll need an Expo account and to configure credentials.
 
-#### Android (Play Store)
-```bash
-npm run build:android:production
-```
+- Android (production): `npm run build:android:production`
+- iOS (production): `npm run build:ios:production`
 
-#### iOS (App Store)
-```bash
-npm run build:ios:production
-```
+Preview and development profiles are available in `eas.json`.
 
-### Project Structure
+## Project structure
 
 ```
-app/                    # App screens and navigation
-├── (tabs)/            # Tab navigation screens
-├── add-log-modal.tsx  # Add pump log modal
-├── edit-log/          # Edit pump log screens
-└── _layout.tsx        # Root layout
+app/                    # Screens and navigation (Expo Router)
+├── (tabs)/             # Tab screens
+├── add-log-modal.tsx   # Add pump log
+├── edit-log/           # Edit pump log
+└── _layout.tsx         # Root layout
 
-lib/                   # Shared utilities and components
-├── components/        # Reusable UI components
-├── hooks/            # Custom React hooks
-├── i18n/             # Internationalization
-├── icons/            # Custom SVG icons
-└── types.ts          # TypeScript type definitions
+lib/                    # Shared utilities and components
+├── components/         # Reusable UI
+├── hooks/              # Custom hooks
+├── i18n/               # Translations and RTL support
+├── icons/              # SVG icons
+└── types.ts            # Types
 
-assets/               # Static assets (images, fonts)
+assets/                 # Images and fonts
 ```
 
-### Technologies Used
+## Tech highlights
 
-- **React Native** - Mobile app framework
-- **Expo** - Development platform
-- **TypeScript** - Type safety
-- **React Native Paper** - UI components
-- **Zustand** - State management
-- **MMKV** - Fast local storage
-- **React Native Gifted Charts** - Data visualization
-- **expo-notifications** - Push notifications
-- **date-fns** - Date utilities
+- Expo + React Native 0.79, React 19
+- TypeScript
+- Expo Router
+- React Native Paper (UI)
+- Zustand + MMKV for state and storage
+- D3 (minimal) for charts
+- expo-notifications for local reminders
+- date-fns for dates
 
-### Contributing
+## Environment
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+- `EXPO_PUBLIC_SENTRY_DSN` (optional) — Sentry DSN for crash reporting.
 
-### License
+## Development
 
-This project is licensed under the MIT License.
+- `npm run lint` — format and lint with Biome
+- `npm run lint:check` — check only
+- `npm run type-check` — TypeScript types
+- `npm run doctor` — Expo diagnostics
 
-### Support
+## Contributing
 
-For issues or questions:
-- Open an issue on GitHub
-- Email: support@mamaflow.app (replace with actual email)
+Pull requests are welcome. Please run lint and type checks before opening a PR.
 
-### Changelog
+## License
 
-#### v1.0.0
-- Initial release
-- Core pumping log functionality
-- Reminder system
-- CSV import/export
-- Accessibility support
+This repository does not currently include a license file. If you plan to use the code beyond personal or evaluation purposes, please open an issue to discuss licensing.
+
+## Support
+
+Questions or issues? Open a GitHub issue or email: andreygalchevski@gmail.com
+
+## Changelog
+
+### v1.0.0
+- Initial release with core logging, reminders, CSV import/export, and accessibility support.
