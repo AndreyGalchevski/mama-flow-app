@@ -83,13 +83,9 @@ assets/                 # Images and fonts
 - `npm run type-check` — TypeScript types
 - `npm run doctor` — Expo diagnostics
 
-## Contributing
-
-Pull requests are welcome. Please run lint and type checks before opening a PR.
-
 ## License
 
-This repository does not currently include a license file. If you plan to use the code beyond personal or evaluation purposes, please open an issue to discuss licensing.
+MIT — see `LICENSE` for details.
 
 ## Support
 
