@@ -60,7 +60,7 @@
     ],
     "notification": {
       "icon": "./assets/images/ic_notification.png",
-      "color": "#ffffff"
+      "color": "#4F8A8B"
     },
     "experiments": {
       "typedRoutes": true
