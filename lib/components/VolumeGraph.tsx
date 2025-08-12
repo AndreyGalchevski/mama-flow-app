@@ -16,7 +16,7 @@ import AnimatedBar from './AnimatedBar';
 
 const barRadius = 18;
 
-const padding = { top: 24, right: 16, bottom: 36, left: 16 };
+const padding = { top: 24, right: 16, bottom: 36, left: 42 };
 
 interface Props {
   data: DataPoint[];
@@ -138,6 +138,37 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
     >
       <Svg width={width} height={height} onPress={handleSvgPress}>
         <G x={padding.left} y={padding.top}>
+          {(() => {
+            const yTicks = 4;
+            const yValues = [];
+            const yDomain = y.domain();
+            for (let i = 0; i <= yTicks; i++) {
+              const value = yDomain[0] + (yDomain[1] - yDomain[0]) * (i / yTicks);
+              if (value === 0) {
+                continue;
+              }
+              yValues.push(value);
+            }
+
+            return yValues.map((value, index) => {
+              const yPos = y(value);
+              return (
+                <SvgText
+                  key={`y-label-${index}`}
+                  x={-8}
+                  y={yPos + 4}
+                  textAnchor="end"
+                  fontSize="10"
+                  fill={COLORS.onSurface}
+                >
+                  {i18n.t('units.volumeWithUnit', {
+                    volume: Math.round(value),
+                  })}
+                </SvgText>
+              );
+            });
+          })()}
+
           {data.map((d, index) => {
             const barX = x(d.label) ?? 0;
             const barW = x.bandwidth();
