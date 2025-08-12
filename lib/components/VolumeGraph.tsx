@@ -1,16 +1,18 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { max } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import Svg, { G, Rect, Text as SvgText } from 'react-native-svg';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Svg, { G, Text as SvgText } from 'react-native-svg';
 
 import { AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
 import i18n, { isRTL } from '../i18n';
 import { getRTLTextAlign } from '../rtl';
 import type { DataPoint } from '../types';
+import AnimatedBar from './AnimatedBar';
 
 const barRadius = 18;
 
@@ -30,6 +32,12 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
     label: string;
     tooltip: string;
   } | null>(null);
+
+  const chartOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    chartOpacity.value = withTiming(1, { duration: 300 });
+  }, [chartOpacity]);
 
   useFocusEffect(
     useCallback(() => {
@@ -115,42 +123,42 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
     [data, x, y, chartH, selectedBar],
   );
 
+  const chartAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: chartOpacity.value,
+  }));
+
   const tooltipOffset = selectedBar ? Math.min(width - 100, Math.max(10, selectedBar.x)) : 0;
 
   return (
-    <View
-      style={{ width, height, alignSelf: 'center' }}
+    <Animated.View
+      style={[{ width, height, alignSelf: 'center' }, chartAnimatedStyle]}
       accessible
       accessibilityLabel={AccessibilityLabels.volumeChart}
       accessibilityRole="image"
     >
       <Svg width={width} height={height} onPress={handleSvgPress}>
         <G x={padding.left} y={padding.top}>
-          {data.map((d) => {
+          {data.map((d, index) => {
             const barX = x(d.label) ?? 0;
             const barW = x.bandwidth();
             const barH = chartH - y(d.value);
             const barY = y(d.value);
 
             const isSelected = selectedBar?.label === d.label;
-
             const barColor = isSelected ? '#3A6B6C' : COLORS.primary;
 
             return (
-              <G
-                key={d.label}
-                accessible
-                accessibilityRole="button"
-                accessibilityLabel={`${d.label} ${d.value} steps`}
-              >
-                <Rect
+              <G key={d.label}>
+                <AnimatedBar
                   x={barX}
-                  y={barY}
                   width={barW}
-                  height={Math.max(2, barH)}
+                  toY={barY}
+                  toHeight={barH}
                   fill={barColor}
                   rx={barRadius}
                   ry={barRadius}
+                  duration={400 + index * 100}
+                  isActive={isSelected}
                 />
 
                 <SvgText
@@ -190,7 +198,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
           </Text>
         </View>
       )}
-    </View>
+    </Animated.View>
   );
 }
 
