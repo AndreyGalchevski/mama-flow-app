@@ -120,7 +120,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
         setSelectedBar(null);
       }
     },
-    [data, x, y, chartH, selectedBar],
+    [data, x, y, chartH, selectedBar?.label],
   );
 
   const chartAnimatedStyle = useAnimatedStyle(() => ({
@@ -176,7 +176,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const barY = y(d.value);
 
             const isSelected = selectedBar?.label === d.label;
-            const barColor = isSelected ? '#3A6B6C' : COLORS.primary;
+            const barColor = isSelected ? '#2D5455' : COLORS.primary;
 
             return (
               <G key={d.label}>

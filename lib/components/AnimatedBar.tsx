@@ -33,18 +33,22 @@ export default function AnimatedBar({
 }: Props) {
   const animatedY = useSharedValue(toY + toHeight);
   const animatedHeight = useSharedValue(0);
-  const animatedFill = useSharedValue(fill);
+  const animatedOpacity = useSharedValue(1);
 
   useEffect(() => {
     animatedY.value = withTiming(toY, { duration });
     animatedHeight.value = withTiming(Math.max(2, toHeight), { duration });
-    animatedFill.value = fill;
-  }, [toY, toHeight, fill, duration, animatedY, animatedHeight, animatedFill]);
+  }, [toY, toHeight, duration, animatedY, animatedHeight]);
+
+  useEffect(() => {
+    animatedOpacity.value = withTiming(isActive ? 0.8 : 1, { duration: 150 });
+  }, [isActive, animatedOpacity]);
 
   const animatedProps = useAnimatedProps(() => ({
     y: animatedY.value,
     height: animatedHeight.value,
-    fill: animatedFill.value,
+    fill,
+    opacity: animatedOpacity.value,
   }));
 
   return (
@@ -56,7 +60,6 @@ export default function AnimatedBar({
       animatedProps={animatedProps}
       onPress={onPress}
       accessibilityLabel={accessibilityLabel}
-      opacity={isActive ? 0.7 : 1}
     />
   );
 }
