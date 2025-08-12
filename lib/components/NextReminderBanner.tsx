@@ -14,9 +14,11 @@ export default function NextReminderBanner() {
   const remindersEnabled = useSettingsStore((s) => s.remindersEnabled);
   const nextReminderAt = useSettingsStore((s) => s.nextReminderAt);
 
+  const showBanner = remindersEnabled && !!nextReminderAt && new Date() < new Date(nextReminderAt);
+
   return (
     <Banner
-      visible={remindersEnabled && !!nextReminderAt}
+      visible={showBanner}
       contentStyle={styles.bannerContent}
       actions={[
         {
@@ -31,7 +33,7 @@ export default function NextReminderBanner() {
         },
       ]}
     >
-      {remindersEnabled && !!nextReminderAt && (
+      {showBanner && (
         <View style={styles.container}>
           <Bell size={24} />
 

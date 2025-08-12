@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import { Text as RNText, type TextStyle } from 'react-native';
 
 import { useTheme } from '../theme/ThemeProvider';
@@ -26,7 +26,7 @@ export function Text({
   children,
   ...rest
 }: { variant?: Variant; style?: TextStyle; children: ReactNode } & Omit<
-  React.ComponentProps<typeof RNText>,
+  ComponentProps<typeof RNText>,
   'style'
 >) {
   const t = useTheme();

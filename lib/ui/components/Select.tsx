@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { View } from 'react-native';
 import { Button } from './Button';
@@ -17,7 +17,7 @@ export function Select<T extends string | number>({
   onChange: (v: T) => void;
   style?: StyleProp<ViewStyle>;
 }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const selected = options.find((o) => o.value === value)?.label ?? '';
   return (
     <>
