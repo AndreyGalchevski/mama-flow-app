@@ -95,6 +95,7 @@ export default function Settings() {
             value={localDayHours}
             onChangeText={setLocalDayHours}
             keyboardType="numeric"
+            right={<TextInput.Icon icon="white-balance-sunny" />}
             error={
               localDayHours !== '' &&
               (Number.isNaN(Number(localDayHours)) || Number(localDayHours) <= 0)
@@ -108,6 +109,7 @@ export default function Settings() {
             value={localNightHours}
             onChangeText={setLocalNightHours}
             keyboardType="numeric"
+            right={<TextInput.Icon icon="moon-waning-crescent" />}
             error={
               localNightHours !== '' &&
               (Number.isNaN(Number(localNightHours)) || Number(localNightHours) <= 0)
