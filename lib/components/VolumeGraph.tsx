@@ -31,6 +31,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
     value: number;
     label: string;
     tooltip: string;
+    pumpCount: number;
   } | null>(null);
 
   const chartOpacity = useSharedValue(0);
@@ -114,6 +115,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             value: clickedBar.value,
             label: clickedBar.label,
             tooltip: clickedBar.tooltip,
+            pumpCount: clickedBar.pumpCount,
           });
         }
       } else {
@@ -178,6 +180,9 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const isSelected = selectedBar?.label === d.label;
             const barColor = isSelected ? '#2D5455' : COLORS.primary;
 
+            const shouldShowPumpCount = isSelected && d.pumpCount > 0 && barH > 40;
+            const textY = barY + barH / 2 + 4;
+
             return (
               <G key={d.label}>
                 <AnimatedBar
@@ -191,6 +196,19 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   duration={400 + index * 100}
                   isActive={isSelected}
                 />
+
+                {shouldShowPumpCount && (
+                  <SvgText
+                    x={barX + barW / 2}
+                    y={textY}
+                    fontSize={14}
+                    fontWeight="600"
+                    fill="#FFFFFF"
+                    textAnchor="middle"
+                  >
+                    {d.pumpCount}
+                  </SvgText>
+                )}
 
                 <SvgText
                   x={barX + barW / 2}
@@ -212,17 +230,28 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
           style={[
             styles.tooltip,
             {
-              top: Math.max(10, selectedBar.y - 44),
+              top: Math.max(10, selectedBar.y - 58),
               ...(isRTL() ? { right: tooltipOffset } : { left: tooltipOffset }),
-              flexDirection: isRTL() ? 'row-reverse' : 'row',
             },
           ]}
         >
-          <Text variant="labelLarge" style={{ textAlign: getRTLTextAlign() }}>
-            {i18n.t('units.volumeWithUnit', {
-              volume: Math.round(selectedBar.value),
-            })}
-          </Text>
+          <View
+            style={{
+              flexDirection: isRTL() ? 'row-reverse' : 'row',
+              alignItems: 'center',
+              gap: 4,
+            }}
+          >
+            <Text variant="labelLarge" style={{ textAlign: getRTLTextAlign() }}>
+              {i18n.t('units.volumeWithUnit', {
+                volume: Math.round(selectedBar.value),
+              })}
+            </Text>
+
+            <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
+              ({i18n.t('units.sessions', { count: selectedBar.pumpCount })})
+            </Text>
+          </View>
 
           <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
             {selectedBar.tooltip}
@@ -250,9 +279,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 6,
     minWidth: 80,
-    alignItems: 'baseline',
     zIndex: 1000,
     gap: 4,
-    justifyContent: 'space-between',
   },
 });

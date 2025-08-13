@@ -55,9 +55,9 @@ export default function Home() {
     });
 
     return days.map((day) => {
-      const total = logs
-        .filter((log) => format(log.timestamp, 'yyyy-MM-dd') === day)
-        .reduce((sum, log) => sum + log.volumeTotalML, 0);
+      const dayLogs = logs.filter((log) => format(log.timestamp, 'yyyy-MM-dd') === day);
+      const total = dayLogs.reduce((sum, log) => sum + log.volumeTotalML, 0);
+      const pumpCount = dayLogs.length;
 
       const dayDate = new Date(day);
       return {
@@ -65,6 +65,7 @@ export default function Home() {
         value: total,
         label: format(dayDate, 'EEE', { locale: getDateLocale() }),
         tooltip: format(dayDate, 'PP', { locale: getDateLocale() }),
+        pumpCount,
       };
     });
   }, [logs]);

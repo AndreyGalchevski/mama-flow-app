@@ -13,4 +13,5 @@ export interface DataPoint {
   value: number;
   label: string;
   tooltip: string;
+  pumpCount: number;
 }

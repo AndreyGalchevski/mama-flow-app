@@ -168,7 +168,8 @@
   },
   "units": {
     "ml": "مل",
-    "volumeWithUnit": "{{volume}}مل"
+    "volumeWithUnit": "{{volume}}مل",
+    "sessions": "{{count}} جلسات"
   },
   "privacy": {
     "bannerTitle": "بياناتك، جهازك",
