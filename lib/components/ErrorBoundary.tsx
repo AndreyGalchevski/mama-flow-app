@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 import { COLORS } from '../colors';
-import { captureException } from '../sentry';
 
 interface Props {
   children: ReactNode;
@@ -26,13 +25,6 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
-
-    // Send error to Sentry with component stack trace
-    captureException(error, {
-      errorBoundary: true,
-      componentStack: errorInfo.componentStack || 'No component stack available',
-      errorStack: error.stack || 'No stack trace available',
-    });
   }
 
   render() {

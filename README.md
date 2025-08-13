@@ -8,13 +8,12 @@ MamaFlow is a simple, focused pumping log for breastfeeding parents. Log volume 
 - Weekly volume chart to spot trends
 - Day/night reminders you control (local notifications)
 - CSV import and export
- - Localization: English, Hebrew, Russian, Arabic; RTL and accessibility support
+- Localization: English, Hebrew, Russian, Arabic; RTL and accessibility support
 
 ## Data and privacy
 
 - Your pumping logs are stored on-device using fast local storage (MMKV).
 - The app does not include ads or behavioral analytics.
-- Production builds use Sentry for crash reporting only. Personal data is not sent; events are scrubbed in code. You can review the setup in `lib/sentry.ts`.
 - Privacy policy: https://www.privacypolicies.com/live/72f69876-661a-418e-be05-37d7df86dcf0
 
 ## Getting started
@@ -72,10 +71,6 @@ assets/                 # Images and fonts
 - expo-notifications for local reminders
 - date-fns for dates
 
-## Environment
-
-- `EXPO_PUBLIC_SENTRY_DSN` (optional) — Sentry DSN for crash reporting.
-
 ## Development
 
 - `npm run lint` — format and lint with Biome
@@ -90,8 +85,3 @@ MIT — see `LICENSE` for details.
 ## Support
 
 Questions or issues? Open a GitHub issue or email: andreygalchevski@gmail.com
-
-## Changelog
-
-### v1.0.0
-- Initial release with core logging, reminders, CSV import/export, and accessibility support.

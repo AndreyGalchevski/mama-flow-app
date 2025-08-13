@@ -4,7 +4,6 @@ import * as Notifications from 'expo-notifications';
 import { useLogsStore } from './hooks/useLogsStore';
 import { useSettingsStore } from './hooks/useSettingsStore';
 import i18n from './i18n';
-import { captureException } from './sentry';
 
 export const NOTIFICATION_IDENTIFIER = 'pump-reminder';
 export const CATEGORY_IDENTIFIER = 'pump-reminder-category';
@@ -22,10 +21,7 @@ export async function ensurePumpReminderCategory() {
       },
     ]);
   } catch (e) {
-    captureException(e instanceof Error ? e : new Error('Failed to set notification category'), {
-      feature: 'reminders',
-      action: 'setNotificationCategory',
-    });
+    console.error('Failed to set notification category:', e);
   }
 }
 
@@ -74,10 +70,6 @@ export async function scheduleNextPumpReminder() {
     const ok = await scheduleReminderAt(nextReminderTime, interval, {
       onPermissionDenied: (status) => {
         console.log('Notification permissions not granted');
-        captureException(new Error('Notification permissions not granted'), {
-          permissionStatus: status,
-          feature: 'reminders',
-        });
       },
     });
 
@@ -88,10 +80,6 @@ export async function scheduleNextPumpReminder() {
     console.log(`Next pump reminder scheduled for: ${nextReminderTime.toISOString()}`);
   } catch (err) {
     console.error('Failed to schedule pump reminder:', err);
-    captureException(err instanceof Error ? err : new Error('Unknown reminder scheduling error'), {
-      feature: 'reminders',
-      action: 'schedule',
-    });
   }
 }
 
@@ -135,10 +123,6 @@ export async function snoozeNextPumpReminder(minutes = 10) {
     console.log(`Next pump reminder snoozed to: ${newTime.toISOString()}`);
   } catch (err) {
     console.error('Failed to snooze pump reminder:', err);
-    captureException(err instanceof Error ? err : new Error('Unknown reminder snooze error'), {
-      feature: 'reminders',
-      action: 'snooze',
-    });
   }
 }
 

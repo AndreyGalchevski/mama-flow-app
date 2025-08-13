@@ -18,7 +18,6 @@ import {
   CATEGORY_IDENTIFIER,
   ensurePumpReminderCategory,
 } from '../lib/reminders';
-import { initSentry } from '../lib/sentry';
 
 registerTranslation('en', en);
 registerTranslation('ru', ru);
@@ -28,8 +27,6 @@ export default function RootLayout() {
   const incrementAppLaunchCount = useSettingsStore((state) => state.incrementAppLaunchCount);
 
   useEffect(() => {
-    initSentry();
-
     incrementAppLaunchCount();
 
     const rtl = isRTL();

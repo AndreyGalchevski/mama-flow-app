@@ -2,8 +2,6 @@ import * as Linking from 'expo-linking';
 import * as StoreReview from 'expo-store-review';
 import { Platform } from 'react-native';
 
-import { captureException } from './sentry';
-
 /**
  * Shows the native app rating prompt if available, otherwise opens the store
  */
@@ -20,9 +18,7 @@ export async function requestReview(): Promise<{ success: boolean; usedNativePro
     // Fallback to opening store directly
     return await openAppStore();
   } catch (error) {
-    captureException(error instanceof Error ? error : new Error('Failed to request review'), {
-      context: 'rating_prompt',
-    });
+    console.error('Failed to request review:', error);
     // Try fallback to store
     return await openAppStore();
   }
@@ -50,9 +46,7 @@ export async function openAppStore(): Promise<{ success: boolean; usedNativeProm
     }
     return { success: true, usedNativePrompt: false };
   } catch (error) {
-    captureException(error instanceof Error ? error : new Error('Failed to open app store'), {
-      context: 'rating_store_open',
-    });
+    console.error('Failed to open app store:', error);
     return { success: false, usedNativePrompt: false };
   }
 }
