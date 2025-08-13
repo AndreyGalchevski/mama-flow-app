@@ -1,8 +1,14 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { max } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import Animated, {
+  useAnimatedProps,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import Svg, { G, Text as SvgText } from 'react-native-svg';
 
 import { AccessibilityLabels } from '../accessibility';
@@ -14,6 +20,42 @@ import AnimatedBar from './AnimatedBar';
 const barRadius = 18;
 
 const padding = { top: 24, right: 16, bottom: 36, left: 42 };
+
+// Animated Text component for smooth label transitions
+const AnimatedSvgText = Animated.createAnimatedComponent(SvgText);
+
+interface AnimatedTextProps {
+  x: number;
+  y: number;
+  children: React.ReactNode;
+  fontSize: number;
+  fill: string;
+  textAnchor: 'start' | 'middle' | 'end';
+}
+
+function AnimatedText({ x, y, children, fontSize, fill, textAnchor }: AnimatedTextProps) {
+  const animatedX = useSharedValue(x);
+
+  useEffect(() => {
+    animatedX.value = withTiming(x, { duration: 250 });
+  }, [x, animatedX]);
+
+  const animatedProps = useAnimatedProps(() => ({
+    x: animatedX.value,
+  }));
+
+  return (
+    <AnimatedSvgText
+      y={y}
+      fontSize={fontSize}
+      fill={fill}
+      textAnchor={textAnchor}
+      animatedProps={animatedProps}
+    >
+      {children}
+    </AnimatedSvgText>
+  );
+}
 
 interface Props {
   data: DataPoint[];
@@ -199,7 +241,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                 {shouldShowText && (
                   <G>
                     <SvgText
-                      x={barX + barW / 2}
+                      x={adjustedBarX + barW / 2}
                       y={barY + 16}
                       fontSize={12}
                       fontWeight="600"
@@ -214,7 +256,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                     {/* Sessions count - shown for medium and tall bars */}
                     {shouldShowTwoLines && (
                       <SvgText
-                        x={barX + barW / 2}
+                        x={adjustedBarX + barW / 2}
                         y={barY + 30}
                         fontSize={10}
                         fill={COLORS.surface}
@@ -228,7 +270,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                     {/* Date - only shown for tall bars */}
                     {shouldShowFullText && (
                       <SvgText
-                        x={barX + barW / 2}
+                        x={adjustedBarX + barW / 2}
                         y={barY + 44}
                         fontSize={9}
                         fill={COLORS.surface}
@@ -241,15 +283,15 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   </G>
                 )}
 
-                <SvgText
-                  x={barX + barW / 2}
+                <AnimatedText
+                  x={adjustedBarX + barW / 2}
                   y={chartH + 18}
                   fontSize={12}
                   fill={COLORS.onSurface}
                   textAnchor="middle"
                 >
                   {d.label}
-                </SvgText>
+                </AnimatedText>
               </G>
             );
           })}
