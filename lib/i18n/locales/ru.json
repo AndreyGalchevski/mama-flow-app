@@ -169,7 +169,13 @@
   "units": {
     "ml": "мл",
     "volumeWithUnit": "{{volume}} мл",
-    "sessions": "{{count}} сеансов"
+    "sessions": {
+      "zero": "{{count}} сеансов",
+      "one": "{{count}} сеанс",
+      "few": "{{count}} сеанса",
+      "many": "{{count}} сеансов",
+      "other": "{{count}} сеансов"
+    }
   },
   "privacy": {
     "bannerTitle": "Ваши данные, ваше устройство",

@@ -168,7 +168,11 @@
   "units": {
     "ml": "מ״ל",
     "volumeWithUnit": "{{volume}} מ״ל",
-    "sessions": "{{count}} סשנים"
+    "sessions": {
+      "zero": "{{count}} סשנים",
+      "one": "{{count}} סשן",
+      "other": "{{count}} סשנים"
+    }
   },
   "privacy": {
     "bannerTitle": "הנתונים שלך, המכשיר שלך",

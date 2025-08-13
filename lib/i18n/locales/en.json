@@ -169,7 +169,11 @@
   "units": {
     "ml": "ml",
     "volumeWithUnit": "{{volume}}ml",
-    "sessions": "{{count}} sessions"
+    "sessions": {
+      "zero": "{{count}} sessions",
+      "one": "{{count}} session",
+      "other": "{{count}} sessions"
+    }
   },
   "privacy": {
     "bannerTitle": "Your Data, Your Device",

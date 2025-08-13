@@ -169,7 +169,14 @@
   "units": {
     "ml": "مل",
     "volumeWithUnit": "{{volume}}مل",
-    "sessions": "{{count}} جلسات"
+    "sessions": {
+      "zero": "{{count}} جلسة",
+      "one": "{{count}} جلسة",
+      "two": "{{count}} جلستان",
+      "few": "{{count}} جلسات",
+      "many": "{{count}} جلسة",
+      "other": "{{count}} جلسة"
+    }
   },
   "privacy": {
     "bannerTitle": "بياناتك، جهازك",
