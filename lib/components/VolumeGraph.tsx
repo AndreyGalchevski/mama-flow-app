@@ -2,15 +2,12 @@ import { useFocusEffect } from '@react-navigation/native';
 import { max } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import Svg, { G, Text as SvgText } from 'react-native-svg';
 
 import { AccessibilityLabels } from '../accessibility';
 import { COLORS } from '../colors';
-import i18n, { isRTL } from '../i18n';
-import { getRTLTextAlign } from '../rtl';
+import i18n from '../i18n';
 import type { DataPoint } from '../types';
 import AnimatedBar from './AnimatedBar';
 
@@ -25,14 +22,7 @@ interface Props {
 }
 
 export default function VolumeGraph({ data, width = 340, height = 220 }: Props) {
-  const [selectedBar, setSelectedBar] = useState<{
-    x: number;
-    y: number;
-    value: number;
-    label: string;
-    tooltip: string;
-    pumpCount: number;
-  } | null>(null);
+  const [selectedBar, setSelectedBar] = useState<string | null>(null);
 
   const chartOpacity = useSharedValue(0);
 
@@ -102,34 +92,21 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
       }
 
       if (clickedBar) {
-        if (selectedBar?.label === clickedBar.label) {
+        if (selectedBar === clickedBar.label) {
           setSelectedBar(null);
         } else {
-          const barX = (x(clickedBar.label) ?? 0) + padding.left;
-          const barW = x.bandwidth();
-          const barY = y(clickedBar.value) + padding.top;
-
-          setSelectedBar({
-            x: barX + barW / 2,
-            y: barY,
-            value: clickedBar.value,
-            label: clickedBar.label,
-            tooltip: clickedBar.tooltip,
-            pumpCount: clickedBar.pumpCount,
-          });
+          setSelectedBar(clickedBar.label);
         }
       } else {
         setSelectedBar(null);
       }
     },
-    [data, x, y, chartH, selectedBar?.label],
+    [data, x, y, chartH, selectedBar],
   );
 
   const chartAnimatedStyle = useAnimatedStyle(() => ({
     opacity: chartOpacity.value,
   }));
-
-  const tooltipOffset = selectedBar ? Math.min(width - 100, Math.max(10, selectedBar.x)) : 0;
 
   return (
     <Animated.View
@@ -177,16 +154,37 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const barH = chartH - y(d.value);
             const barY = y(d.value);
 
-            const isSelected = selectedBar?.label === d.label;
+            const isSelected = selectedBar === d.label;
             const barColor = isSelected ? '#2D5455' : COLORS.primary;
 
-            const shouldShowPumpCount = isSelected && d.pumpCount > 0 && barH > 40;
-            const textY = barY + barH / 2 + 4;
+            const expandedWidth = barW * 1.8;
+
+            const shouldShowText = isSelected && barH > 10;
+            const shouldShowFullText = isSelected && barH > 60;
+            const shouldShowTwoLines = isSelected && barH > 40;
+
+            let adjustedBarX = barX;
+            if (selectedBar) {
+              const selectedIndex = data.findIndex((item) => item.label === selectedBar);
+              const currentIndex = index;
+
+              if (selectedIndex !== -1) {
+                const extraWidth = (expandedWidth - barW) / 2; // Half the extra width on each side
+
+                if (currentIndex > selectedIndex) {
+                  // Bars to the right of selected: move right
+                  adjustedBarX = barX + extraWidth;
+                } else if (currentIndex < selectedIndex) {
+                  // Bars to the left of selected: move left
+                  adjustedBarX = barX - extraWidth;
+                }
+              }
+            }
 
             return (
               <G key={d.label}>
                 <AnimatedBar
-                  x={barX}
+                  x={adjustedBarX}
                   width={barW}
                   toY={barY}
                   toHeight={barH}
@@ -195,19 +193,52 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   ry={barRadius}
                   duration={400 + index * 100}
                   isActive={isSelected}
+                  expandedWidth={expandedWidth}
                 />
 
-                {shouldShowPumpCount && (
-                  <SvgText
-                    x={barX + barW / 2}
-                    y={textY}
-                    fontSize={14}
-                    fontWeight="600"
-                    fill="#FFFFFF"
-                    textAnchor="middle"
-                  >
-                    {d.pumpCount}
-                  </SvgText>
+                {shouldShowText && (
+                  <G>
+                    <SvgText
+                      x={barX + barW / 2}
+                      y={barY + 16}
+                      fontSize={12}
+                      fontWeight="600"
+                      fill={COLORS.surface}
+                      textAnchor="middle"
+                    >
+                      {i18n.t('units.volumeWithUnit', {
+                        volume: Math.round(d.value),
+                      })}
+                    </SvgText>
+
+                    {/* Sessions count - shown for medium and tall bars */}
+                    {shouldShowTwoLines && (
+                      <SvgText
+                        x={barX + barW / 2}
+                        y={barY + 30}
+                        fontSize={10}
+                        fill={COLORS.surface}
+                        textAnchor="middle"
+                        opacity={0.9}
+                      >
+                        {i18n.t('units.sessions', { count: d.pumpCount })}
+                      </SvgText>
+                    )}
+
+                    {/* Date - only shown for tall bars */}
+                    {shouldShowFullText && (
+                      <SvgText
+                        x={barX + barW / 2}
+                        y={barY + 44}
+                        fontSize={9}
+                        fill={COLORS.surface}
+                        textAnchor="middle"
+                        opacity={0.8}
+                      >
+                        {d.tooltip}
+                      </SvgText>
+                    )}
+                  </G>
                 )}
 
                 <SvgText
@@ -224,62 +255,6 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
           })}
         </G>
       </Svg>
-
-      {selectedBar && (
-        <View
-          style={[
-            styles.tooltip,
-            {
-              top: Math.max(10, selectedBar.y - 58),
-              ...(isRTL() ? { right: tooltipOffset } : { left: tooltipOffset }),
-            },
-          ]}
-        >
-          <View
-            style={{
-              flexDirection: isRTL() ? 'row-reverse' : 'row',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <Text variant="labelLarge" style={{ textAlign: getRTLTextAlign() }}>
-              {i18n.t('units.volumeWithUnit', {
-                volume: Math.round(selectedBar.value),
-              })}
-            </Text>
-
-            <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
-              {selectedBar.tooltip}
-            </Text>
-          </View>
-
-          <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
-            ({i18n.t('units.sessions', { count: selectedBar.pumpCount })})
-          </Text>
-        </View>
-      )}
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  tooltip: {
-    position: 'absolute',
-    backgroundColor: COLORS.surface,
-    padding: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: COLORS.outline,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 6,
-    minWidth: 80,
-    zIndex: 1000,
-    gap: 4,
-  },
-});

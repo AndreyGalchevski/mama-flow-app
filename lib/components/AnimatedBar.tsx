@@ -14,6 +14,7 @@ interface Props {
   onPress?: () => void;
   accessibilityLabel?: string;
   isActive?: boolean;
+  expandedWidth?: number;
 }
 
 const AnimatedRect = Animated.createAnimatedComponent(SvgRect);
@@ -30,10 +31,13 @@ export default function AnimatedBar({
   onPress,
   accessibilityLabel,
   isActive,
+  expandedWidth,
 }: Props) {
   const animatedY = useSharedValue(toY + toHeight);
   const animatedHeight = useSharedValue(0);
   const animatedOpacity = useSharedValue(1);
+  const animatedWidth = useSharedValue(width);
+  const animatedX = useSharedValue(x);
 
   useEffect(() => {
     animatedY.value = withTiming(toY, { duration });
@@ -44,8 +48,19 @@ export default function AnimatedBar({
     animatedOpacity.value = withTiming(isActive ? 0.8 : 1, { duration: 150 });
   }, [isActive, animatedOpacity]);
 
+  useEffect(() => {
+    const targetWidth = isActive && expandedWidth ? expandedWidth : width;
+    const widthDiff = targetWidth - width;
+    const targetX = isActive ? x - widthDiff / 2 : x;
+
+    animatedWidth.value = withTiming(targetWidth, { duration: 250 });
+    animatedX.value = withTiming(targetX, { duration: 250 });
+  }, [isActive, expandedWidth, width, x, animatedWidth, animatedX]);
+
   const animatedProps = useAnimatedProps(() => ({
+    x: animatedX.value,
     y: animatedY.value,
+    width: animatedWidth.value,
     height: animatedHeight.value,
     fill,
     opacity: animatedOpacity.value,
@@ -53,8 +68,8 @@ export default function AnimatedBar({
 
   return (
     <AnimatedRect
-      x={x}
-      width={width}
+      width={0}
+      x={0}
       rx={rx}
       ry={ry}
       animatedProps={animatedProps}
