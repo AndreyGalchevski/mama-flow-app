@@ -249,12 +249,12 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             </Text>
 
             <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
-              ({i18n.t('units.sessions', { count: selectedBar.pumpCount })})
+              {selectedBar.tooltip}
             </Text>
           </View>
 
           <Text variant="bodySmall" style={{ textAlign: getRTLTextAlign() }}>
-            {selectedBar.tooltip}
+            ({i18n.t('units.sessions', { count: selectedBar.pumpCount })})
           </Text>
         </View>
       )}

@@ -64,7 +64,7 @@ export default function Home() {
         timestamp: dayDate.getTime(),
         value: total,
         label: format(dayDate, 'EEE', { locale: getDateLocale() }),
-        tooltip: format(dayDate, 'PP', { locale: getDateLocale() }),
+        tooltip: format(dayDate, 'MMM d', { locale: getDateLocale() }),
         pumpCount,
       };
     });
