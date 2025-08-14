@@ -150,6 +150,11 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
     opacity: chartOpacity.value,
   }));
 
+  const selectedIndex = useMemo(
+    () => (selectedBar ? data.findIndex((item) => item.label === selectedBar) : -1),
+    [selectedBar, data],
+  );
+
   return (
     <Animated.View
       style={[{ width, height, alignSelf: 'center' }, chartAnimatedStyle]}
@@ -164,7 +169,6 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const barW = x.bandwidth();
             const barH = chartH - y(d.value);
             const barY = y(d.value);
-
             const isSelected = selectedBar === d.label;
 
             const expandedWidth = barW * 1.8;
@@ -175,21 +179,20 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
 
             let adjustedBarX = barX;
             if (selectedBar) {
-              const selectedIndex = data.findIndex((item) => item.label === selectedBar);
               const currentIndex = index;
-
               if (selectedIndex !== -1) {
                 const extraWidth = (expandedWidth - barW) / 2;
-
                 if (currentIndex > selectedIndex) {
-                  // Bars to the right of selected: move right
                   adjustedBarX = barX + extraWidth;
                 } else if (currentIndex < selectedIndex) {
-                  // Bars to the left of selected: move left
                   adjustedBarX = barX - extraWidth;
                 }
               }
             }
+
+            // Wave opacity delay based on distance from selected.
+            const opacityDelay =
+              selectedIndex !== -1 && !isSelected ? Math.abs(index - selectedIndex) * 40 : 0;
 
             return (
               <G key={d.label}>
@@ -205,6 +208,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   isActive={isSelected}
                   expandedWidth={expandedWidth}
                   targetOpacity={selectedBar ? (isSelected ? 1 : 0.55) : 1}
+                  opacityDelay={opacityDelay}
                   stroke={isSelected ? '#2C5E5F' : undefined}
                   strokeWidth={isSelected ? 2 : 0}
                 />
@@ -224,7 +228,6 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                       })}
                     </SvgText>
 
-                    {/* Sessions count - shown for medium and tall bars */}
                     {shouldShowTwoLines && (
                       <SvgText
                         x={adjustedBarX + barW / 2}
@@ -238,7 +241,6 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                       </SvgText>
                     )}
 
-                    {/* Date - only shown for tall bars */}
                     {shouldShowFullText && (
                       <SvgText
                         x={adjustedBarX + barW / 2}

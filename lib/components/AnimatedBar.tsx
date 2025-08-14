@@ -18,6 +18,7 @@ interface Props {
   targetOpacity?: number;
   stroke?: string;
   strokeWidth?: number;
+  opacityDelay?: number;
 }
 
 const AnimatedRect = Animated.createAnimatedComponent(SvgRect);
@@ -38,6 +39,7 @@ export default function AnimatedBar({
   targetOpacity = 1,
   stroke,
   strokeWidth = 0,
+  opacityDelay = 0,
 }: Props) {
   const animatedY = useSharedValue(toY + toHeight);
   const animatedHeight = useSharedValue(0);
@@ -51,8 +53,18 @@ export default function AnimatedBar({
   }, [toY, toHeight, duration, animatedY, animatedHeight]);
 
   useEffect(() => {
-    animatedOpacity.value = withTiming(targetOpacity, { duration: 200 });
-  }, [targetOpacity, animatedOpacity]);
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+    if (opacityDelay > 0) {
+      timeout = setTimeout(() => {
+        animatedOpacity.value = withTiming(targetOpacity, { duration: 220 });
+      }, opacityDelay);
+    } else {
+      animatedOpacity.value = withTiming(targetOpacity, { duration: 220 });
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [targetOpacity, opacityDelay, animatedOpacity]);
 
   useEffect(() => {
     const targetWidth = isActive && expandedWidth ? expandedWidth : width;
