@@ -43,12 +43,29 @@
     "title": "ربط حقول CSV",
     "preview": "معاينة (أول 3 صفوف)",
     "importButton": "استيراد السجلات",
+    "intro": "استوردي السجلات من تطبيق أو جدول بيانات آخر. اربطي كل حقل في MamaFlow بالعمود المناسب في CSV.",
+    "viewExample": "عرض مثال CSV",
+    "hideExample": "إخفاء المثال",
+    "reset": "إعادة التعيين",
+    "selectColumn": "اختاري عموداً...",
+    "requiredField": "حقل مطلوب",
+    "mapAllRequired": "اربطي كل الحقول المطلوبة لعرض المعاينة.",
+    "fixMappingBeforeImport": "أصلحي الأخطاء قبل الاستيراد",
+    "rowsSummaryInvalid": "{{invalid}} من {{total}} صفوف بها أخطاء صلاحية.",
+    "rowsSummaryAllValid": "كل {{total}} الصفوف صالحة.",
     "fields": {
       "timestamp": "الوقت والتاريخ",
       "volumeLeft": "الحجم الأيسر (مل)",
       "volumeRight": "الحجم الأيمن (مل)",
       "duration": "المدة (دقائق)",
       "notes": "ملاحظات (اختياري)"
+    },
+    "help": {
+      "timestamp": "تاريخ ووقت جلسة الضخ. الصيغة المتوقعة: dd/MM/yyyy HH:mm:ss.",
+      "volumeLeft": "حجم الحليب من الجهة اليسرى بالمل (أرقام فقط).",
+      "volumeRight": "حجم الحليب من الجهة اليمنى بالمل (أرقام فقط).",
+      "duration": "مدة الجلسة بالدقائق.",
+      "notes": "ملاحظات اختيارية أو سياق إضافي."
     }
   },
   "logs": {

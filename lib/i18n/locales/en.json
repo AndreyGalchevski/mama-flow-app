@@ -40,15 +40,32 @@
     }
   },
   "importCSV": {
-    "title": "Map CSV Fields",
+    "title": "Map Your Columns",
     "preview": "Preview (first 3 rows)",
     "importButton": "Import Logs",
+    "intro": "Import logs from another app or spreadsheet. Match each MamaFlow field with the column in your CSV.",
+    "viewExample": "View Example CSV",
+    "hideExample": "Hide Example",
+    "reset": "Reset Mappings",
+    "selectColumn": "Select a column...",
+    "requiredField": "Required field",
+    "mapAllRequired": "Map all required fields to see a preview.",
+    "fixMappingBeforeImport": "Fix errors before importing",
+    "rowsSummaryInvalid": "{{invalid}} of {{total}} rows have validation issues.",
+    "rowsSummaryAllValid": "All {{total}} rows look valid.",
     "fields": {
       "timestamp": "Timestamp (date + time)",
       "volumeLeft": "Volume Left (ml)",
       "volumeRight": "Volume Right (ml)",
       "duration": "Duration (minutes)",
       "notes": "Notes (optional)"
+    },
+    "help": {
+      "timestamp": "Date and time of the pumping session. Expected format: dd/MM/yyyy HH:mm:ss.",
+      "volumeLeft": "Milk volume from left side in milliliters (numbers only).",
+      "volumeRight": "Milk volume from right side in milliliters (numbers only).",
+      "duration": "Session duration in minutes (whole number).",
+      "notes": "Optional notes, brand, or context."
     }
   },
   "logs": {

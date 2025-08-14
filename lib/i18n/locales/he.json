@@ -42,12 +42,29 @@
     "title": "מיפוי שדות CSV",
     "preview": "תצוגה מקדימה (3 שורות ראשונות)",
     "importButton": "ייבוא רשומות",
+    "intro": "ייבאי רשומות מאפליקציה או גליון נתונים אחר. התאימי כל שדה של MamaFlow לעמודה בקובץ.",
+    "viewExample": "הצג דוגמת CSV",
+    "hideExample": "הסתר דוגמה",
+    "reset": "אפס מיפוי",
+    "selectColumn": "בחרי עמודה...",
+    "requiredField": "שדה חובה",
+    "mapAllRequired": "מפי את כל שדות החובה כדי לראות תצוגה מקדימה.",
+    "fixMappingBeforeImport": "תקני שגיאות לפני הייבוא",
+    "rowsSummaryInvalid": "{{invalid}} מתוך {{total}} שורות עם בעיות ולידציה.",
+    "rowsSummaryAllValid": "כל {{total}} השורות תקינות.",
     "fields": {
       "timestamp": "זמן (תאריך + שעה)",
       "volumeLeft": "נפח שד שמאל (מ\"ל)",
       "volumeRight": "נפח שד ימין (מ\"ל)",
       "duration": "משך זמן (דקות)",
       "notes": "הערות (אופציונלי)"
+    },
+    "help": {
+      "timestamp": "תאריך ושעת סשן השאיבה. פורמט צפוי: dd/MM/yyyy HH:mm:ss.",
+      "volumeLeft": "נפח חלב מצד שמאל במ\"ל (מספר בלבד).",
+      "volumeRight": "נפח חלב מצד ימין במ\"ל (מספר בלבד).",
+      "duration": "משך הסשן בדקות.",
+      "notes": "הערות אופציונליות, מותג או הקשר."
     }
   },
   "logs": {
