@@ -18,6 +18,8 @@ import type { DataPoint } from '../types';
 import AnimatedBar from './AnimatedBar';
 
 const barRadius = 18;
+const INACTIVE_OPACITY = 0.55;
+const WAVE_DELAY_STEP_IN_MS = 40;
 
 const padding = { top: 16, right: 16, bottom: 36, left: 16 };
 
@@ -169,30 +171,28 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const barW = x.bandwidth();
             const barH = chartH - y(d.value);
             const barY = y(d.value);
-            const isSelected = selectedBar === d.label;
 
+            const isSelected = selectedIndex === index;
+            const anySelected = selectedIndex !== -1;
             const expandedWidth = barW * 1.8;
 
             const shouldShowText = isSelected && barH > 10;
             const shouldShowFullText = isSelected && barH > 60;
             const shouldShowTwoLines = isSelected && barH > 40;
 
+            // Horizontal shift of neighbors based on selectedIndex
             let adjustedBarX = barX;
-            if (selectedBar) {
-              const currentIndex = index;
-              if (selectedIndex !== -1) {
-                const extraWidth = (expandedWidth - barW) / 2;
-                if (currentIndex > selectedIndex) {
-                  adjustedBarX = barX + extraWidth;
-                } else if (currentIndex < selectedIndex) {
-                  adjustedBarX = barX - extraWidth;
-                }
-              }
+            if (anySelected && selectedIndex !== -1) {
+              const extraWidth = (expandedWidth - barW) / 2;
+              if (index > selectedIndex) adjustedBarX = barX + extraWidth;
+              else if (index < selectedIndex) adjustedBarX = barX - extraWidth;
             }
 
-            // Wave opacity delay based on distance from selected.
+            // Wave delay (skip selected bar itself)
             const opacityDelay =
-              selectedIndex !== -1 && !isSelected ? Math.abs(index - selectedIndex) * 40 : 0;
+              anySelected && !isSelected
+                ? Math.abs(index - selectedIndex) * WAVE_DELAY_STEP_IN_MS
+                : 0;
 
             return (
               <G key={d.label}>
@@ -207,7 +207,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   duration={400 + index * 100}
                   isActive={isSelected}
                   expandedWidth={expandedWidth}
-                  targetOpacity={selectedBar ? (isSelected ? 1 : 0.55) : 1}
+                  targetOpacity={anySelected ? (isSelected ? 1 : INACTIVE_OPACITY) : 1}
                   opacityDelay={opacityDelay}
                   stroke={isSelected ? '#2C5E5F' : undefined}
                   strokeWidth={isSelected ? 2 : 0}
@@ -223,11 +223,8 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                       fill={COLORS.surface}
                       textAnchor="middle"
                     >
-                      {i18n.t('units.volumeWithUnit', {
-                        volume: Math.round(d.value),
-                      })}
+                      {i18n.t('units.volumeWithUnit', { volume: Math.round(d.value) })}
                     </SvgText>
-
                     {shouldShowTwoLines && (
                       <SvgText
                         x={adjustedBarX + barW / 2}
@@ -240,7 +237,6 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                         {i18n.t('units.sessions', { count: d.pumpCount })}
                       </SvgText>
                     )}
-
                     {shouldShowFullText && (
                       <SvgText
                         x={adjustedBarX + barW / 2}
