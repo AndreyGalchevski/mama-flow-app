@@ -166,7 +166,6 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const barY = y(d.value);
 
             const isSelected = selectedBar === d.label;
-            const barColor = isSelected ? '#2D5455' : COLORS.primary;
 
             const expandedWidth = barW * 1.8;
 
@@ -180,7 +179,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
               const currentIndex = index;
 
               if (selectedIndex !== -1) {
-                const extraWidth = (expandedWidth - barW) / 2; // Half the extra width on each side
+                const extraWidth = (expandedWidth - barW) / 2;
 
                 if (currentIndex > selectedIndex) {
                   // Bars to the right of selected: move right
@@ -199,12 +198,15 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   width={barW}
                   toY={barY}
                   toHeight={barH}
-                  fill={barColor}
+                  fill={COLORS.primary}
                   rx={barRadius}
                   ry={barRadius}
                   duration={400 + index * 100}
                   isActive={isSelected}
                   expandedWidth={expandedWidth}
+                  targetOpacity={selectedBar ? (isSelected ? 1 : 0.55) : 1}
+                  stroke={isSelected ? '#2C5E5F' : undefined}
+                  strokeWidth={isSelected ? 2 : 0}
                 />
 
                 {shouldShowText && (
@@ -212,7 +214,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                     <SvgText
                       x={adjustedBarX + barW / 2}
                       y={barY + 16}
-                      fontSize={12}
+                      fontSize={13}
                       fontWeight="600"
                       fill={COLORS.surface}
                       textAnchor="middle"
@@ -227,7 +229,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                       <SvgText
                         x={adjustedBarX + barW / 2}
                         y={barY + 30}
-                        fontSize={10}
+                        fontSize={11}
                         fill={COLORS.surface}
                         textAnchor="middle"
                         opacity={0.9}
@@ -241,7 +243,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                       <SvgText
                         x={adjustedBarX + barW / 2}
                         y={barY + 44}
-                        fontSize={9}
+                        fontSize={10}
                         fill={COLORS.surface}
                         textAnchor="middle"
                         opacity={0.8}

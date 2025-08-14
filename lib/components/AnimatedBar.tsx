@@ -15,6 +15,9 @@ interface Props {
   accessibilityLabel?: string;
   isActive?: boolean;
   expandedWidth?: number;
+  targetOpacity?: number;
+  stroke?: string;
+  strokeWidth?: number;
 }
 
 const AnimatedRect = Animated.createAnimatedComponent(SvgRect);
@@ -32,6 +35,9 @@ export default function AnimatedBar({
   accessibilityLabel,
   isActive,
   expandedWidth,
+  targetOpacity = 1,
+  stroke,
+  strokeWidth = 0,
 }: Props) {
   const animatedY = useSharedValue(toY + toHeight);
   const animatedHeight = useSharedValue(0);
@@ -45,8 +51,8 @@ export default function AnimatedBar({
   }, [toY, toHeight, duration, animatedY, animatedHeight]);
 
   useEffect(() => {
-    animatedOpacity.value = withTiming(isActive ? 0.8 : 1, { duration: 150 });
-  }, [isActive, animatedOpacity]);
+    animatedOpacity.value = withTiming(targetOpacity, { duration: 200 });
+  }, [targetOpacity, animatedOpacity]);
 
   useEffect(() => {
     const targetWidth = isActive && expandedWidth ? expandedWidth : width;
@@ -75,6 +81,8 @@ export default function AnimatedBar({
       animatedProps={animatedProps}
       onPress={onPress}
       accessibilityLabel={accessibilityLabel}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
     />
   );
 }
