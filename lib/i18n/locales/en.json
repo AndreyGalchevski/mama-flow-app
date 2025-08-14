@@ -159,7 +159,7 @@
   },
   "validation": {
     "positive": "Enter a value greater than 0",
-    "integer": "Enter a whole number of minutes",
+    "integer": "Enter a number",
     "minMinutes": "Enter at least {{min}} minute",
     "maxMinutes": "Enter 600 minutes or less",
     "maxLength": "Please keep it under {{max}} characters",

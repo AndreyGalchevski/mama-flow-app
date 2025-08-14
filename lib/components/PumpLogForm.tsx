@@ -81,7 +81,9 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
       const fieldErrors: Record<string, string | undefined> = {};
       for (const issue of parsed.error.issues) {
         const path = issue.path[0] as string;
-        if (!fieldErrors[path]) fieldErrors[path] = issue.message;
+        if (!fieldErrors[path]) {
+          fieldErrors[path] = issue.message;
+        }
       }
       setErrors(fieldErrors);
       return;
