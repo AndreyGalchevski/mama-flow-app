@@ -15,3 +15,5 @@ export interface DataPoint {
   tooltip: string;
   pumpCount: number;
 }
+
+export type SnackbarType = 'error' | 'success';

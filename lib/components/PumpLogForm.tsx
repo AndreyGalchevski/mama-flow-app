@@ -6,6 +6,7 @@ import { Button, HelperText, TextInput, useTheme } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 
 import { getDateLocale } from '../date';
+import { useSnackbarStore } from '../hooks/useSnackbarStore';
 import i18n from '../i18n';
 import type { PumpLog } from '../types';
 import { pumpLogFormSchema } from '../validation/pumpLog';
@@ -21,7 +22,7 @@ export interface PumpLogFormData {
 
 interface Props {
   initialState?: PumpLog;
-  onSave: (data: PumpLogFormData) => void;
+  onSave: (data: PumpLogFormData) => Promise<void>;
 }
 
 export default function PumpLogForm({ initialState, onSave }: Props) {
@@ -36,6 +37,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+  const showSnackbar = useSnackbarStore((s) => s.showSnackbar);
 
   useEffect(() => {
     if (initialState) {
@@ -64,7 +66,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
     setDate(newDate);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const volumeLeftML = Number.parseFloat(volumeLeft);
     const volumeRightML = Number.parseFloat(volumeRight);
     const durationMinutes = Number.parseFloat(duration);
@@ -90,7 +92,10 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
     }
 
     setErrors({});
-    onSave(parsed.data);
+
+    await onSave(parsed.data);
+
+    showSnackbar({ message: 'Log saved successfully', type: 'success' });
   };
 
   return (

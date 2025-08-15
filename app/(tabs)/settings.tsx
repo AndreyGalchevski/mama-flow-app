@@ -9,6 +9,7 @@ import { formatTimeHM } from '../../lib/date';
 import { useResetFirstTime } from '../../lib/hooks/useFirstTimeUser';
 import { useRatingPrompt } from '../../lib/hooks/useRatingPrompt';
 import { useSettingsStore } from '../../lib/hooks/useSettingsStore';
+import { useSnackbarStore } from '../../lib/hooks/useSnackbarStore';
 import i18n from '../../lib/i18n';
 import { scheduleNextPumpReminder } from '../../lib/reminders';
 
@@ -35,6 +36,8 @@ export default function Settings() {
   const nightStartMinutes = useSettingsStore((s) => s.nightStartMinutes);
   const nightEndMinutes = useSettingsStore((s) => s.nightEndMinutes);
 
+  const showSnackbar = useSnackbarStore((s) => s.showSnackbar);
+
   const [localDayHours, setLocalDayHours] = useState(String(reminderHoursDay));
   const [localNightHours, setLocalNightHours] = useState(String(reminderHoursNight));
 
@@ -51,6 +54,8 @@ export default function Settings() {
 
     localDayHoursInputRef.current?.blur();
     localNightHoursInputRef.current?.blur();
+
+    showSnackbar({ type: 'success', message: 'Reminder intervals updated' });
   };
 
   const handleResetIntervals = () => {

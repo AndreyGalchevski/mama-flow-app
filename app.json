@@ -13,7 +13,10 @@
     "githubUrl": "https://github.com/AndreyGalchevski/mama-flow-app",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.soyrage.mamaflow"
+      "bundleIdentifier": "com.soyrage.mamaflow",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -6,10 +6,10 @@ import {
 import * as Notifications from 'expo-notifications';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { I18nManager, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { MD3DarkTheme, MD3LightTheme, PaperProvider, Snackbar } from 'react-native-paper';
 import { en, he, registerTranslation, ru } from 'react-native-paper-dates';
 import 'react-native-reanimated';
 
@@ -17,6 +17,7 @@ import { COLORS, DARK_COLORS } from '../lib/colors';
 import ErrorBoundary from '../lib/components/ErrorBoundary';
 import WelcomeModal from '../lib/components/WelcomeModal';
 import { useSettingsStore } from '../lib/hooks/useSettingsStore';
+import { useSnackbarStore } from '../lib/hooks/useSnackbarStore';
 import i18n, { isRTL } from '../lib/i18n';
 import {
   ACTION_START_PUMP,
@@ -29,6 +30,11 @@ registerTranslation('ru', ru);
 registerTranslation('he', he);
 
 export default function RootLayout() {
+  const isSnackbarVisible = useSnackbarStore((s) => s.isSnackbarVisible);
+  const snackbarType = useSnackbarStore((s) => s.snackbarType);
+  const snackbarMessage = useSnackbarStore((s) => s.snackbarMessage);
+  const hideSnackbar = useSnackbarStore((s) => s.hideSnackbar);
+
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
 
@@ -133,41 +139,47 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <GestureHandlerRootView>
-      <ErrorBoundary>
-        <PaperProvider theme={theme}>
-          <StatusBar style={isDark ? 'light' : 'dark'} />
-          <NavigationThemeProvider value={navTheme}>
-            <Stack
-              screenOptions={{
-                headerStyle: { backgroundColor: navTheme.colors.card },
-                headerTintColor: navTheme.colors.text,
-                contentStyle: { backgroundColor: navTheme.colors.background },
-              }}
-            >
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="add-log-modal"
-                options={{ presentation: 'modal', title: i18n.t('logs.newPumpLog') }}
-              />
-              <Stack.Screen
-                name="edit-log/[id]"
-                options={{ presentation: 'modal', title: i18n.t('logs.updatePumpLog') }}
-              />
-              <Stack.Screen
-                name="import-csv-modal"
-                options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
-              />
-              <Stack.Screen
-                name="night-time-modal"
-                options={{ presentation: 'modal', title: i18n.t('settings.nightIntervalTitle') }}
-              />
-            </Stack>
-          </NavigationThemeProvider>
+    <>
+      <GestureHandlerRootView>
+        <ErrorBoundary>
+          <PaperProvider theme={theme}>
+            <StatusBar style={isDark ? 'light' : 'dark'} />
+            <NavigationThemeProvider value={navTheme}>
+              <Stack
+                screenOptions={{
+                  headerStyle: { backgroundColor: navTheme.colors.card },
+                  headerTintColor: navTheme.colors.text,
+                  contentStyle: { backgroundColor: navTheme.colors.background },
+                }}
+              >
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="add-log-modal"
+                  options={{ presentation: 'modal', title: i18n.t('logs.newPumpLog') }}
+                />
+                <Stack.Screen
+                  name="edit-log/[id]"
+                  options={{ presentation: 'modal', title: i18n.t('logs.updatePumpLog') }}
+                />
+                <Stack.Screen
+                  name="import-csv-modal"
+                  options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
+                />
+                <Stack.Screen
+                  name="night-time-modal"
+                  options={{ presentation: 'modal', title: i18n.t('settings.nightIntervalTitle') }}
+                />
+              </Stack>
+            </NavigationThemeProvider>
 
-          <WelcomeModal />
-        </PaperProvider>
-      </ErrorBoundary>
-    </GestureHandlerRootView>
+            <WelcomeModal />
+
+            <Snackbar visible={isSnackbarVisible} onDismiss={hideSnackbar}>
+              {snackbarMessage}
+            </Snackbar>
+          </PaperProvider>
+        </ErrorBoundary>
+      </GestureHandlerRootView>
+    </>
   );
 }

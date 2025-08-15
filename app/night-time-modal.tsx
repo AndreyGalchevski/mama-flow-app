@@ -7,6 +7,7 @@ import { TimePickerModal } from 'react-native-paper-dates';
 import ActionsBar from '../lib/components/ActionBar';
 import { formatTimeHM } from '../lib/date';
 import { useSettingsStore } from '../lib/hooks/useSettingsStore';
+import { useSnackbarStore } from '../lib/hooks/useSnackbarStore';
 import i18n from '../lib/i18n';
 
 export default function NightTimeModal() {
@@ -16,6 +17,8 @@ export default function NightTimeModal() {
   const nightStartMinutes = useSettingsStore((s) => s.nightStartMinutes);
   const nightEndMinutes = useSettingsStore((s) => s.nightEndMinutes);
   const updateNightTimeInterval = useSettingsStore((s) => s.updateNightTimeInterval);
+
+  const showSnackbar = useSnackbarStore((s) => s.showSnackbar);
 
   const [start, setStart] = useState(nightStartMinutes);
   const [end, setEnd] = useState(nightEndMinutes);
@@ -38,6 +41,7 @@ export default function NightTimeModal() {
   const onSave = () => {
     updateNightTimeInterval(start, end);
     router.back();
+    showSnackbar({ type: 'success', message: 'Night time interval updated' });
   };
 
   return (

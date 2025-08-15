@@ -9,6 +9,7 @@ import { Dropdown } from 'react-native-paper-dropdown';
 
 import ActionsBar from '../lib/components/ActionBar';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
+import { useSnackbarStore } from '../lib/hooks/useSnackbarStore';
 import i18n from '../lib/i18n';
 import type { PumpLog } from '../lib/types';
 import { pumpLogCSVRowSchema } from '../lib/validation/pumpLog';
@@ -56,6 +57,7 @@ export default function ImportCSVModal() {
   const [importErrors, setImportErrors] = useState<string[]>([]);
   const [showExample, setShowExample] = useState(false);
   const [invalidIndices, setInvalidIndices] = useState<number[]>([]);
+  const showSnackbar = useSnackbarStore((s) => s.showSnackbar);
 
   const requiredFieldsMapped = useMemo(
     () => pumpLogFields.filter((f) => f.required).every((f) => fieldMap[f.key]),
@@ -200,6 +202,8 @@ export default function ImportCSVModal() {
 
     logs.forEach(addLog);
     router.back();
+
+    showSnackbar({ type: 'success', message: 'Logs imported successfully' });
   };
 
   return (
