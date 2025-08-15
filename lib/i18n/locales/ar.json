@@ -214,5 +214,14 @@
       "message": "غير قادر على فتح نافذة التقييم. هل تريدين فتح متجر التطبيقات مباشرة؟",
       "openStore": "فتح المتجر"
     }
+  },
+  "snackbar": {
+    "logSaved": "تم حفظ السجل",
+    "logsImported": "تم استيراد السجلات",
+    "nightIntervalUpdated": "تم تحديث فترة الليل",
+    "reminderIntervalsUpdated": "تم تحديث فترات التذكير",
+    "snoozed10m": "تم التأجيل لمدة 10 دقائق",
+    "configure": "إعداد",
+    "genericError": "حدث خطأ ما"
   }
 }

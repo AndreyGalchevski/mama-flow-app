@@ -41,7 +41,7 @@ export default function NightTimeModal() {
   const onSave = () => {
     updateNightTimeInterval(start, end);
     router.back();
-    showSnackbar({ type: 'success', message: 'Night time interval updated' });
+  showSnackbar({ type: 'success', message: i18n.t('snackbar.nightIntervalUpdated') });
   };
 
   return (

@@ -211,5 +211,14 @@
       "message": "Unable to open the rating prompt. Would you like to open the app store directly?",
       "openStore": "Open Store"
     }
+  },
+  "snackbar": {
+    "logSaved": "Log saved successfully",
+    "logsImported": "Logs imported successfully",
+    "nightIntervalUpdated": "Night time interval updated",
+    "reminderIntervalsUpdated": "Reminder intervals updated",
+    "snoozed10m": "Snoozed for 10 minutes",
+    "configure": "Configure",
+    "genericError": "Something went wrong"
   }
 }

@@ -95,7 +95,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
     await onSave(parsed.data);
 
-    showSnackbar({ message: 'Log saved successfully', type: 'success' });
+  showSnackbar({ message: i18n.t('snackbar.logSaved'), type: 'success' });
   };
 
   return (

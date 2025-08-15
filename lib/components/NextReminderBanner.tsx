@@ -28,11 +28,11 @@ export default function NextReminderBanner() {
           label: i18n.t('reminders.snooze10m'),
           onPress: () => {
             snoozeNextPumpReminder(10).catch(console.error);
-            showSnackbar({ type: 'success', message: 'Snoozed for 10 minutes' });
+            showSnackbar({ type: 'success', message: i18n.t('snackbar.snoozed10m') });
           },
         },
         {
-          label: 'Configure',
+          label: i18n.t('snackbar.configure'),
           onPress: () => router.push('/(tabs)/settings'),
         },
       ]}

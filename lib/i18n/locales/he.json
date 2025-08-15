@@ -210,5 +210,14 @@
       "message": "לא ניתן לפתוח את חלון הדירוג. האם תרצי לפתוח את חנות האפליקציות ישירות?",
       "openStore": "פתחי חנות"
     }
+  },
+  "snackbar": {
+    "logSaved": "הרשומה נשמרה",
+    "logsImported": "הרשומות יובאו בהצלחה",
+    "nightIntervalUpdated": "חלון הלילה עודכן",
+    "reminderIntervalsUpdated": "מרווחי התזכורות עודכנו",
+    "snoozed10m": "נדחה ב-10 דקות",
+    "configure": "הגדר",
+    "genericError": "משהו השתבש"
   }
 }

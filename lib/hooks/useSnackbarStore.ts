@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import i18n from '../i18n';
 
 import type { SnackbarType } from '../types';
 
@@ -48,7 +49,7 @@ export const useSnackbarStore = create<SnackbarState>((set) => {
       if (payload.error instanceof Error) {
         set({
           isSnackbarVisible: true,
-          snackbarMessage: payload.error.message || 'Something went wrong',
+          snackbarMessage: payload.error.message || i18n.t('snackbar.genericError'),
           snackbarType: 'error',
         });
         return;
@@ -56,7 +57,7 @@ export const useSnackbarStore = create<SnackbarState>((set) => {
 
       set({
         isSnackbarVisible: true,
-        snackbarMessage: 'Something went wrong',
+        snackbarMessage: i18n.t('snackbar.genericError'),
         snackbarType: 'error',
       });
     },

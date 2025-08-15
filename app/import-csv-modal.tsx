@@ -203,7 +203,7 @@ export default function ImportCSVModal() {
     logs.forEach(addLog);
     router.back();
 
-    showSnackbar({ type: 'success', message: 'Logs imported successfully' });
+  showSnackbar({ type: 'success', message: i18n.t('snackbar.logsImported') });
   };
 
   return (
