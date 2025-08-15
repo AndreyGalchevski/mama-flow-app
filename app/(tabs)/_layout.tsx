@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 import Tabs from '../../lib/components/Tabs';
@@ -10,7 +10,9 @@ export default function TabLayout() {
       <Tabs
         labeled={false}
         tabBarStyle={{ backgroundColor: theme.colors.surface }}
-        tabBarActiveTintColor={theme.colors.onPrimary}
+        tabBarActiveTintColor={
+          Platform.OS === 'android' ? theme.colors.onPrimary : theme.colors.primary
+        }
         activeIndicatorColor={theme.colors.primary}
       >
         <Tabs.Screen
