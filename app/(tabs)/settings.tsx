@@ -55,7 +55,7 @@ export default function Settings() {
     localDayHoursInputRef.current?.blur();
     localNightHoursInputRef.current?.blur();
 
-  showSnackbar({ type: 'success', message: i18n.t('snackbar.reminderIntervalsUpdated') });
+    showSnackbar({ type: 'success', message: i18n.t('snackbar.reminderIntervalsUpdated') });
   };
 
   const handleResetIntervals = () => {
