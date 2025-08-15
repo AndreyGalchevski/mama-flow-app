@@ -178,8 +178,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
             const expandedWidth = barW * 1.8;
 
             const shouldShowText = isSelected && barH > 10;
-            const shouldShowFullText = isSelected && barH > 60;
-            const shouldShowTwoLines = isSelected && barH > 40;
+            const shouldShowTwoLines = isSelected && barH > 40; // sessions line
 
             // Horizontal shift of neighbors based on selectedIndex
             let adjustedBarX = barX;
@@ -216,40 +215,50 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
 
                 {shouldShowText && (
                   <G>
-                    <SvgText
-                      x={adjustedBarX + barW / 2}
-                      y={barY + 16}
-                      fontSize={13}
-                      fontWeight="600"
-                      fill={theme.colors.onPrimary}
-                      textAnchor="middle"
-                    >
-                      {i18n.t('units.volumeWithUnit', { volume: Math.round(d.value) })}
-                    </SvgText>
-                    {shouldShowTwoLines && (
-                      <SvgText
-                        x={adjustedBarX + barW / 2}
-                        y={barY + 30}
-                        fontSize={11}
-                        fill={theme.colors.onPrimary}
-                        textAnchor="middle"
-                        opacity={0.9}
-                      >
-                        {i18n.t('units.sessions', { count: d.pumpCount })}
-                      </SvgText>
-                    )}
-                    {shouldShowFullText && (
-                      <SvgText
-                        x={adjustedBarX + barW / 2}
-                        y={barY + 44}
-                        fontSize={10}
-                        fill={theme.colors.onPrimary}
-                        textAnchor="middle"
-                        opacity={0.8}
-                      >
-                        {d.tooltip}
-                      </SvgText>
-                    )}
+                    {(() => {
+                      // Dynamically center the active bar label block vertically
+                      const lineSpacing = 14; // distance between baselines
+                      const numLines = 1 + (shouldShowTwoLines ? 1 : 0); // volume (+ sessions)
+                      const groupHeight = (numLines - 1) * lineSpacing;
+                      const firstLineY = barY + barH / 2 - groupHeight / 2; // baseline of first line
+
+                      let currentY = firstLineY;
+                      const centerX = adjustedBarX + barW / 2;
+                      const nodes: React.ReactNode[] = [];
+
+                      nodes.push(
+                        <SvgText
+                          key="volume"
+                          x={centerX}
+                          y={currentY}
+                          fontSize={13}
+                          fontWeight="600"
+                          fill={theme.colors.onPrimary}
+                          textAnchor="middle"
+                        >
+                          {i18n.t('units.volumeWithUnit', { volume: Math.round(d.value) })}
+                        </SvgText>,
+                      );
+
+                      if (shouldShowTwoLines) {
+                        currentY += lineSpacing;
+                        nodes.push(
+                          <SvgText
+                            key="sessions"
+                            x={centerX}
+                            y={currentY}
+                            fontSize={11}
+                            fill={theme.colors.onPrimary}
+                            textAnchor="middle"
+                            opacity={0.9}
+                          >
+                            {i18n.t('units.sessions', { count: d.pumpCount })}
+                          </SvgText>,
+                        );
+                      }
+
+                      return nodes;
+                    })()}
                   </G>
                 )}
 
@@ -260,7 +269,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   fill={theme.colors.onSurface}
                   textAnchor="middle"
                 >
-                  {d.label}
+                  {isSelected ? `${d.label} ${d.tooltip}` : d.label}
                 </AnimatedText>
               </G>
             );

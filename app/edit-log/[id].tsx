@@ -14,7 +14,7 @@ export default function UpdateLogModal() {
 
   const currentLog = useMemo(() => logs.find((log) => log.id === id), [logs, id]);
 
-  const handleSave = ({
+  const handleSave = async ({
     volumeLeftML,
     volumeRightML,
     durationMinutes,
