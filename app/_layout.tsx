@@ -1,14 +1,19 @@
+import {
+  DarkTheme as NavDarkTheme,
+  DefaultTheme as NavLightTheme,
+  ThemeProvider as NavigationThemeProvider,
+} from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { I18nManager } from 'react-native';
+import { useEffect, useMemo } from 'react';
+import { I18nManager, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { MD3LightTheme, PaperProvider, useTheme } from 'react-native-paper';
+import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { en, he, registerTranslation, ru } from 'react-native-paper-dates';
 import 'react-native-reanimated';
 
-import { COLORS } from '../lib/colors';
+import { COLORS, DARK_COLORS } from '../lib/colors';
 import ErrorBoundary from '../lib/components/ErrorBoundary';
 import WelcomeModal from '../lib/components/WelcomeModal';
 import { useSettingsStore } from '../lib/hooks/useSettingsStore';
@@ -24,7 +29,46 @@ registerTranslation('ru', ru);
 registerTranslation('he', he);
 
 export default function RootLayout() {
-  const theme = useTheme();
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
+
+  const theme = useMemo(() => {
+    return isDark
+      ? {
+          ...MD3DarkTheme,
+          dark: true,
+          roundness: 8,
+          colors: {
+            ...MD3DarkTheme.colors,
+            ...DARK_COLORS,
+          },
+        }
+      : {
+          ...MD3LightTheme,
+          dark: false,
+          roundness: 8,
+          colors: {
+            ...MD3LightTheme.colors,
+            ...COLORS,
+          },
+        };
+  }, [isDark]);
+
+  const navTheme = useMemo(() => {
+    const base = isDark ? NavDarkTheme : NavLightTheme;
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        primary: theme.colors.primary,
+        background: theme.colors.background,
+        card: theme.colors.surface,
+        text: theme.colors.onSurface,
+        border: theme.colors.outlineVariant || theme.colors.outline || base.colors.border,
+        notification: theme.colors.error || base.colors.notification,
+      },
+    };
+  }, [isDark, theme]);
 
   const incrementAppLaunchCount = useSettingsStore((state) => state.incrementAppLaunchCount);
 
@@ -91,37 +135,35 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <ErrorBoundary>
-        <PaperProvider
-          theme={{
-            ...MD3LightTheme,
-            dark: false,
-            roundness: 8,
-            colors: {
-              ...MD3LightTheme.colors,
-              ...COLORS,
-            },
-          }}
-        >
-          <StatusBar style={theme.dark ? 'light' : 'dark'} />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="add-log-modal"
-              options={{ presentation: 'modal', title: i18n.t('logs.newPumpLog') }}
-            />
-            <Stack.Screen
-              name="edit-log/[id]"
-              options={{ presentation: 'modal', title: i18n.t('logs.updatePumpLog') }}
-            />
-            <Stack.Screen
-              name="import-csv-modal"
-              options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
-            />
-            <Stack.Screen
-              name="night-time-modal"
-              options={{ presentation: 'modal', title: i18n.t('settings.nightIntervalTitle') }}
-            />
-          </Stack>
+        <PaperProvider theme={theme}>
+          <StatusBar style={isDark ? 'light' : 'dark'} />
+          <NavigationThemeProvider value={navTheme}>
+            <Stack
+              screenOptions={{
+                headerStyle: { backgroundColor: navTheme.colors.card },
+                headerTintColor: navTheme.colors.text,
+                contentStyle: { backgroundColor: navTheme.colors.background },
+              }}
+            >
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="add-log-modal"
+                options={{ presentation: 'modal', title: i18n.t('logs.newPumpLog') }}
+              />
+              <Stack.Screen
+                name="edit-log/[id]"
+                options={{ presentation: 'modal', title: i18n.t('logs.updatePumpLog') }}
+              />
+              <Stack.Screen
+                name="import-csv-modal"
+                options={{ presentation: 'modal', title: i18n.t('csv.importTitle') }}
+              />
+              <Stack.Screen
+                name="night-time-modal"
+                options={{ presentation: 'modal', title: i18n.t('settings.nightIntervalTitle') }}
+              />
+            </Stack>
+          </NavigationThemeProvider>
 
           <WelcomeModal />
         </PaperProvider>
