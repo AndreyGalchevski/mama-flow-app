@@ -3,10 +3,9 @@ import { format, subDays } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { FAB, Text } from 'react-native-paper';
+import { FAB, Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { COLORS } from '../../lib/colors';
 import EmptyState from '../../lib/components/EmptyState';
 import NextReminderBanner from '../../lib/components/NextReminderBanner';
 import PumpCard from '../../lib/components/PumpCard';
@@ -24,6 +23,7 @@ export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [showRatingDialog, setShowRatingDialog] = useState(false);
+  const theme = useTheme();
 
   const logs = useLogsStore((s) => s.logs);
   const { shouldShowPrompt } = useRatingPrompt();
@@ -97,7 +97,7 @@ export default function Home() {
             label: i18n.t('home.empty.tertiaryAction'),
             onPress: () => router.push('/(tabs)/settings'),
           }}
-          icon={<DocumentAdd size={64} color={COLORS.primary} />}
+          icon={<DocumentAdd size={64} color={theme.colors.primary} />}
         />
       </View>
     );
@@ -108,6 +108,7 @@ export default function Home() {
       style={[
         styles.container,
         {
+          backgroundColor: theme.colors.background,
           paddingTop: insets.top,
           paddingLeft: insets.left + 16,
           paddingRight: insets.right + 16,
@@ -140,8 +141,8 @@ export default function Home() {
       )}
 
       <FAB
-        icon={() => <DocumentAdd color={COLORS.onPrimary} />}
-        style={styles.fab}
+        icon={() => <DocumentAdd color={theme.colors.onPrimary} />}
+        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
         onPress={() => router.push('/add-log-modal')}
       />
 
@@ -154,7 +155,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 16,
-    backgroundColor: COLORS.background,
   },
   noRecentContainer: {
     flex: 1,
@@ -164,15 +164,12 @@ const styles = StyleSheet.create({
   },
   noRecentTitle: {
     textAlign: 'center',
-    color: COLORS.onSurfaceVariant,
     marginBottom: 16,
   },
   noRecentDescription: {
     textAlign: 'center',
-    color: COLORS.onSurfaceVariant,
   },
   fab: {
-    backgroundColor: COLORS.primary,
     position: 'absolute',
     margin: 16,
     right: 0,

@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-
-import { COLORS } from '../colors';
+import { Button, Text, useTheme } from 'react-native-paper';
 
 interface EmptyStateProps {
   title: string;
@@ -30,20 +28,28 @@ export default function EmptyState({
   tertiaryAction,
   icon,
 }: EmptyStateProps) {
+  const theme = useTheme();
   return (
     <View style={styles.container}>
       {icon && <View style={styles.iconContainer}>{icon}</View>}
 
-      <Text variant="headlineSmall" style={styles.title}>
+      <Text variant="headlineSmall" style={[styles.title, { color: theme.colors.onSurface }]}>
         {title}
       </Text>
 
-      <Text variant="bodyLarge" style={styles.description}>
+      <Text
+        variant="bodyLarge"
+        style={[styles.description, { color: theme.colors.onSurfaceVariant }]}
+      >
         {description}
       </Text>
 
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={primaryAction.onPress} style={styles.primaryButton}>
+        <Button
+          mode="contained"
+          onPress={primaryAction.onPress}
+          style={[styles.primaryButton, { backgroundColor: theme.colors.primary }]}
+        >
           {primaryAction.label}
         </Button>
 
@@ -78,19 +84,15 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     marginBottom: 8,
-    color: COLORS.onSurface,
   },
   description: {
     textAlign: 'center',
     marginBottom: 32,
-    color: COLORS.onSurfaceVariant,
   },
   buttonContainer: {
     gap: 12,
     width: '100%',
     maxWidth: 300,
   },
-  primaryButton: {
-    backgroundColor: COLORS.primary,
-  },
+  primaryButton: {},
 });

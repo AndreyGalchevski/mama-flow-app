@@ -1,8 +1,6 @@
 import Svg, { Path } from 'react-native-svg';
 
-import { COLORS } from '../colors';
-
-export default function Download({ size = 24, color = COLORS.primary }) {
+export default function Download({ size = 24, color }: { size?: number; color?: string }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path

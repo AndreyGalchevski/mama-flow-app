@@ -2,10 +2,9 @@ import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { Alert, StyleSheet } from 'react-native';
-import { Card, IconButton, Text } from 'react-native-paper';
+import { Card, IconButton, Text, useTheme } from 'react-native-paper';
 
 import { AccessibilityHints, AccessibilityLabels } from '../accessibility';
-import { COLORS } from '../colors';
 import { getDateLocale } from '../date';
 import { useLogsStore } from '../hooks/useLogsStore';
 import i18n from '../i18n';
@@ -19,6 +18,7 @@ interface Props {
 
 function PumpCard({ item }: Props) {
   const router = useRouter();
+  const theme = useTheme();
 
   const handleDeleteConfirm = async () => {
     const current = useLogsStore.getState().logs;
@@ -42,7 +42,7 @@ function PumpCard({ item }: Props) {
         right={(props) => (
           <IconButton
             {...props}
-            icon={() => <Trash size={24} color={COLORS.onBackground} />}
+            icon={() => <Trash size={24} color={theme.colors.onSurface} />}
             onPress={() =>
               Alert.alert(
                 i18n.t('logs.deleteConfirm.title'),

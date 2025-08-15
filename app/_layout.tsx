@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { I18nManager } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { MD3LightTheme, PaperProvider, useTheme } from 'react-native-paper';
 import { en, he, registerTranslation, ru } from 'react-native-paper-dates';
 import 'react-native-reanimated';
 
@@ -24,6 +24,8 @@ registerTranslation('ru', ru);
 registerTranslation('he', he);
 
 export default function RootLayout() {
+  const theme = useTheme();
+
   const incrementAppLaunchCount = useSettingsStore((state) => state.incrementAppLaunchCount);
 
   useEffect(() => {
@@ -94,10 +96,13 @@ export default function RootLayout() {
             ...MD3LightTheme,
             dark: false,
             roundness: 8,
-            colors: COLORS,
+            colors: {
+              ...MD3LightTheme.colors,
+              ...COLORS,
+            },
           }}
         >
-          <StatusBar style="dark" />
+          <StatusBar style={theme.dark ? 'light' : 'dark'} />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen

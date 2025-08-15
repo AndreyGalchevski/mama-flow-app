@@ -154,5 +154,6 @@ const styles = StyleSheet.create({
   cardActions: {
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 24,
   },
 });

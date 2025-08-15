@@ -1,15 +1,17 @@
 import { StyleSheet, View } from 'react-native';
-import { COLORS } from '../../lib/colors';
+import { useTheme } from 'react-native-paper';
+
 import Tabs from '../../lib/components/Tabs';
 
 export default function TabLayout() {
+  const theme = useTheme();
   return (
     <View style={styles.container}>
       <Tabs
         labeled={false}
-        tabBarStyle={styles.tabBar}
-        tabBarActiveTintColor={COLORS.onPrimary}
-        activeIndicatorColor={COLORS.primary}
+        tabBarStyle={{ backgroundColor: theme.colors.surface }}
+        tabBarActiveTintColor={theme.colors.onPrimary}
+        activeIndicatorColor={theme.colors.primary}
       >
         <Tabs.Screen
           name="index"
@@ -41,7 +43,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  tabBar: {
-    backgroundColor: COLORS.surface,
-  },
+  tabBar: {},
 });

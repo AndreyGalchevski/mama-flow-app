@@ -6,10 +6,9 @@ import * as Sharing from 'expo-sharing';
 import Papa from 'papaparse';
 import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { COLORS } from '../../lib/colors';
 import EmptyState from '../../lib/components/EmptyState';
 import PumpCard from '../../lib/components/PumpCard';
 import { getDateLocale } from '../../lib/date';
@@ -38,6 +37,7 @@ type Row =
 export default function AllLogs() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
 
   const logs = useLogsStore((s) => s.logs);
 
@@ -104,7 +104,12 @@ export default function AllLogs() {
     <View
       style={[
         styles.container,
-        { paddingTop: insets.top, paddingLeft: insets.left + 16, paddingRight: insets.right + 16 },
+        {
+          backgroundColor: theme.colors.background,
+          paddingTop: insets.top,
+          paddingLeft: insets.left + 16,
+          paddingRight: insets.right + 16,
+        },
       ]}
     >
       {logs.length > 0 && (
@@ -112,7 +117,7 @@ export default function AllLogs() {
           <Button
             onPress={handleImportCSVPress}
             mode="outlined"
-            icon={() => <Download size={20} />}
+            icon={() => <Download size={20} color={theme.colors.primary} />}
           >
             {i18n.t('logs.allLogs.import')}
           </Button>
@@ -120,7 +125,7 @@ export default function AllLogs() {
           <Button
             onPress={handleExportToCSVPress}
             mode="outlined"
-            icon={() => <Upload size={20} />}
+            icon={() => <Upload size={20} color={theme.colors.primary} />}
           >
             {i18n.t('logs.allLogs.export')}
           </Button>
@@ -143,7 +148,7 @@ export default function AllLogs() {
             label: i18n.t('logs.allLogs.empty.tertiaryAction'),
             onPress: () => router.push('/(tabs)/settings'),
           }}
-          icon={<Download size={64} color={COLORS.primary} />}
+          icon={<Download size={64} color={theme.colors.primary} />}
         />
       ) : (
         <FlashList
@@ -152,8 +157,8 @@ export default function AllLogs() {
           renderItem={({ item }: ListRenderItemInfo<Row>) => {
             if (item.type === 'header') {
               return (
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionHeaderText}>
+                <View style={[styles.sectionHeader, { backgroundColor: theme.colors.background }]}>
+                  <Text style={[styles.sectionHeaderText, { color: theme.colors.onSurface }]}>
                     {item.title} ({item.count})
                   </Text>
                 </View>
@@ -175,7 +180,6 @@ export default function AllLogs() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -183,11 +187,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionHeader: {
-    backgroundColor: COLORS.background,
     paddingVertical: 8,
   },
   sectionHeaderText: {
-    color: COLORS.onBackground,
     fontWeight: '600',
     fontSize: 16,
     marginTop: 8,

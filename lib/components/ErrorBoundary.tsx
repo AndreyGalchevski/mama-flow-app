@@ -1,8 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-
-import { COLORS } from '../colors';
+import { Button, Text, useTheme } from 'react-native-paper';
 
 interface Props {
   children: ReactNode;
@@ -32,8 +30,10 @@ export default class ErrorBoundary extends Component<Props, State> {
       return this.props.children;
     }
 
+    const theme = useTheme();
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background, padding: 32 }]}>
         <Text variant="headlineSmall" style={styles.title}>
           Something went wrong
         </Text>
@@ -65,26 +65,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 32,
-    backgroundColor: COLORS.background,
   },
   title: {
     textAlign: 'center',
     marginBottom: 16,
-    color: COLORS.error,
   },
   description: {
     textAlign: 'center',
     marginBottom: 32,
-    color: COLORS.onSurfaceVariant,
   },
   button: {
-    backgroundColor: COLORS.primary,
+    // dynamic color from Paper button variant
   },
   errorText: {
     marginTop: 16,
     padding: 16,
-    backgroundColor: COLORS.surfaceVariant,
     fontFamily: 'monospace',
     fontSize: 10,
   },

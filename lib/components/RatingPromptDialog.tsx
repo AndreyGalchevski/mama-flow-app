@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Button, Dialog, Paragraph, Portal, Text } from 'react-native-paper';
+import { Button, Dialog, Portal, Text } from 'react-native-paper';
 
 import { useRatingPrompt } from '../hooks/useRatingPrompt';
 import { useSettingsStore } from '../hooks/useSettingsStore';
@@ -32,7 +32,7 @@ export default function RatingPromptDialog({ visible, onDismiss }: RatingPromptD
         </Dialog.Title>
 
         <Dialog.Content>
-          <Paragraph>{i18n.t('rating.message')}</Paragraph>
+          <Text variant="bodyMedium">{i18n.t('rating.message')}</Text>
         </Dialog.Content>
 
         <Dialog.Actions style={styles.actions}>
@@ -49,6 +49,7 @@ export default function RatingPromptDialog({ visible, onDismiss }: RatingPromptD
 const styles = StyleSheet.create({
   dialog: {
     marginHorizontal: 24,
+    borderRadius: 12,
   },
   actions: {
     paddingHorizontal: 24,

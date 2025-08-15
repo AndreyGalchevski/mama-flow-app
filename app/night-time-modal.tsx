@@ -1,10 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Text, useTheme } from 'react-native-paper';
 import { TimePickerModal } from 'react-native-paper-dates';
 
-import { COLORS } from '../lib/colors';
 import ActionsBar from '../lib/components/ActionBar';
 import { formatTimeHM } from '../lib/date';
 import { useSettingsStore } from '../lib/hooks/useSettingsStore';
@@ -12,6 +11,7 @@ import i18n from '../lib/i18n';
 
 export default function NightTimeModal() {
   const router = useRouter();
+  const theme = useTheme();
 
   const nightStartMinutes = useSettingsStore((s) => s.nightStartMinutes);
   const nightEndMinutes = useSettingsStore((s) => s.nightEndMinutes);
@@ -41,9 +41,11 @@ export default function NightTimeModal() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.content}>
-        <Text style={styles.description}>{i18n.t('settings.nightIntervalDesc')}</Text>
+        <Text style={[styles.description, { color: theme.colors.onSurfaceVariant }]}>
+          {i18n.t('settings.nightIntervalDesc')}
+        </Text>
 
         <Button mode="outlined" onPress={() => setShowStartPicker(true)} style={styles.timeBtn}>
           {i18n.t('settings.nightStart', { time: formatTimeHM(startHM.h, startHM.m) })}
@@ -86,7 +88,6 @@ export default function NightTimeModal() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
     justifyContent: 'space-between',
   },
   content: {

@@ -3,6 +3,7 @@ import { max } from 'd3-array';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTheme } from 'react-native-paper';
 import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
@@ -12,7 +13,6 @@ import Animated, {
 import Svg, { G, Text as SvgText } from 'react-native-svg';
 
 import { AccessibilityLabels } from '../accessibility';
-import { COLORS } from '../colors';
 import i18n from '../i18n';
 import type { DataPoint } from '../types';
 import AnimatedBar from './AnimatedBar';
@@ -66,6 +66,7 @@ interface Props {
 }
 
 export default function VolumeGraph({ data, width = 340, height = 220 }: Props) {
+  const theme = useTheme();
   const [selectedBar, setSelectedBar] = useState<string | null>(null);
 
   const chartOpacity = useSharedValue(0);
@@ -201,7 +202,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   width={barW}
                   toY={barY}
                   toHeight={barH}
-                  fill={COLORS.primary}
+                  fill={theme.colors.primary}
                   rx={barRadius}
                   ry={barRadius}
                   duration={400 + index * 100}
@@ -220,7 +221,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                       y={barY + 16}
                       fontSize={13}
                       fontWeight="600"
-                      fill={COLORS.surface}
+                      fill={theme.colors.onPrimary}
                       textAnchor="middle"
                     >
                       {i18n.t('units.volumeWithUnit', { volume: Math.round(d.value) })}
@@ -230,7 +231,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                         x={adjustedBarX + barW / 2}
                         y={barY + 30}
                         fontSize={11}
-                        fill={COLORS.surface}
+                        fill={theme.colors.onPrimary}
                         textAnchor="middle"
                         opacity={0.9}
                       >
@@ -242,7 +243,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                         x={adjustedBarX + barW / 2}
                         y={barY + 44}
                         fontSize={10}
-                        fill={COLORS.surface}
+                        fill={theme.colors.onPrimary}
                         textAnchor="middle"
                         opacity={0.8}
                       >
@@ -256,7 +257,7 @@ export default function VolumeGraph({ data, width = 340, height = 220 }: Props) 
                   x={adjustedBarX + barW / 2}
                   y={chartH + 18}
                   fontSize={12}
-                  fill={COLORS.onSurface}
+                  fill={theme.colors.onSurface}
                   textAnchor="middle"
                 >
                   {d.label}

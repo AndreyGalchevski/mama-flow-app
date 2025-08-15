@@ -2,10 +2,9 @@ import { format } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, HelperText, TextInput } from 'react-native-paper';
+import { Button, HelperText, TextInput, useTheme } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 
-import { COLORS } from '../../lib/colors';
 import { getDateLocale } from '../date';
 import i18n from '../i18n';
 import type { PumpLog } from '../types';
@@ -27,6 +26,7 @@ interface Props {
 
 export default function PumpLogForm({ initialState, onSave }: Props) {
   const router = useRouter();
+  const theme = useTheme();
 
   const [volumeLeft, setVolumeLeft] = useState('');
   const [volumeRight, setVolumeRight] = useState('');
@@ -95,10 +95,9 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.colors.surfaceVariant }]}>
         <View style={styles.formContainer}>
           <TextInput
-            mode="outlined"
             label={i18n.t('logs.volumeLeft')}
             value={volumeLeft}
             keyboardType="numeric"
@@ -114,7 +113,6 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
           ) : null}
 
           <TextInput
-            mode="outlined"
             label={i18n.t('logs.volumeRight')}
             value={volumeRight}
             keyboardType="numeric"
@@ -129,7 +127,6 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
           ) : null}
 
           <TextInput
-            mode="outlined"
             label={i18n.t('logs.duration')}
             value={duration}
             keyboardType="numeric"
@@ -143,13 +140,7 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
             </HelperText>
           ) : null}
 
-          <TextInput
-            mode="outlined"
-            label={i18n.t('logs.notes')}
-            value={notes}
-            onChangeText={setNotes}
-            multiline
-          />
+          <TextInput label={i18n.t('logs.notes')} value={notes} onChangeText={setNotes} multiline />
 
           {errors.notes ? (
             <HelperText type="error" visible>
@@ -208,7 +199,6 @@ export default function PumpLogForm({ initialState, onSave }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   formContainer: {
     flex: 1,

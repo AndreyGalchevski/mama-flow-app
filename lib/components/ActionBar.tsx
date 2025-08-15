@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS } from '../colors';
 
 interface Props {
   children: ReactNode;
@@ -10,9 +10,20 @@ interface Props {
 
 export default function ActionsBar({ children, style }: Props) {
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom || 16 }, style]}>
+    <View
+      style={[
+        styles.container,
+        {
+          borderTopColor: theme.colors.outline,
+          backgroundColor: theme.colors.background,
+          paddingBottom: insets.bottom || 16,
+        },
+        style,
+      ]}
+    >
       <View style={styles.content}>{children}</View>
     </View>
   );
@@ -21,8 +32,6 @@ export default function ActionsBar({ children, style }: Props) {
 const styles = StyleSheet.create({
   container: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: COLORS.outline,
-    backgroundColor: COLORS.background,
     paddingHorizontal: 16,
     paddingTop: 12,
   },

@@ -4,10 +4,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import Papa from 'papaparse';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Chip, DataTable, Divider, HelperText, Text } from 'react-native-paper';
+import { Button, Chip, DataTable, Divider, HelperText, Text, useTheme } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
 
-import { COLORS } from '../lib/colors';
 import ActionsBar from '../lib/components/ActionBar';
 import { useLogsStore } from '../lib/hooks/useLogsStore';
 import i18n from '../lib/i18n';
@@ -49,6 +48,7 @@ const pumpLogFields: { key: keyof PumpLog; label: string; required: boolean; hel
 
 export default function ImportCSVModal() {
   const router = useRouter();
+  const theme = useTheme();
   const params = useLocalSearchParams();
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<Record<string, string>[]>([]);
@@ -203,7 +203,7 @@ export default function ImportCSVModal() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView>
         <Text variant="titleMedium" style={styles.title}>
           {i18n.t('importCSV.title')}
@@ -300,7 +300,7 @@ export default function ImportCSVModal() {
           </DataTable>
         )}
         {invalidIndices.length > 0 && requiredFieldsMapped && (
-          <Chip icon="alert" selectedColor={COLORS.error} style={styles.chip}>
+          <Chip icon="alert" selectedColor={theme.colors.error} style={styles.chip}>
             {i18n.t('importCSV.fixMappingBeforeImport')}
           </Chip>
         )}
@@ -325,7 +325,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: COLORS.background,
   },
   title: {
     marginBottom: 12,
@@ -352,7 +351,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   fieldLabel: { fontSize: 14, fontWeight: '600', marginBottom: 4 },
-  required: { color: COLORS.error },
+  required: { color: 'red' },
   helpText: { fontSize: 12, color: '#555', marginTop: 4 },
   divider: {
     marginVertical: 16,

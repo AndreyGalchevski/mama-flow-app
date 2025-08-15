@@ -1,10 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { StyleSheet, type TextInput as TextInputRN, View } from 'react-native';
-import { Button, Divider, Icon, Switch, Text, TextInput } from 'react-native-paper';
+import { Button, Divider, Icon, Switch, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { COLORS } from '../../lib/colors';
 import NextReminderText from '../../lib/components/NextReminderText';
 import { formatTimeHM } from '../../lib/date';
 import { useResetFirstTime } from '../../lib/hooks/useFirstTimeUser';
@@ -21,6 +20,7 @@ const isValidInput = (dayHoursStr: string, nightHoursStr: string) => {
 
 export default function Settings() {
   const router = useRouter();
+  const theme = useTheme();
 
   const localDayHoursInputRef = useRef<TextInputRN>(null);
   const localNightHoursInputRef = useRef<TextInputRN>(null);
@@ -62,7 +62,7 @@ export default function Settings() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View>
         <Text variant="titleMedium">{i18n.t('settings.reminders')}</Text>
 
@@ -178,7 +178,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     gap: 16,
-    backgroundColor: COLORS.background,
   },
   switchRow: {
     flexDirection: 'row',
